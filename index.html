@@ -638,6 +638,14 @@
     th:nth-child(n+2), td:nth-child(n+2) { width: 70px; }
   }
   .perm-intro { font-weight: 500; margin: 0 0 14px; }
+  /* Language switch: equal segments, one pill that slides to the chosen language */
+  .langs { position: relative; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 0; padding: 3px; height: 34px; border: 1px solid var(--line); border-radius: 999px; }
+  .langs::before { content: ""; position: absolute; top: 3px; bottom: 3px; left: 3px; width: calc((100% - 6px) / var(--ln, 4)); border-radius: 999px; background: var(--fg); transform: translateX(calc(var(--li, 0) * 100%)); transition: transform .45s var(--ease), background .6s; }
+  .langs button { position: relative; z-index: 1; min-width: 36px; padding: 0 8px; font: 500 11.5px/1 var(--mono); letter-spacing: .08em; color: var(--muted); transition: color .3s; }
+  .langs button:hover { color: var(--fg); }
+  .langs button[aria-pressed="true"], .langs button[aria-pressed="true"]:hover { background: none; color: var(--bg); }
+  .theme { width: 34px; height: 34px; }
+  header nav .theme + .langs { margin-left: -16px; }
   @media (max-width: 960px) { .perm-intro { font-size: 14.5px; margin-bottom: 10px; } #s-privacy .perm .ex button { padding: 7px 11px; font-size: 13px; } }
 </style>
 </head>
@@ -2281,6 +2289,7 @@ function apply(lang) {
     if (v !== undefined) el.textContent = v;
   });
   document.querySelectorAll(".langs button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+  { const ls = document.querySelector(".langs"), bs = [...ls.children]; ls.style.setProperty("--ln", bs.length); ls.style.setProperty("--li", Math.max(0, bs.findIndex(b => b.dataset.lang === lang))); }
   try { localStorage.setItem("quiet-lang", lang); } catch (e) {}
   Demo.refresh();
   Touch.lang();
