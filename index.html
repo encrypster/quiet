@@ -10,6 +10,7 @@
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#000000">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23000'/%3E%3Ccircle cx='32' cy='32' r='13' fill='none' stroke='%23fff' stroke-width='5'/%3E%3C/svg%3E">
+<script>try { var th = localStorage.getItem("quiet-theme"); if (th) document.documentElement.dataset.theme = th; } catch (e) {}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -337,6 +338,37 @@
   .ring.go { animation: breathe 8s ease-in-out infinite; }
   .ring-cap { font-size: 14px !important; color: var(--muted); min-height: 1.4em; text-align: center; }
 
+  /* ---- Ultra ---- */
+  :root[data-theme="dark"] { --bg: #000; --fg: #fff; --muted: #a0a0a0; --line: #262626; --soft: #0d0d0d; }
+  :root[data-theme="light"] { --bg: #fff; --fg: #0a0a0a; --muted: #5c5c5c; --line: #e4e4e4; --soft: #f5f5f5; }
+  :root[data-theme="dark"] .invert { --bg: #fff; --fg: #0a0a0a; --muted: #5c5c5c; --line: #dcdcdc; --soft: #f1f1f1; }
+  :root[data-theme="light"] .invert { --bg: #0a0a0a; --fg: #fff; --muted: #a0a0a0; --line: #2a2a2a; --soft: #151515; }
+  ::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+  .theme { width: 34px; height: 34px; flex: none; border-radius: 50%; border: 1.5px solid var(--fg); background: linear-gradient(90deg, var(--fg) 50%, transparent 50%); cursor: pointer; padding: 0; }
+  #grid { -webkit-mask-image: none; mask-image: none; }
+  #cur { position: fixed; left: 0; top: 0; width: 26px; height: 26px; margin: -13px 0 0 -13px; pointer-events: none; z-index: 60; mix-blend-mode: difference; opacity: 0; transform: translate(var(--x, -100px), var(--y, -100px)); }
+  #cur::after { content: ""; position: absolute; inset: 0; border: 1.5px solid #fff; border-radius: 50%; transform: scale(var(--s, 1)); transition: transform .22s cubic-bezier(.2, .7, .2, 1); }
+  @media (hover: none) { #cur { display: none; } }
+  .mag { transition: transform .25s cubic-bezier(.2, .7, .2, 1); }
+  .stage { cursor: grab; } .stage:active { cursor: grabbing; }
+
+  .year-grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 72px; align-items: center; }
+  @media (max-width: 900px) { .year-grid { grid-template-columns: 1fr; gap: 40px; } }
+  .year-big { font-size: clamp(72px, 11vw, 144px); font-weight: 600; letter-spacing: -.055em; line-height: .92; font-variant-numeric: tabular-nums; }
+  .year-big small { font-size: .2em; letter-spacing: 0; font-weight: 500; margin-left: .5em; color: var(--muted); }
+  .year-lines p { color: var(--muted); margin-top: 12px; font-size: 17px; min-height: 1.6em; }
+  .ctl { margin-top: 26px; }
+  .ctl label { display: flex; justify-content: space-between; gap: 16px; font-weight: 500; margin-bottom: 10px; font-size: 15.5px; }
+  .ctl output { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .dots { display: grid; grid-template-columns: repeat(31, 1fr); gap: 4px; }
+  .dots i { display: block; aspect-ratio: 1; border-radius: 3px; background: var(--line); transition: background .3s, box-shadow .3s, transform .3s; transition-delay: calc(var(--n) * 1.4ms); }
+  .dots i.t { background: var(--fg); }
+  .dots i.s { background: transparent; box-shadow: inset 0 0 0 1.5px var(--fg); transform: scale(.82); }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-top: 18px; color: var(--muted); font-size: 14px; }
+  .legend > span { display: flex; align-items: center; gap: 8px; }
+  .legend i { width: 12px; height: 12px; border-radius: 3px; display: block; }
+  .legend i.t { background: var(--fg); } .legend i.s { box-shadow: inset 0 0 0 1.5px var(--fg); }
+
   /* Sections */
   section { padding: 104px 0; }
   .sec-head { max-width: 46em; margin-bottom: 64px; }
@@ -423,6 +455,8 @@
 </head>
 <body>
 
+<div id="cur" aria-hidden="true"></div>
+
 <header>
   <div class="wrap bar">
     <a class="logo" href="#top"><i></i>Quiet</a>
@@ -431,6 +465,7 @@
       <a href="#parents" data-t="nav_parents"></a>
       <a href="#pricing" data-t="nav_pricing"></a>
       <a href="#faq" data-t="nav_faq"></a>
+      <button class="theme mag" id="theme" type="button" aria-label="Theme"></button>
       <div class="langs" role="group" aria-label="Language">
         <button type="button" data-lang="uz">UZ</button>
         <button type="button" data-lang="ru">RU</button>
@@ -451,7 +486,7 @@
       <h1 data-t="h1"></h1>
       <p class="lead" data-t="lead"></p>
       <div class="hero-actions">
-        <span class="status"><i></i><span data-t="status"></span></span>
+        <span class="status mag"><i></i><span data-t="status"></span></span>
         <a class="more" href="#how" data-t="more"></a>
       </div>
     </div>
@@ -518,6 +553,28 @@
       </div>
       <p class="try-done" id="demo-done" hidden></p>
       <p class="story-note"><span data-t="try_note"></span> <button type="button" class="linkbtn" id="demo-reset"></button></p>
+    </div>
+  </section>
+
+  <section id="year" class="also">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="num" data-t="y_num"></p>
+        <h2 data-t="y_h"></h2>
+        <p data-t="y_p"></p>
+      </div>
+      <div class="year-grid">
+        <div>
+          <div class="year-big"><span id="y-days">0</span><small data-t="y_unit"></small></div>
+          <div class="year-lines"><p id="y-line1"></p><p id="y-line2"></p></div>
+          <div class="ctl"><label for="y-h"><span data-t="y_l1"></span><output id="y-ho"></output></label><input type="range" id="y-h" min="30" max="600" step="15" value="240"></div>
+          <div class="ctl"><label for="y-c"><span data-t="y_l2"></span><output id="y-co"></output></label><input type="range" id="y-c" min="0" max="180" step="5" value="45"></div>
+        </div>
+        <div>
+          <div class="dots" id="y-dots" aria-hidden="true"></div>
+          <p class="legend"><span><i class="t"></i><span data-t="y_k1"></span></span><span><i class="s"></i><span data-t="y_k2"></span></span></p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -977,7 +1034,8 @@ const Demo = (() => {
   const FOCUS_ALLOWED = new Set(["mail", "calendar", "docs", "phone", "notes"]);
   const ALL = ["calendar", "camera", "clock", "docs", "instagram", "mail", "maps", "messages", "notes", "phone", "telegram", "youtube"];
   const WAIT_S = 5, VISIT_S = 8;
-  const st = { screen: "home", app: null, focus: false, n: 0, min: 0, chat: -1, done: new Set() };
+  const st = { screen: "home", app: null, focus: false, n: 0, min: 0, chat: -1, why: "", done: new Set(), rules: { instagram: "wait" } };
+  const buzz = ms => { try { if (navigator.vibrate && navigator.userActivation && navigator.userActivation.hasBeenActive) navigator.vibrate(ms); } catch (e) {} };
   let timers = [], toastTimer = null;
   const $ = id => document.getElementById(id);
   const d = () => T[LANG].d;
@@ -996,9 +1054,10 @@ const Demo = (() => {
   }
   function go(screen, app) { clear(); st.screen = screen; if (app !== undefined) st.app = app; render(); }
 
-  function open(app) {
-    if (st.focus && !FOCUS_ALLOWED.has(app)) { go("block", app); if (app === "instagram") mark(2); return; }
-    if (app === "instagram") {
+  function open(app, waited) {
+    if (st.focus && !FOCUS_ALLOWED.has(app)) { st.why = "focus"; go("block", app); buzz(30); if (app === "instagram") mark(2); return; }
+    if (st.rules[app] === "block") { st.why = "rule"; go("block", app); buzz(30); return; }
+    if (st.rules[app] === "wait" && !waited) {
       st.n = WAIT_S; go("wait", app);
       timers.push(setInterval(() => { if (st.n > 0) { st.n--; render(false); } }, 1000));
       return;
@@ -1006,8 +1065,16 @@ const Demo = (() => {
     st.min = 0; go("app", app);
   }
   function visit(min) {
-    st.min = min; go("app", "instagram"); mark(1);
-    later(() => { go("home"); toast(fill(d().timeup, { app: name("instagram") })); }, VISIT_S * 1000);
+    const app = st.app;
+    st.min = min; go("app", app); mark(1);
+    later(() => { go("home"); toast(fill(d().timeup, { app: name(app) })); buzz(30); }, VISIT_S * 1000);
+  }
+  // Pressing and holding an app, as in Quiet itself: a rule of the visitor's own.
+  function sheet(app) { go("sheet", app); buzz(20); }
+  function rule(kind) {
+    const app = st.app;
+    if (kind === "none") delete st.rules[app]; else st.rules[app] = kind;
+    go("home"); toast(fill(d().sheet_ok, { app: name(app) }));
   }
   function shorts() {
     go("shorts", "youtube");
@@ -1034,6 +1101,12 @@ const Demo = (() => {
       case "drawer":
         return bar(t.all, "home") + '<input class="d-search" id="demo-q" type="search" autocomplete="off" placeholder="' + esc(t.search) + '" aria-label="' + esc(t.search) + '">' +
           '<div class="d-scroll" id="demo-apps">' + drawerList("") + "</div>";
+      case "sheet": {
+        const now = st.rules[st.app] || "none";
+        return bar(name(st.app), "home") + '<div class="d-dim" style="margin:16px 0 8px">' + esc(t.sheet_p) + "</div>" +
+          [["wait", t.sheet_wait], ["block", t.sheet_block], ["none", t.sheet_none]].map(o =>
+            '<button type="button" class="d-btn' + (o[0] === now ? " fill" : "") + '" data-act="rule:' + o[0] + '">' + esc(o[1]) + "</button>").join("");
+      }
       case "wait": {
         const ready = st.n <= 0;
         return '<div style="margin-top:auto"></div><div class="d-title">' + esc(fill(t.opening, { app: name(st.app) })) + "</div>" +
@@ -1043,8 +1116,8 @@ const Demo = (() => {
           [5, 10, 20].map(m => '<button type="button" class="d-btn" data-act="visit:' + m + '"' + (ready ? "" : " disabled") + ">" + esc(fill(t.cont, { n: m })) + "</button>").join("");
       }
       case "block":
-        return '<div style="margin-top:auto"></div><div class="d-title">' + esc(fill(t.block_h, { app: name(st.app) })) + "</div>" +
-          '<div class="d-dim" style="margin:10px 0 18px">' + esc(t.block_p) + "</div>" +
+        return '<div style="margin-top:auto"></div><div class="d-title">' + esc(fill(st.why === "rule" ? t.block2_h : t.block_h, { app: name(st.app) })) + "</div>" +
+          '<div class="d-dim" style="margin:10px 0 18px">' + esc(st.why === "rule" ? t.block2_p : t.block_p) + "</div>" +
           '<button type="button" class="d-btn fill" data-act="home">' + esc(t.go_home) + "</button>";
       case "shorts":
         return bar("Shorts", "open:youtube") + skeleton([330]);
@@ -1110,16 +1183,24 @@ const Demo = (() => {
   }
   function act(a) {
     const [what, arg] = a.split(":");
+    buzz(8);
     if (what === "home") go("home");
     else if (what === "drawer") { go("drawer"); mark(0); }
     else if (what === "open") open(arg);
     else if (what === "visit") visit(Number(arg));
     else if (what === "shorts") shorts();
     else if (what === "chat") chat(Number(arg));
+    else if (what === "rule") rule(arg);
   }
   function init() {
     const phone = $("demo");
+    let press = null, held = false;
+    const appOf = e => { const b = e.target.closest(".d-app"); return b ? b.dataset.act.split(":")[1] : null; };
+    phone.addEventListener("pointerdown", e => { held = false; const app = appOf(e); clearTimeout(press); if (app) press = setTimeout(() => { held = true; sheet(app); }, 520); });
+    ["pointerup", "pointerleave", "pointercancel"].forEach(ev => phone.addEventListener(ev, () => { clearTimeout(press); setTimeout(() => { held = false; }, 0); }));
+    phone.addEventListener("contextmenu", e => { const app = appOf(e); if (app) { e.preventDefault(); clearTimeout(press); sheet(app); } });
     phone.addEventListener("click", e => {
+      if (held) { held = false; return; }
       const b = e.target.closest("[data-act]");
       if (b && !b.disabled) act(b.dataset.act);
     });
@@ -1151,7 +1232,7 @@ const FX = (() => {
   const $ = id => document.getElementById(id);
   const clamp = v => Math.max(0, Math.min(1, v));
   const SPOTS = [[-190, -215], [175, -235], [-235, -95], [220, -115], [-210, 45], [228, 35], [-185, 175], [195, 185], [-55, -300], [70, 285]];
-  let scene, stage, ticking = false, pointer = { x: -999, y: -999 }, gridOn = false;
+  let scene, stage, ticking = false, pointer = { x: -999, y: -999 }, gridOn = false, prog = 0;
 
   function chips() {
     $("chips").onclick = e => { const c = e.target.closest(".chip"); if (c) c.classList.add("gone"); };
@@ -1173,11 +1254,11 @@ const FX = (() => {
         p = clamp((innerHeight * .5 - s.top) / (innerHeight * .4));
       }
     }
-    scene.style.setProperty("--p", p.toFixed(4));
+    scene.style.setProperty("--p", p.toFixed(4)); prog = p;
     // Reveals and the story's chapter are worked out from positions, so a jump down the page
     // (a menu link, a restored scroll position) never leaves anything hidden.
     const edge = innerHeight * .92;
-    pending = pending.filter(el => { if (el.getBoundingClientRect().top < edge) { el.classList.add("in"); return false; } return true; });
+    pending = pending.filter(el => { if (el.getBoundingClientRect().top < edge) { el.classList.add("in"); const h2 = el.tagName === "H2" ? el : null; if (h2) scramble(h2); return false; } return true; });
     if (storyRows.length && innerWidth > 960) {
       const mid = innerHeight / 2;
       let best = storyRows[0], gap = Infinity;
@@ -1189,37 +1270,99 @@ const FX = (() => {
   // working in a tab whose animation frames are paused.
   function onScroll() { frame(); }
 
-  // A field of dots behind the hero that brightens near the pointer.
+  // Noise that settles: specks drift everywhere, and as the scene plays they gather into
+  // Quiet's ring around the phone. They shy away from the pointer; a click sends a wave through.
+  let shock = null;
   function grid() {
     const cv = $("grid"), ctx = cv.getContext("2d");
-    let w = 0, h = 0, fg = "#fff";
+    const N = innerWidth > 900 ? 1300 : 520;
+    let w = 0, h = 0, fg = "#fff", cx = 0, cy = 0, R = 200, n = 0;
+    const P = [];
+    function place() {
+      const s = stage.querySelector(".phone").getBoundingClientRect(), c = cv.getBoundingClientRect();
+      cx = s.left + s.width / 2 - c.left; cy = s.top + s.height / 2 - c.top; R = Math.max(s.height * .6, 190);
+    }
     function size() {
       const r = cv.getBoundingClientRect(), dpr = Math.min(devicePixelRatio || 1, 2);
       w = r.width; h = r.height; cv.width = w * dpr; cv.height = h * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      fg = getComputedStyle(document.body).color;
-    }
-    function draw(t) {
-      ctx.clearRect(0, 0, w, h);
-      ctx.fillStyle = fg;
-      for (let y = 14; y < h; y += 26) for (let x = 14; x < w; x += 26) {
-        const dx = x - pointer.x, dy = y - pointer.y, near = Math.max(0, 1 - Math.hypot(dx, dy) / 210);
-        const wave = reduce ? 0 : .05 * Math.sin(t * .0012 + x * .018 + y * .013);
-        ctx.globalAlpha = Math.max(0, .09 + wave + near * near * .7);
-        const r = 1 + near * 1.6;
-        ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.fill();
-      }
-      if (gridOn && !reduce) requestAnimationFrame(draw);
+      fg = getComputedStyle(document.body).color; place();
     }
     size();
-    addEventListener("resize", () => { size(); if (reduce) draw(0); });
-    matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => setTimeout(size, 50));
+    for (let i = 0; i < N; i++) P.push({ x: Math.random() * w, y: Math.random() * h, vx: 0, vy: 0, a: i / N * 6.2832, o: (Math.random() + Math.random() - 1) * 16, s: 1 + Math.random() * 1.2 });
+    function draw() {
+      const p = reduce ? 1 : prog, pull = .03 * p * p, wild = (1 - p) * .55;
+      if (++n % 30 === 0) { place(); fg = getComputedStyle(document.body).color; }
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = fg; ctx.globalAlpha = .28 + .5 * p;
+      for (const q of P) {
+        q.a += .0007;
+        const tx = cx + Math.cos(q.a) * (R + q.o), ty = cy + Math.sin(q.a) * (R + q.o);
+        q.vx += (Math.random() - .5) * wild + (tx - q.x) * pull;
+        q.vy += (Math.random() - .5) * wild + (ty - q.y) * pull;
+        const dx = q.x - pointer.x, dy = q.y - pointer.y, d2 = dx * dx + dy * dy;
+        if (d2 < 19600) { const d = Math.sqrt(d2) || 1, f = (1 - d / 140) * 1.8; q.vx += dx / d * f; q.vy += dy / d * f; }
+        if (shock) { const sx = q.x - shock.x, sy = q.y - shock.y, d = Math.hypot(sx, sy) || 1; if (d < 320) { const f = (1 - d / 320) * 16; q.vx += sx / d * f; q.vy += sy / d * f; } }
+        q.vx *= .9; q.vy *= .9; q.x += q.vx; q.y += q.vy;
+        if (p < .3) { if (q.x < 0) q.x += w; else if (q.x > w) q.x -= w; if (q.y < 0) q.y += h; else if (q.y > h) q.y -= h; }
+        ctx.fillRect(q.x, q.y, q.s, q.s);
+      }
+      shock = null;
+      if (gridOn && !reduce) requestAnimationFrame(draw);
+    }
+    if (reduce) { for (const q of P) { q.x = cx + Math.cos(q.a) * (R + q.o); q.y = cy + Math.sin(q.a) * (R + q.o); } draw(); }
+    addEventListener("resize", () => { size(); if (reduce) draw(); });
     new IntersectionObserver(es => {
       const on = es[0].isIntersecting;
       if (on && !gridOn) { gridOn = true; requestAnimationFrame(draw); } else if (!on) gridOn = false;
     }).observe(cv);
-    cv.parentElement.addEventListener("pointermove", e => { const r = cv.getBoundingClientRect(); pointer = { x: e.clientX - r.left, y: e.clientY - r.top }; });
-    cv.parentElement.addEventListener("pointerleave", () => { pointer = { x: -999, y: -999 }; });
-    if (reduce) draw(0);
+    const box = cv.parentElement;
+    box.addEventListener("pointermove", e => { const r = cv.getBoundingClientRect(); pointer = { x: e.clientX - r.left, y: e.clientY - r.top }; });
+    box.addEventListener("pointerleave", () => { pointer = { x: -999, y: -999 }; });
+    box.addEventListener("click", e => {
+      if (e.target.closest("a, button, .chip")) return;
+      const r = cv.getBoundingClientRect(); shock = { x: e.clientX - r.left, y: e.clientY - r.top };
+    });
+  }
+
+  // Headings arrive as noise and settle into words.
+  function scramble(el) {
+    const text = T[LANG][el.dataset.t];
+    if (reduce || !text) return;
+    const G = "/\\—·:░▒"; let i = 0; const total = 20;
+    clearInterval(el._s);
+    el._s = setInterval(() => {
+      i++;
+      const cut = Math.floor(text.length * i / total);
+      el.textContent = text.slice(0, cut) + [...text.slice(cut)].map(ch => ch === " " ? " " : G[Math.random() * G.length | 0]).join("");
+      if (i >= total) { clearInterval(el._s); el.textContent = text; }
+    }, 30);
+  }
+
+  // A ring that trails the pointer, a theme that wipes across the page, buttons that lean in.
+  function ultra() {
+    const root = document.documentElement;
+    $("theme").addEventListener("click", e => {
+      const now = root.dataset.theme || (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+      const next = now === "dark" ? "light" : "dark";
+      const set = () => { root.dataset.theme = next; try { localStorage.setItem("quiet-theme", next); } catch (err) {} };
+      if (!document.startViewTransition || reduce) { set(); return; }
+      const x = e.clientX, y = e.clientY, r = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+      document.startViewTransition(set).ready.then(() => root.animate(
+        { clipPath: ["circle(0px at " + x + "px " + y + "px)", "circle(" + r + "px at " + x + "px " + y + "px)"] },
+        { duration: 700, easing: "cubic-bezier(.4, 0, .2, 1)", pseudoElement: "::view-transition-new(root)" }));
+    });
+    if (reduce || !matchMedia("(hover: hover)").matches) return;
+    const cur = $("cur"); let x = -100, y = -100, tx = -100, ty = -100;
+    addEventListener("pointermove", e => {
+      tx = e.clientX; ty = e.clientY; cur.style.opacity = 1;
+      cur.style.setProperty("--s", e.target.closest && e.target.closest("a, button, input, label, summary, .chip") ? 2.3 : 1);
+    }, { passive: true });
+    (function loop() { x += (tx - x) * .2; y += (ty - y) * .2; cur.style.setProperty("--x", x + "px"); cur.style.setProperty("--y", y + "px"); requestAnimationFrame(loop); })();
+    document.querySelectorAll(".mag, .btn").forEach(el => {
+      el.classList.add("mag");
+      el.addEventListener("pointermove", e => { const r = el.getBoundingClientRect(); el.style.transform = "translate(" + (e.clientX - r.left - r.width / 2) * .28 + "px," + (e.clientY - r.top - r.height / 2) * .28 + "px)"; });
+      el.addEventListener("pointerleave", () => { el.style.transform = ""; });
+    });
   }
 
   function tilt() {
@@ -1227,7 +1370,7 @@ const FX = (() => {
     document.querySelectorAll(".tilt").forEach(box => {
       box.addEventListener("pointermove", e => {
         const r = box.getBoundingClientRect();
-        const k = box.dataset.tilt === "soft" ? .35 : 1;
+        const k = box.dataset.tilt === "soft" ? .35 : (e.buttons & 1 ? 3.2 : 1);
         box.style.setProperty("--ry", ((e.clientX - r.left) / r.width - .5) * 16 * k + "deg");
         box.style.setProperty("--rx", (.5 - (e.clientY - r.top) / r.height) * 12 * k + "deg");
       });
@@ -1243,7 +1386,7 @@ const FX = (() => {
   function reveals() {
     if (reduce) return;
     const io = { observe: el => pending.push(el) };
-    const groups = [".facts li", ".sec-head > *", ".bento .card", ".tester", ".chooser", ".perm", ".cols li", "tbody tr", ".faq details", ".privacy .body p", ".closing h2", ".closing p", ".price-note"];
+    const groups = [".facts li", ".sec-head > *", ".bento .card", ".tester", ".chooser", ".perm", ".year-grid > *", ".cols li", "tbody tr", ".faq details", ".privacy .body p", ".closing h2", ".closing p", ".price-note"];
     groups.forEach(sel => {
       const byParent = new Map();
       document.querySelectorAll(sel).forEach(el => {
@@ -1287,12 +1430,13 @@ const FX = (() => {
 
   function init() {
     scene = $("scene"); stage = $("stage");
-    grid(); tilt(); reveals(); story(); parents();
+    grid(); tilt(); reveals(); story(); parents(); ultra();
+    const h1 = document.querySelector("h1"); if (h1) scramble(h1);
     addEventListener("scroll", onScroll, { passive: true });
     addEventListener("resize", onScroll);
     frame();
   }
-  return { init, pick, lang() { chips(); } };
+  return { init, pick, lang() { chips(); document.querySelectorAll("h1, h2").forEach(el => clearInterval(el._s)); } };
 })();
 
 // Words for the story's chapters and for the parts of the page that can be touched.
@@ -1420,6 +1564,19 @@ T.en.w = {
   ring: "Press the ring", breatheIn: "Breathe in", breatheOut: "Breathe out"
 };
 
+Object.assign(T.uz, { y_num: "HISOB", y_h: "Telefon yiliga necha kuningizni oladi?", y_p: "Surgichlarni oʻzingizga moslang. Bu vaʼda emas, oddiy arifmetika.", y_unit: "kun / yil", y_l1: "Kuniga telefonda", y_l2: "Kuniga qancha kamaytirmoqchisiz", y_k1: "telefonda oʻtadigan kunlar", y_k2: "oʻzingizga qaytadigan kunlar",
+  try_note: "Namoyishda daqiqalar soniyalarga qisqartirilgan. Maslahat: istalgan ilova nomini bosib turing va unga oʻzingiz qoida qoʻying." });
+Object.assign(T.uz.w, { yPct: "Bu uygʻoq vaqtingizning {p} foizi.", ySave: "Kuniga {c} kam boʻlsa, yiliga {d} kun oʻzingizga qaytadi.", yNone: "Pastki surgichni suring: qancha kun qaytishini koʻrasiz." });
+Object.assign(T.uz.d, { sheet_p: "Bu ilova uchun qoida:", sheet_wait: "Ochishdan oldin kutish", sheet_block: "Har doim bloklash", sheet_none: "Qoidasiz", sheet_ok: "{app} uchun qoida saqlandi.", block2_h: "{app} bloklangan", block2_p: "Bu qoidani oʻzingiz qoʻydingiz. Oʻzgartirish uchun ilova nomini bosib turing." });
+Object.assign(T.ru, { y_num: "РАСЧЁТ", y_h: "Сколько дней в году забирает телефон?", y_p: "Подвиньте ползунки под себя. Это не обещание, а простая арифметика.", y_unit: "дней в год", y_l1: "В день в телефоне", y_l2: "На сколько хотите сократить в день", y_k1: "дни, уходящие на телефон", y_k2: "дни, которые к вам вернутся",
+  try_note: "В демо минуты сокращены до секунд. Подсказка: нажмите и удерживайте название любого приложения, чтобы задать ему своё правило." });
+Object.assign(T.ru.w, { yPct: "Это {p}% времени, когда вы не спите.", ySave: "Если сократить на {c} в день, за год к вам вернётся {d} дн.", yNone: "Подвиньте нижний ползунок и увидите, сколько дней вернётся." });
+Object.assign(T.ru.d, { sheet_p: "Правило для этого приложения:", sheet_wait: "Ждать перед открытием", sheet_block: "Всегда блокировать", sheet_none: "Без правила", sheet_ok: "Правило для {app} сохранено.", block2_h: "{app} заблокирован", block2_p: "Это правило задали вы сами. Чтобы изменить его, нажмите и удерживайте название приложения." });
+Object.assign(T.en, { y_num: "THE SUM", y_h: "How many days a year does your phone take?", y_p: "Set the sliders to your own numbers. This is arithmetic, not a promise.", y_unit: "days a year", y_l1: "On the phone each day", y_l2: "How much you would cut each day", y_k1: "days spent on the phone", y_k2: "days that come back to you",
+  try_note: "In the demo, minutes are shortened to seconds. Tip: press and hold any app's name to give it a rule of your own." });
+Object.assign(T.en.w, { yPct: "That is {p}% of your waking hours.", ySave: "Cut {c} a day and {d} days a year come back to you.", yNone: "Drag the lower slider to see how many days come back." });
+Object.assign(T.en.d, { sheet_p: "A rule for this app:", sheet_wait: "Wait before it opens", sheet_block: "Always block", sheet_none: "No rule", sheet_ok: "Rule saved for {app}.", block2_h: "{app} is blocked", block2_p: "You set this rule yourself. Press and hold the app's name to change it." });
+
 /* ---- Touch: the small things on the page that respond. Sample data only; nothing is sent. ---- */
 const Touch = (() => {
   const $ = id => document.getElementById(id);
@@ -1505,6 +1662,19 @@ const Touch = (() => {
   let breathing = null, phase = 0;
   function ringCap() { $("ring-cap").textContent = breathing === null ? w().ring : (phase % 2 ? w().breatheOut : w().breatheIn); }
 
+  // The year: plain arithmetic on the visitor's own numbers.
+  function year() {
+    const dots = $("y-dots");
+    if (!dots.children.length) dots.innerHTML = Array.from({ length: 365 }, (_, i) => '<i style="--n:' + i + '"></i>').join("");
+    const min = Number($("y-h").value), cut = Math.min(Number($("y-c").value), min);
+    const days = Math.round(min * 365 / 1440), back = Math.round(cut * 365 / 1440);
+    $("y-days").textContent = days;
+    $("y-ho").textContent = dur(min); $("y-co").textContent = dur(cut);
+    $("y-line1").textContent = fill(w().yPct, { p: Math.round(min / 960 * 100) });
+    $("y-line2").textContent = back > 0 ? fill(w().ySave, { c: dur(cut), d: back }) : w().yNone;
+    [...dots.children].forEach((el, i) => { el.className = i < days - back ? "t" : i < days ? "s" : ""; });
+  }
+
   function on(id, type, fn) { $(id).addEventListener(type, fn); }
   function pick(id, fn) { on(id, "click", e => { const b = e.target.closest("[data-i]"); if (b) fn(Number(b.dataset.i)); }); }
 
@@ -1519,6 +1689,7 @@ const Touch = (() => {
       refused = true; strict();
       const t = $("strict-time"); t.classList.remove("shake"); void t.offsetWidth; t.classList.add("shake");
     });
+    on("y-h", "input", year); on("y-c", "input", year);
     on("gray-on", "change", () => $("feed").classList.toggle("gray", $("gray-on").checked));
     on("guard-in", "input", () => guard(true));
     on("guard-ex", "click", e => { const b = e.target.closest("button"); if (b) { $("guard-in").value = b.textContent; guard(true); } });
@@ -1532,7 +1703,7 @@ const Touch = (() => {
     });
   }
   function lang() {
-    time(); hold(); sched(); strict(); needs(); perms(); ringCap();
+    time(); hold(); sched(); strict(); needs(); perms(); ringCap(); year();
     $("guard-in").placeholder = w().gPh;
     $("sched").setAttribute("aria-label", T[LANG].d4_h);
     $("ring").setAttribute("aria-label", w().ring);
