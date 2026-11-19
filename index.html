@@ -100,6 +100,62 @@
   .ph-toast { margin-top: auto; margin-bottom: 20px; border: 1px solid #4a4a4a; background: #0c0c0c; border-radius: 14px; padding: 12px 14px; font-weight: 500; }
   .ph-home { position: absolute; bottom: 10px; left: 50%; width: 84px; height: 4px; margin-left: -42px; border-radius: 4px; background: #fff; opacity: .9; }
 
+  /* The demo: a small Quiet that runs in the page. */
+  .try { background: var(--soft); border-bottom: 1px solid var(--line); }
+  .try-grid { display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "phone head" "phone side"; column-gap: 72px; row-gap: 28px; align-items: start; }
+  .try-head { grid-area: head; align-self: end; }
+  .try-head p:last-child { color: var(--muted); font-size: 18px; margin-top: 18px; max-width: 32em; }
+  .try-phone { grid-area: phone; display: flex; justify-content: center; }
+  .try-side { grid-area: side; }
+  @media (max-width: 860px) {
+    .try-grid { grid-template-columns: 1fr; grid-template-areas: "head" "phone" "side"; row-gap: 36px; }
+  }
+  .steps { list-style: none; margin: 0 0 26px; padding: 0; counter-reset: s; max-width: 30em; }
+  .steps li { counter-increment: s; display: grid; grid-template-columns: 30px 1fr; gap: 14px; align-items: start; padding: 13px 0; border-bottom: 1px solid var(--line); color: var(--muted); }
+  .steps li::before { content: counter(s); width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--muted); display: grid; place-items: center; font: 500 13px/1 Inter, system-ui, sans-serif; }
+  .steps li.done { color: var(--fg); }
+  .steps li.done::before { content: "✓"; background: var(--fg); color: var(--bg); border-color: var(--fg); }
+  .try-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+  .btn { font: 500 15.5px/1 Inter, system-ui, sans-serif; min-height: 46px; padding: 0 22px; border-radius: 999px; border: 1.5px solid var(--fg); background: var(--fg); color: var(--bg); cursor: pointer; }
+  .btn.ghost { background: none; color: var(--fg); border-color: var(--line); }
+  .try-done { margin-top: 22px; font-weight: 500; max-width: 30em; }
+
+  .phone.demo { width: 300px; max-width: 100%; padding: 0; font-size: 14px; user-select: none; touch-action: pan-y; }
+  .demo button { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; text-align: left; cursor: pointer; }
+  .demo button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+  .demo .scr { position: absolute; inset: 0; padding: 48px 24px 44px; display: flex; flex-direction: column; animation: d-in .22s ease-out; }
+  @keyframes d-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .demo .scr { animation: none; } }
+  .demo .d-time { font-size: 56px; letter-spacing: -.035em; line-height: 1; margin-top: 22px; }
+  .demo .d-dim { color: #8e8e8e; }
+  .demo .d-pill { align-self: flex-start; margin-top: 14px; border: 1px solid #5a5a5a; border-radius: 12px; padding: 7px 12px; font-weight: 500; }
+  .demo .d-list { margin-top: auto; display: grid; gap: 4px; }
+  .demo .d-app { font-size: 21px; padding: 7px 0; width: 100%; }
+  .demo .d-app:active { opacity: .5; }
+  .demo .d-all { margin-top: 14px; color: #8e8e8e; padding: 8px 0; }
+  .demo .d-search { width: 100%; background: none; border: 1px solid #3a3a3a; border-radius: 12px; color: #fff; font: inherit; padding: 10px 12px; margin: 6px 0 10px; }
+  .demo .d-search::placeholder { color: #777; }
+  .demo .d-scroll { overflow-y: auto; flex: 1; scrollbar-width: none; }
+  .demo .d-title { font-size: 24px; font-weight: 600; letter-spacing: -.02em; }
+  .demo .d-btn { display: block; width: 100%; border: 1px solid #fff; border-radius: 13px; text-align: center; padding: 11px 8px; font-weight: 500; margin-top: 9px; }
+  .demo .d-btn.fill { background: #fff; color: #000; }
+  .demo .d-btn[disabled] { border-color: #333; color: #555; cursor: default; }
+  .demo .d-bar { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 17px; padding-bottom: 12px; border-bottom: 1px solid #1f1f1f; }
+  .demo .d-back { font-size: 22px; line-height: 1; padding: 2px 6px 4px 0; }
+  .demo .d-chip { align-self: flex-start; margin-top: 12px; border: 1px solid #3a3a3a; border-radius: 999px; padding: 5px 11px; font-size: 12px; color: #b5b5b5; }
+  .demo .d-sk { display: grid; gap: 14px; margin-top: 16px; }
+  .demo .d-sk i { display: block; border-radius: 10px; background: #161616; }
+  .demo .d-tabs { margin-top: auto; display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid #1f1f1f; }
+  .demo .d-tabs button { text-align: center; padding: 12px 0 2px; font-weight: 500; color: #8e8e8e; }
+  .demo .d-tabs button.on { color: #fff; }
+  .demo .d-chatrow { display: grid; grid-template-columns: 38px 1fr; gap: 12px; align-items: center; width: 100%; padding: 10px 0; }
+  .demo .d-chatrow i { width: 38px; height: 38px; border-radius: 50%; background: #1d1d1d; }
+  .demo .d-chatrow b { display: block; font-weight: 500; font-size: 15px; }
+  .demo .d-chatrow span span { color: #8e8e8e; font-size: 12.5px; }
+  .demo .d-toast { position: absolute; left: 16px; right: 16px; bottom: 46px; border: 1px solid #4a4a4a; background: #0c0c0c; border-radius: 14px; padding: 12px 14px; font-weight: 500; font-size: 13px; animation: d-in .2s ease-out; z-index: 3; }
+  .demo .d-homebar { position: absolute; left: 0; right: 0; bottom: 0; height: 34px; display: grid; place-items: center; z-index: 4; }
+  .demo .d-homebar i { width: 96px; height: 4px; border-radius: 4px; background: #fff; }
+
   /* Sections */
   section { padding: 104px 0; }
   .sec-head { max-width: 46em; margin-bottom: 64px; }
@@ -211,7 +267,7 @@
       <p class="lead" data-t="lead"></p>
       <div class="hero-actions">
         <span class="status"><i></i><span data-t="status"></span></span>
-        <a class="more" href="#how" data-t="more"></a>
+        <a class="more" href="#try" data-t="more"></a>
       </div>
     </div>
     <div class="hero-phone" aria-hidden="true">
@@ -233,6 +289,32 @@
       <li data-t="fact1"></li><li data-t="fact2"></li><li data-t="fact3"></li>
     </ul></div>
   </div>
+
+  <section id="try" class="try">
+    <div class="wrap try-grid">
+      <div class="try-head">
+        <p class="num" data-t="try_num"></p>
+        <h2 data-t="try_h"></h2>
+        <p data-t="try_p"></p>
+      </div>
+      <div class="try-phone">
+        <div class="phone demo" id="demo">
+          <div class="sb"><span id="demo-clock">7:42</span><span><em></em><b></b></span></div>
+          <div id="demo-screen"></div>
+          <div id="demo-toast" role="status" aria-live="polite"></div>
+          <button class="d-homebar" type="button" data-act="home" id="demo-home"><i></i></button>
+        </div>
+      </div>
+      <div class="try-side">
+        <ol class="steps" id="demo-steps"></ol>
+        <div class="try-actions">
+          <button class="btn" type="button" id="demo-focus"></button>
+          <button class="btn ghost" type="button" id="demo-reset"></button>
+        </div>
+        <p class="try-done" id="demo-done" hidden></p>
+      </div>
+    </div>
+  </section>
 
   <section id="how">
     <div class="wrap">
@@ -643,6 +725,223 @@ en: {
 }
 };
 
+// The demo's own words.
+Object.assign(T.uz, {
+  more: "Hozir sinab koʻrish", try_num: "NAMOYISH",
+  try_h: "Oʻzingiz sinab koʻring",
+  try_p: "Bu telefon haqiqiy Quiet kabi ishlaydi: ilovalarni bosing, kutish ekranidan oʻting, fokusni yoqing. Namoyishda daqiqalar soniyalarga qisqartirilgan.",
+  d: {
+    steps: ["Instagramni oching", "Kutib turing, 5 daqiqani tanlang va vaqt tugashini kuting", "Fokusni boshlang va “Barcha ilovalar”dan Instagramni ochib koʻring", "YouTube’da Shorts boʻlimiga oʻting", "Telegram’da “Kinolar” botini oching"],
+    focus_on: "Fokusni boshlash", focus_off: "Fokusni tugatish", reset: "Boshidan boshlash",
+    done: "Hammasini sinab koʻrdingiz. Haqiqiy ilovada bularning barchasini oʻzingiz sozlaysiz.",
+    today: "Bugun telefonda 38 daqiqa", all: "Barcha ilovalar", search: "Ilovalarni qidirish", back: "Orqaga", home_btn: "Bosh ekran",
+    opening: "{app} ochilmoqda", wait: "{n} soniya kuting.", used: "Bugun 3 marta, 24 daqiqa.", why: "Nima uchun ochyapsiz?",
+    go_home: "Uyga qaytish", cont: "{n} daqiqaga davom etish", chip: "{n} daqiqa · namoyishda {s} soniya",
+    timeup: "Vaqt tugadi. {app} yopildi.", pill: "Ish · 25 daqiqa qoldi",
+    block_h: "{app} hozir ochilmaydi", block_p: "Fokus tugaguncha faqat shu ish uchun tanlangan ilovalar ochiladi. Qoʻngʻiroqlar har doim oʻtadi.",
+    shorts_toast: "Qisqa videolar oʻchirilgan.", bot_toast: "Quiet yopdi: bu telefonda Telegram botlari yopiq.",
+    tab_home: "Bosh sahifa", chats: ["Oila", "Sinfdoshlar", "Kinolar", "Ustoz"], subs: ["Kechki ovqatga kelasizmi?", "Ertaga soat 9 da", "bot", "Rahmat"],
+    apps: { phone: "Telefon", messages: "Xabarlar", camera: "Kamera", maps: "Xarita", calendar: "Taqvim", instagram: "Instagram", youtube: "YouTube", telegram: "Telegram", mail: "Pochta", docs: "Hujjatlar", notes: "Qaydlar", clock: "Soat" }
+  }
+});
+Object.assign(T.ru, {
+  more: "Попробовать сейчас", try_num: "ДЕМО",
+  try_h: "Попробуйте сами",
+  try_p: "Этот телефон работает как настоящий Quiet: нажимайте на приложения, пройдите экран ожидания, включите фокус. В демо минуты сокращены до секунд.",
+  d: {
+    steps: ["Откройте Instagram", "Подождите, выберите 5 минут и дождитесь конца времени", "Включите фокус и попробуйте открыть Instagram через «Все приложения»", "В YouTube перейдите в Shorts", "В Telegram откройте бота «Кино»"],
+    focus_on: "Начать фокус", focus_off: "Закончить фокус", reset: "Начать сначала",
+    done: "Вы попробовали всё. В настоящем приложении всё это вы настраиваете сами.",
+    today: "Сегодня в телефоне 38 минут", all: "Все приложения", search: "Поиск приложений", back: "Назад", home_btn: "Главный экран",
+    opening: "Открывается {app}", wait: "Подождите {n} с.", used: "Сегодня 3 раза, 24 минуты.", why: "Зачем вы его открываете?",
+    go_home: "На главный экран", cont: "Продолжить на {n} мин", chip: "{n} мин · в демо {s} с",
+    timeup: "Время вышло. {app} закрыт.", pill: "Работа · осталось 25 мин",
+    block_h: "{app} сейчас не откроется", block_p: "До конца фокуса открываются только приложения, выбранные для этого дела. Звонки проходят всегда.",
+    shorts_toast: "Короткие видео отключены.", bot_toast: "Закрыто Quiet: боты Telegram на этом телефоне закрыты.",
+    tab_home: "Главная", chats: ["Семья", "Одноклассники", "Кино", "Учитель"], subs: ["Придёшь к ужину?", "Завтра в 9", "бот", "Спасибо"],
+    apps: { phone: "Телефон", messages: "Сообщения", camera: "Камера", maps: "Карты", calendar: "Календарь", instagram: "Instagram", youtube: "YouTube", telegram: "Telegram", mail: "Почта", docs: "Документы", notes: "Заметки", clock: "Часы" }
+  }
+});
+Object.assign(T.en, {
+  more: "Try it now", try_num: "DEMO",
+  try_h: "Try it yourself",
+  try_p: "This phone behaves like the real Quiet: tap the apps, sit through the wait, start a focus. In the demo, minutes are shortened to seconds.",
+  d: {
+    steps: ["Open Instagram", "Wait, pick 5 minutes and let the time run out", "Start a focus, then try opening Instagram from “All apps”", "In YouTube, go to Shorts", "In Telegram, open the “Movies” bot"],
+    focus_on: "Start focus", focus_off: "End focus", reset: "Start over",
+    done: "You have tried all of it. In the real app, you set every one of these up yourself.",
+    today: "38 minutes on the phone today", all: "All apps", search: "Search apps", back: "Back", home_btn: "Home screen",
+    opening: "Opening {app}", wait: "Wait {n} s.", used: "3 times today, 24 minutes.", why: "What are you opening this for?",
+    go_home: "Go home", cont: "Continue for {n} min", chip: "{n} min · {s} s in the demo",
+    timeup: "Time is up. {app} was closed.", pill: "Work · 25 min left",
+    block_h: "{app} will not open now", block_p: "Until the focus ends, only the apps chosen for this job open. Calls always come through.",
+    shorts_toast: "Short videos are switched off.", bot_toast: "Closed by Quiet: Telegram bots are closed on this phone.",
+    tab_home: "Home", chats: ["Family", "Classmates", "Movies", "Teacher"], subs: ["Home for dinner?", "Tomorrow at 9", "bot", "Thank you"],
+    apps: { phone: "Phone", messages: "Messages", camera: "Camera", maps: "Maps", calendar: "Calendar", instagram: "Instagram", youtube: "YouTube", telegram: "Telegram", mail: "Mail", docs: "Docs", notes: "Notes", clock: "Clock" }
+  }
+});
+
+let LANG = "uz";
+
+/* ---- The demo: a small Quiet in the page. Nothing here leaves the browser. ---- */
+const Demo = (() => {
+  const HOME = ["phone", "messages", "camera", "instagram", "youtube", "telegram"];
+  const FOCUS_HOME = ["mail", "calendar", "docs"];
+  const FOCUS_ALLOWED = new Set(["mail", "calendar", "docs", "phone", "notes"]);
+  const ALL = ["calendar", "camera", "clock", "docs", "instagram", "mail", "maps", "messages", "notes", "phone", "telegram", "youtube"];
+  const WAIT_S = 5, VISIT_S = 8;
+  const st = { screen: "home", app: null, focus: false, n: 0, min: 0, chat: -1, done: new Set() };
+  let timers = [], toastTimer = null;
+  const $ = id => document.getElementById(id);
+  const d = () => T[LANG].d;
+  const fill = (s, v) => s.replace(/\{(\w+)\}/g, (_, k) => v[k]);
+  const name = app => d().apps[app];
+  const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  function clear() { timers.forEach(t => { clearTimeout(t); clearInterval(t); }); timers = []; }
+  function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+  function mark(i) { st.done.add(i); side(); }
+  function toast(text) {
+    const el = $("demo-toast");
+    el.innerHTML = '<div class="d-toast">' + esc(text) + "</div>";
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { el.innerHTML = ""; }, 3200);
+  }
+  function go(screen, app) { clear(); st.screen = screen; if (app !== undefined) st.app = app; render(); }
+
+  function open(app) {
+    if (st.focus && !FOCUS_ALLOWED.has(app)) { go("block", app); if (app === "instagram") mark(2); return; }
+    if (app === "instagram") {
+      st.n = WAIT_S; go("wait", app); mark(0);
+      timers.push(setInterval(() => { if (st.n > 0) { st.n--; render(false); } }, 1000));
+      return;
+    }
+    st.min = 0; go("app", app);
+  }
+  function visit(min) {
+    st.min = min; go("app", "instagram");
+    later(() => { go("home"); toast(fill(d().timeup, { app: name("instagram") })); mark(1); }, VISIT_S * 1000);
+  }
+  function shorts() {
+    go("shorts", "youtube");
+    later(() => { st.min = 0; go("app", "youtube"); toast(d().shorts_toast); mark(3); }, 900);
+  }
+  function chat(i) {
+    st.chat = i; go("chat", "telegram");
+    if (i === 2) later(() => { go("app", "telegram"); toast(d().bot_toast); mark(4); }, 900);
+  }
+
+  const skeleton = hs => '<div class="d-sk">' + hs.map(h => '<i style="height:' + h + 'px"></i>').join("") + "</div>";
+  const bar = (title, act) => '<div class="d-bar"><button type="button" class="d-back" data-act="' + act + '" aria-label="' + esc(d().back) + '">‹</button>' + esc(title) + "</div>";
+  const appBtn = app => '<button type="button" class="d-app" data-act="open:' + app + '">' + esc(name(app)) + "</button>";
+
+  function view() {
+    const t = d();
+    switch (st.screen) {
+      case "home": {
+        const list = (st.focus ? FOCUS_HOME : HOME).map(appBtn).join("");
+        return '<div class="d-time">' + clock() + '</div><div class="d-dim" style="margin-top:10px">' + esc(today()) + "</div>" +
+          (st.focus ? '<div class="d-pill">' + esc(t.pill) + "</div>" : '<div class="d-dim">' + esc(t.today) + "</div>") +
+          '<div class="d-list">' + list + '</div><button type="button" class="d-all" data-act="drawer">' + esc(t.all) + " ↑</button>";
+      }
+      case "drawer":
+        return bar(t.all, "home") + '<input class="d-search" id="demo-q" type="search" autocomplete="off" placeholder="' + esc(t.search) + '" aria-label="' + esc(t.search) + '">' +
+          '<div class="d-scroll" id="demo-apps">' + drawerList("") + "</div>";
+      case "wait": {
+        const ready = st.n <= 0;
+        return '<div style="margin-top:auto"></div><div class="d-title">' + esc(fill(t.opening, { app: name(st.app) })) + "</div>" +
+          '<div class="d-dim" style="margin-top:8px">' + (ready ? "&nbsp;" : esc(fill(t.wait, { n: st.n }))) + '</div><div class="d-dim">' + esc(t.used) + "</div>" +
+          '<div style="margin:16px 0 12px">' + esc(t.why) + "</div>" +
+          '<button type="button" class="d-btn fill" data-act="home">' + esc(t.go_home) + "</button>" +
+          [5, 10, 20].map(m => '<button type="button" class="d-btn" data-act="visit:' + m + '"' + (ready ? "" : " disabled") + ">" + esc(fill(t.cont, { n: m })) + "</button>").join("");
+      }
+      case "block":
+        return '<div style="margin-top:auto"></div><div class="d-title">' + esc(fill(t.block_h, { app: name(st.app) })) + "</div>" +
+          '<div class="d-dim" style="margin:10px 0 18px">' + esc(t.block_p) + "</div>" +
+          '<button type="button" class="d-btn fill" data-act="home">' + esc(t.go_home) + "</button>";
+      case "shorts":
+        return bar("Shorts", "open:youtube") + skeleton([330]);
+      case "chat":
+        return bar(t.chats[st.chat], "open:telegram") + '<div class="d-dim" style="margin-top:8px">' + (st.chat === 2 ? "bot" : "") + "</div>" + skeleton([44, 60, 36]);
+      case "app":
+        if (st.app === "youtube")
+          return bar("YouTube", "home") + skeleton([120, 14, 120, 14]) +
+            '<div class="d-tabs"><button type="button" class="on" data-act="open:youtube">' + esc(t.tab_home) + '</button><button type="button" data-act="shorts">Shorts</button></div>';
+        if (st.app === "telegram")
+          return bar("Telegram", "home") + '<div style="margin-top:8px">' + t.chats.map((c, i) =>
+            '<button type="button" class="d-chatrow" data-act="chat:' + i + '"><i></i><span><b>' + esc(c) + "</b><span>" + esc(t.subs[i]) + "</span></span></button>").join("") + "</div>";
+        return bar(name(st.app), "home") +
+          (st.min ? '<div class="d-chip">' + esc(fill(t.chip, { n: st.min, s: VISIT_S })) + "</div>" : "") +
+          skeleton(st.app === "instagram" ? [36, 200, 14, 14] : [60, 40, 90, 40]);
+    }
+    return "";
+  }
+  function drawerList(q) {
+    q = q.trim().toLowerCase();
+    return ALL.map(a => [a, name(a)]).filter(p => p[1].toLowerCase().includes(q)).sort((a, b) => a[1].localeCompare(b[1], LANG))
+      .map(p => appBtn(p[0])).join("");
+  }
+  function clock() { const n = new Date(); return n.getHours() + ":" + String(n.getMinutes()).padStart(2, "0"); }
+  function today() {
+    // Written out by hand: many browsers have no Uzbek calendar and print "M11 19, Thu".
+    const n = new Date(), day = n.getDate();
+    const W = {
+      uz: ["Yakshanba", "Dushanba", "Seshanba", "Chorshanba", "Payshanba", "Juma", "Shanba"],
+      ru: ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"],
+      en: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+    }[LANG][n.getDay()];
+    const M = {
+      uz: ["yanvar", "fevral", "mart", "aprel", "may", "iyun", "iyul", "avgust", "sentabr", "oktabr", "noyabr", "dekabr"],
+      ru: ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"],
+      en: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    }[LANG][n.getMonth()];
+    return LANG === "uz" ? W + ", " + day + "-" + M : W + ", " + day + " " + M;
+  }
+  function render(animate) {
+    const el = $("demo-screen");
+    if (!el) return;
+    el.innerHTML = '<div class="scr"' + (animate === false ? ' style="animation:none"' : "") + ">" + view() + "</div>";
+    $("demo-clock").textContent = clock();
+    $("demo-home").setAttribute("aria-label", d().home_btn);
+  }
+  function side() {
+    const t = d();
+    $("demo-steps").innerHTML = t.steps.map((s, i) => "<li" + (st.done.has(i) ? ' class="done"' : "") + "><span>" + esc(s) + "</span></li>").join("");
+    $("demo-focus").textContent = st.focus ? t.focus_off : t.focus_on;
+    $("demo-reset").textContent = t.reset;
+    const done = $("demo-done");
+    done.textContent = t.done;
+    done.hidden = st.done.size < t.steps.length;
+  }
+  function act(a) {
+    const [what, arg] = a.split(":");
+    if (what === "home") go("home");
+    else if (what === "drawer") go("drawer");
+    else if (what === "open") open(arg);
+    else if (what === "visit") visit(Number(arg));
+    else if (what === "shorts") shorts();
+    else if (what === "chat") chat(Number(arg));
+  }
+  function init() {
+    const phone = $("demo");
+    phone.addEventListener("click", e => {
+      const b = e.target.closest("[data-act]");
+      if (b && !b.disabled) act(b.dataset.act);
+    });
+    phone.addEventListener("input", e => {
+      if (e.target.id === "demo-q") $("demo-apps").innerHTML = drawerList(e.target.value);
+    });
+    // Swipe up on the home screen opens the app list, as in the app.
+    let y0 = null;
+    phone.addEventListener("pointerdown", e => { y0 = e.clientY; });
+    phone.addEventListener("pointerup", e => { if (y0 !== null && st.screen === "home" && y0 - e.clientY > 50) go("drawer"); y0 = null; });
+    $("demo-focus").addEventListener("click", () => { st.focus = !st.focus; go("home"); side(); });
+    $("demo-reset").addEventListener("click", () => { st.focus = false; st.done.clear(); $("demo-toast").innerHTML = ""; go("home"); side(); });
+    setInterval(() => { if (st.screen === "home") render(false); }, 20000);
+  }
+  return { init, refresh() { render(false); side(); } };
+})();
+
 function pickLang() {
   try { const saved = localStorage.getItem("quiet-lang"); if (saved && T[saved]) return saved; } catch (e) {}
   const nav = (navigator.language || "uz").slice(0, 2).toLowerCase();
@@ -663,9 +962,12 @@ function apply(lang) {
   });
   document.querySelectorAll(".langs button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
   try { localStorage.setItem("quiet-lang", lang); } catch (e) {}
+  LANG = lang;
+  Demo.refresh();
 }
 
 document.querySelectorAll(".langs button").forEach(b => b.addEventListener("click", () => apply(b.dataset.lang)));
+Demo.init();
 apply(pickLang());
 </script>
 </body>
