@@ -274,6 +274,90 @@
   footer a { text-underline-offset: 4px; }
   footer .sp { margin-right: auto; }
 
+  /* Pass 4: the page shows what it can do */
+  .hero { background-image: none; }
+  #net { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; -webkit-mask-image: linear-gradient(#000 60%, transparent); mask-image: linear-gradient(#000 60%, transparent); }
+  .stage { perspective: 1200px; }
+  #player .phone { transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .3s ease-out; will-change: transform; }
+
+  .tape { border-top: 1px solid var(--line); overflow: hidden; padding: 14px 0; }
+  .tape div { display: flex; width: max-content; animation: tape 40s linear infinite; }
+  .tape span { font-size: 12.5px; font-weight: 500; letter-spacing: .14em; color: var(--muted); white-space: nowrap; }
+  .tape span::after { content: "✦"; margin: 0 22px; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  @keyframes tape { to { transform: translateX(-50%); } }
+  .tape + section { border-top: 1px solid var(--line); }
+
+  /* Before and after */
+  .ba-wrap { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+  .phone.ba { --pw: min(300px, 74vw, 36svh); touch-action: pan-y; cursor: ew-resize; user-select: none; -webkit-user-select: none; box-shadow: 0 0 0 1px #34343c, 0 0 0 5px rgba(255,255,255,.04), 0 26px 80px color-mix(in srgb, var(--a2) 40%, rgba(0,0,0,.5)); }
+  .noisy { position: absolute; inset: 0; padding: 12% 7% 6%; display: flex; flex-direction: column; gap: .7em; background: linear-gradient(160deg, #3b1d6e, #0f4c81 55%, #b4235a); }
+  .nz-ban { display: flex; gap: .6em; align-items: flex-start; background: rgba(255,255,255,.94); border-radius: .9em; padding: .6em .7em; }
+  .nz-ban i { width: 1.7em; height: 1.7em; border-radius: .5em; flex: none; display: block; }
+  .nz-ban u { flex: 1; display: block; height: .5em; border-radius: .3em; background: #b9b9c4; box-shadow: 0 .9em 0 #dcdce3; margin: .15em 0 1em; }
+  .nz-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .9em .8em; margin-top: .3em; }
+  .nz-grid i, .nz-dock i { position: relative; aspect-ratio: 1; border-radius: 28%; display: block; }
+  .nz-grid i[data-n]::after { content: attr(data-n); position: absolute; right: -.5em; top: -.5em; min-width: 1.6em; height: 1.6em; padding: 0 .35em; border-radius: 1em; background: #ff3b30; color: #fff; font-size: .62em; font-weight: 600; font-style: normal; line-height: 1.6em; text-align: center; box-shadow: 0 0 0 .14em rgba(0,0,0,.25); }
+  .nz-dock { margin-top: auto; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .8em; background: rgba(255,255,255,.18); border-radius: 1.4em; padding: .7em; }
+  .calm { position: absolute; inset: 0; background: #000; clip-path: inset(0 calc(100% - var(--x, 55%)) 0 0); }
+  .calm .sc { opacity: 1; visibility: visible; }
+  .ba-line { position: absolute; top: 0; bottom: 0; left: var(--x, 55%); width: 2px; margin-left: -1px; background: linear-gradient(var(--a1), var(--a3)); box-shadow: 0 0 18px var(--a2); }
+  .ba-line b { position: absolute; left: 50%; top: 50%; width: 2.7em; height: 2.7em; margin: -1.35em 0 0 -1.35em; border-radius: 50%; background: #fff; color: #000; display: grid; place-items: center; font-weight: 600; box-shadow: 0 .3em 1.2em rgba(0,0,0,.5); }
+  .ba-tags { display: flex; gap: 10px; }
+  .ba-tags span { font-size: 13.5px; font-weight: 500; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+  .ba-tags span:first-child { color: var(--fg); border-color: transparent; background: linear-gradient(var(--bg), var(--bg)) padding-box, var(--grad) border-box; }
+
+  /* The year */
+  .time { text-align: center; }
+  .time h2 { max-width: 16ch; margin: 0 auto; }
+  .tm-num { margin-top: 20px; display: flex; flex-direction: column; align-items: center; }
+  .tm-num b { font-size: clamp(110px, 38vw, 220px); font-weight: 600; letter-spacing: -.06em; line-height: 1; font-variant-numeric: tabular-nums; padding: 0 .06em; }
+  .tm-num span { font-size: 14px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
+  .tm-ctl { max-width: 460px; margin: 32px auto 0; text-align: left; }
+  .tm-row { display: flex; justify-content: space-between; gap: 12px; font-weight: 500; font-size: 16px; }
+  .tm-ctl input { width: 100%; height: 36px; accent-color: var(--a1); margin-top: 6px; }
+  .tm-bar { height: 8px; border-radius: 8px; background: var(--line); overflow: hidden; margin-top: 10px; }
+  .tm-bar i { display: block; height: 100%; width: 100%; background: var(--grad); transform-origin: left; transform: scaleX(.17); transition: transform .3s; }
+  .tm-pct { color: var(--muted); font-size: 14.5px; margin-top: 8px; }
+  .time .note { margin: 14px auto 0; }
+
+  /* The checker */
+  .ck { grid-column: 1 / -1; border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.04); border-radius: 22px; padding: 22px 18px; }
+  .ck h3 { font-size: 20px; }
+  .ck > p { color: #a9a9b4; font-size: 16px; margin-top: 6px; max-width: 62ch; }
+  .ck input { width: 100%; margin-top: 16px; font: 500 17px/1.3 Inter, system-ui, sans-serif; color: #fff; background: #0d0d12; border: 1px solid rgba(255,255,255,.2); border-radius: 14px; padding: 14px 16px; outline: none; transition: border-color .2s, box-shadow .2s; }
+  .ck input:focus { border-color: var(--a2); box-shadow: 0 0 0 4px color-mix(in srgb, var(--a2) 25%, transparent); }
+  .ck-ex { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .ck-ex button { font-size: 14px; font-weight: 500; color: #d6d6de; padding: 8px 13px; border-radius: 999px; border: 1px solid rgba(255,255,255,.16); }
+  .ck-out { margin-top: 16px; border-radius: 14px; padding: 14px 16px; border: 1px solid rgba(255,255,255,.12); display: grid; gap: 4px; align-content: start; min-height: 5.6em; transition: border-color .25s, background .25s; }
+  .ck-out b { font-size: 17px; }
+  .ck-out span { color: #a9a9b4; font-size: 15px; line-height: 1.45; }
+  .ck-out.bad { border-color: #ff6b81; background: rgba(255,107,129,.09); }
+  .ck-out.bad b { color: #ffc2cc; }
+  .ck-out.ok { border-color: #34d399; background: rgba(52,211,153,.08); }
+  .ck-out.ok b { color: #b9f5dc; }
+
+  /* One app instead of three */
+  .cmp { border: 1px solid var(--line); border-radius: 20px; background: var(--card); overflow: hidden; }
+  .cr { display: grid; grid-template-columns: minmax(0, 1fr) repeat(4, 50px); align-items: stretch; font-size: 15px; line-height: 1.3; }
+  .cr + .cr { border-top: 1px solid var(--line); }
+  .cr > * { display: grid; place-items: center; padding: 14px 2px; text-align: center; }
+  .cr > :first-child { justify-items: start; text-align: left; padding-left: 16px; font-weight: 500; }
+  .cr > :nth-child(2) { background: color-mix(in srgb, var(--a1) 12%, transparent); }
+  .cr.th { font-size: 10px; font-weight: 600; color: var(--muted); background: var(--soft); }
+  .cr.th > :nth-child(2) { color: var(--fg); font-size: 12px; }
+  .yes, .no { display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; }
+  .yes { background: var(--grad); color: #fff; }
+  .yes.dim { background: var(--line); color: var(--fg); }
+  .yes svg { width: 14px; height: 14px; }
+  .no::before { content: ""; width: 10px; height: 2px; border-radius: 2px; background: var(--muted); opacity: .5; }
+  @media (min-width: 720px) {
+    .cr { grid-template-columns: minmax(0, 1fr) repeat(4, 124px); font-size: 16.5px; }
+    .cr > * { padding: 16px 8px; }
+    .cr > :first-child { padding-left: 28px; }
+    .cr.th { font-size: 12.5px; letter-spacing: .06em; text-transform: uppercase; }
+    .ck { padding: 30px 28px; }
+  }
+
   @media (min-width: 720px) {
     .wrap { padding: 0 32px; }
     section { padding: 96px 0; }
@@ -333,6 +417,7 @@
 
 <main id="top">
   <section class="hero">
+    <canvas id="net" aria-hidden="true"></canvas>
     <div class="wrap hero-grid">
       <div>
         <a class="badge" href="#ai" style="text-decoration:none"><svg class="spark" viewBox="0 0 24 24"><defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7c5cff"/><stop offset=".55" stop-color="#3b82f6"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs><path fill="url(#sg)" d="M12 2l2.1 6.2a3 3 0 0 0 1.7 1.7L22 12l-6.2 2.1a3 3 0 0 0-1.7 1.7L12 22l-2.1-6.2a3 3 0 0 0-1.7-1.7L2 12l6.2-2.1a3 3 0 0 0 1.7-1.7z"/></svg><span data-t="ai_badge"></span></a>
@@ -354,6 +439,39 @@
         <p class="cap" id="p-cap" aria-live="off"></p>
         <div class="segs" id="p-segs" role="tablist"></div>
       </div>
+    </div>
+  </section>
+
+  <div class="tape" aria-hidden="true"><div><span>ON-DEVICE AI</span><span>TENSORFLOW LITE</span><span>KOTLIN</span><span>0 SERVERS</span><span>OFFLINE</span><span>ANDROID 8+</span><span>NO ACCOUNT</span><span>ON-DEVICE AI</span><span>TENSORFLOW LITE</span><span>KOTLIN</span><span>0 SERVERS</span><span>OFFLINE</span><span>ANDROID 8+</span><span>NO ACCOUNT</span><span>ON-DEVICE AI</span><span>TENSORFLOW LITE</span><span>KOTLIN</span><span>0 SERVERS</span><span>OFFLINE</span><span>ANDROID 8+</span><span>NO ACCOUNT</span><span>ON-DEVICE AI</span><span>TENSORFLOW LITE</span><span>KOTLIN</span><span>0 SERVERS</span><span>OFFLINE</span><span>ANDROID 8+</span><span>NO ACCOUNT</span></div></div>
+
+  <section id="shift">
+    <div class="wrap">
+      <div class="head">
+        <h2 data-t="sh_h"></h2>
+        <p class="sub" data-t="sh_p"></p>
+      </div>
+      <div class="ba-wrap">
+        <div class="phone ba" id="ba" aria-hidden="true"><div class="screen">
+          <div class="noisy" id="noisy"></div>
+          <div class="calm" data-shot="home"></div>
+          <i class="ba-line"><b>&#8249;&#8250;</b></i>
+        </div></div>
+        <div class="ba-tags"><span data-t="sh_b"></span><span data-t="sh_a"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="time">
+    <div class="wrap time">
+      <h2 data-t="tm_h"></h2>
+      <div class="tm-num"><b class="gt" id="tm-days">61</b><span data-t="tm_unit"></span></div>
+      <div class="tm-ctl">
+        <div class="tm-row"><label for="tm-in" data-t="tm_l"></label><output id="tm-out" for="tm-in"></output></div>
+        <input type="range" id="tm-in" min="1" max="10" step="0.5" value="4">
+        <div class="tm-bar"><i id="tm-fill"></i></div>
+        <p class="tm-pct" id="tm-pct"></p>
+      </div>
+      <p class="note" data-t="tm_note"></p>
     </div>
   </section>
 
@@ -406,7 +524,25 @@
           </div>
           <div class="scan-foot"><span data-t="ai_local"></span><span data-t="ai_close"></span></div>
         </div>
+        <div class="ck">
+          <h3 data-t="ck_h"></h3>
+          <p data-t="ck_p"></p>
+          <input id="ck-in" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="60">
+          <div class="ck-ex" id="ck-ex"></div>
+          <div class="ck-out" id="ck-out" aria-live="polite"><b></b><span></span></div>
+        </div>
       </div>
+    </div>
+  </section>
+
+  <section id="why">
+    <div class="wrap">
+      <div class="head">
+        <h2 data-t="cmp_h"></h2>
+        <p class="sub" data-t="cmp_p"></p>
+      </div>
+      <div class="cmp" id="cmp"></div>
+      <p class="note" data-t="cmp_note"></p>
     </div>
   </section>
 
@@ -858,6 +994,7 @@ function apply(lang) {
   document.querySelectorAll(".langs button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
   try { localStorage.setItem("quiet-lang", lang); } catch (e) {}
   Player.label();
+  Extra.lang();
 }
 
 /* ---- Light or dark: the system's choice until the visitor makes their own. ---- */
@@ -872,9 +1009,220 @@ try { const saved = localStorage.getItem("quiet-theme"); if (saved === "dark" ||
 theme();
 document.getElementById("theme").addEventListener("click", () => theme(theme() ? "light" : "dark"));
 
+// Words for the parts that respond.
+Object.assign(T.uz, {
+  sh_h: "Bir xil telefon. Ikki xil bosh ekran.", sh_p: "Chiziqni chapga-o‘ngga suring: chapda Quiet, o‘ngda odatiy ekran.", sh_a: "Oldin", sh_b: "Quiet bilan",
+  tm_h: "Telefon yiliga necha kuningizni oladi?", tm_unit: "kun / yil", tm_l: "Kuniga telefonda", tm_fmt: "{h} soat", tm_pct: "Bu yilning {p} foizi.",
+  tm_note: "Bu va’da emas, oddiy arifmetika: soat × 365 ÷ 24.",
+  ck_h: "O‘zingiz tekshirib ko‘ring", ck_p: "Kanal yoki chat nomini yozing. Tekshiruv shu sahifaning o‘zida, ilovadagi so‘z ro‘yxati bilan ishlaydi; hech narsa yuborilmaydi.",
+  ck_ph: "Masalan: Tungi kinolar", ck_ex: ["Sinfdoshlar 7-A", "Tungi kinolar 🔞", "Kino 18+", "Kinolar yashirin"], ck_empty: "Nom yozing yoki misollardan birini bosing.",
+  ck_bad: ["Yopiladi.", "Nomida kattalar uchun kontentni bildiruvchi so‘z yoki belgi bor."],
+  ck_ok: ["So‘z tekshiruvidan o‘tadi.", "Shuning uchun rasm tekshiruvi va botlarni yopish ham bor: nomi beozor bo‘lsa-da, ichidagisi tekshiriladi."],
+  cmp_h: "Uchta ilova o‘rniga bitta",
+  cmp_p: "Odatda buning uchun uchta alohida ilova kerak: minimalist launcher, bloklovchi va ota-ona nazorati. Quiet uchalasini birlashtiradi va ustiga telefonning o‘zida ishlaydigan AI qo‘shadi.",
+  cmp_f: "Imkoniyat", cmp_c: ["Launcher", "Bloker", "Nazorat"],
+  cmp_r: ["Sokin bosh ekran", "Ilova limitlari", "Fokus rejimi", "Ota-ona qulfi", "Telefondagi AI"],
+  cmp_note: "Toifalarning odatiy imkoniyatlari ko‘rsatilgan; ayrim ilovalar farq qilishi mumkin."
+});
+Object.assign(T.ru, {
+  sh_h: "Один телефон. Два домашних экрана.", sh_p: "Двигайте линию влево и вправо: слева Quiet, справа обычный экран.", sh_a: "До", sh_b: "С Quiet",
+  tm_h: "Сколько дней в году забирает телефон?", tm_unit: "дней в год", tm_l: "В день в телефоне", tm_fmt: "{h} ч", tm_pct: "Это {p}% года.",
+  tm_note: "Это не обещание, а арифметика: часы × 365 ÷ 24.",
+  ck_h: "Проверьте сами", ck_p: "Введите название канала или чата. Проверка идёт прямо на этой странице, по списку слов из приложения; ничего не отправляется.",
+  ck_ph: "Например: Ночное кино", ck_ex: ["Одноклассники 7-А", "Ночное кино 🔞", "Кино 18+", "Скрытые фильмы"], ck_empty: "Введите название или нажмите на пример.",
+  ck_bad: ["Закроется.", "В названии есть слово или знак, указывающий на контент для взрослых."],
+  ck_ok: ["Проверку слов проходит.", "Поэтому есть ещё проверка изображений и блокировка ботов: при безобидном названии проверяется содержимое."],
+  cmp_h: "Одно приложение вместо трёх",
+  cmp_p: "Обычно для этого нужны три разных приложения: минималистичный лаунчер, блокировщик и родительский контроль. Quiet объединяет все три и добавляет ИИ, который работает прямо на телефоне.",
+  cmp_f: "Возможность", cmp_c: ["Лаунчер", "Блокер", "Контроль"],
+  cmp_r: ["Спокойный экран", "Лимиты приложений", "Режим фокуса", "Родительский замок", "ИИ на телефоне"],
+  cmp_note: "Показаны типичные возможности категорий; отдельные приложения могут отличаться."
+});
+Object.assign(T.en, {
+  sh_h: "Same phone. Two home screens.", sh_p: "Drag the line left and right: Quiet on the left, the usual screen on the right.", sh_a: "Before", sh_b: "With Quiet",
+  tm_h: "How many days a year does your phone take?", tm_unit: "days a year", tm_l: "On the phone each day", tm_fmt: "{h} h", tm_pct: "That is {p}% of the year.",
+  tm_note: "Not a promise, just arithmetic: hours × 365 ÷ 24.",
+  ck_h: "Check it yourself", ck_p: "Type the name of a channel or chat. The check runs on this page, with the word list from the app; nothing is sent anywhere.",
+  ck_ph: "For example: Late night movies", ck_ex: ["Class 7-A", "Late night movies 🔞", "Movies 18+", "Hidden films"], ck_empty: "Type a name or tap one of the examples.",
+  ck_bad: ["It gets closed.", "The name has a word or sign that points to adult content."],
+  ck_ok: ["It passes the word check.", "That is why there is also the image check and bot blocking: a harmless name does not hide what is inside."],
+  cmp_h: "One app instead of three",
+  cmp_p: "This usually takes three separate apps: a minimalist launcher, a blocker and parental controls. Quiet combines all three and adds AI that runs on the phone itself.",
+  cmp_f: "Feature", cmp_c: ["Launcher", "Blocker", "Parental"],
+  cmp_r: ["Calm home screen", "App limits", "Focus mode", "Parental lock", "On-device AI"],
+  cmp_note: "Typical features of each category; individual apps may differ."
+});
+
+/* ---- The parts of the page that respond: the network, the slider, the year, the checker. ---- */
+const Extra = (() => {
+  const $ = id => document.getElementById(id);
+  const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // What a name is made of, the way the app looks at it.
+  const PARTS = ["porn", "порн", "xvideos", "xnxx", "xhamster", "onlyfans", "hentai", "хентай", "nsfw", "erotic", "erotik", "эротик", "секс", "интим", "18+", "+18", "🔞", "sekis", "секис", "seksual"];
+  const WORDS = ["sex", "sexy", "seks", "seksi", "xxx", "nude", "anal"];
+  function verdict() {
+    const raw = $("ck-in").value.trim(), text = raw.toLowerCase(), out = $("ck-out");
+    if (!raw) { out.className = "ck-out"; out.firstChild.textContent = ""; out.lastChild.textContent = T[LANG].ck_empty; return; }
+    const bad = PARTS.some(p => text.includes(p)) || text.split(/[^\p{L}\p{N}+]+/u).some(x => WORDS.includes(x));
+    const v = bad ? T[LANG].ck_bad : T[LANG].ck_ok;
+    out.className = "ck-out " + (bad ? "bad" : "ok");
+    out.firstChild.textContent = v[0]; out.lastChild.textContent = v[1];
+  }
+
+  // The year: hours a day, turned into days.
+  let shownDays = -1;
+  function time(jump) {
+    const h = Number($("tm-in").value), d = Math.round(h * 365 / 24);
+    if (jump !== false) { $("tm-days").textContent = d; shownDays = d; }
+    $("tm-out").textContent = T[LANG].tm_fmt.replace("{h}", String(h).replace(".", LANG === "en" ? "." : ","));
+    $("tm-fill").style.transform = "scaleX(" + (h / 24).toFixed(3) + ")";
+    $("tm-pct").textContent = T[LANG].tm_pct.replace("{p}", Math.round(h / 24 * 100));
+    return d;
+  }
+  function countUp() {
+    const to = time(false), el = $("tm-days"), t0 = performance.now();
+    const step = now => { const k = Math.min(1, (now - t0) / 1100), e = 1 - Math.pow(1 - k, 3); el.textContent = Math.round(to * e); if (k < 1) requestAnimationFrame(step); };
+    el.textContent = 0; requestAnimationFrame(step);
+    setTimeout(() => time(), 1400);
+  }
+
+  // The comparison.
+  const MARKS = [[1, 0, 0], [0, 1, 1], [0, 1, 0], [0, 0, 1], [0, 0, 0]];
+  const tick = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12.5l4 4 8-9"/></svg>';
+  function compare() {
+    const t = T[LANG];
+    $("cmp").innerHTML = '<div class="cr th"><span>' + t.cmp_f + "</span><span>Quiet</span>" + t.cmp_c.map(c => "<span>" + c + "</span>").join("") + "</div>" +
+      t.cmp_r.map((r, i) => '<div class="cr"><span>' + r + '</span><span><i class="yes">' + tick + "</i></span>" +
+        MARKS[i].map(m => "<span>" + (m ? '<i class="yes dim">' + tick + "</i>" : '<i class="no"></i>') + "</span>").join("") + "</div>").join("");
+  }
+
+  // Before and after: one line between the usual screen and Quiet.
+  let touched = false;
+  function slider() {
+    const hues = [12, 205, 140, 48, 280, 330, 190, 95, 25, 260, 170, 350, 220, 60, 300, 110];
+    const badge = { 1: "3", 2: "12", 5: "99+", 7: "7", 10: "1", 12: "24" };
+    const icon = (hu, n) => '<i style="background:linear-gradient(145deg,hsl(' + hu + " 85% 62%),hsl(" + (hu + 30) + ' 80% 45%))"' + (n ? ' data-n="' + n + '"' : "") + "></i>";
+    $("noisy").innerHTML = '<div class="nz-ban">' + icon(330) + "<u></u></div>" + '<div class="nz-ban">' + icon(205) + "<u></u></div>" +
+      '<div class="nz-grid">' + hues.map((hu, i) => icon(hu, badge[i])).join("") + "</div>" +
+      '<div class="nz-dock">' + [140, 205, 48, 0].map(hu => icon(hu)).join("") + "</div>";
+    const ba = $("ba"), scr = ba.querySelector(".screen");
+    const set = v => ba.style.setProperty("--x", (Math.max(.05, Math.min(.95, v)) * 100).toFixed(1) + "%");
+    const at = e => { const r = scr.getBoundingClientRect(); set((e.clientX - r.left) / r.width); };
+    let drag = false;
+    ba.addEventListener("pointerdown", e => { drag = true; touched = true; try { ba.setPointerCapture(e.pointerId); } catch (x) {} at(e); });
+    ba.addEventListener("pointermove", e => { if (drag) at(e); });
+    ["pointerup", "pointercancel"].forEach(n => ba.addEventListener(n, () => { drag = false; }));
+    return set;
+  }
+  function sweep(set) {
+    const t0 = performance.now();
+    const step = now => {
+      if (touched) return;
+      const k = Math.min(1, (now - t0) / 2600);
+      // Out to the right, across to the left, back to the middle.
+      set(k < .25 ? .55 - k * 1.6 : k < .7 ? .15 + (k - .25) / .45 * .75 : .9 - (k - .7) / .3 * .35);
+      if (k < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  // The network behind the headline: points that find each other, and signals passing between them.
+  function net() {
+    const c = $("net"), hero = c.parentElement, ctx = c.getContext && c.getContext("2d");
+    if (!ctx) return () => {};
+    let w = 0, h = 0, nodes = [], pulses = [], px = -1e4, py = -1e4, raf = 0, last = 0;
+    function size() {
+      const dpr = Math.min(2, devicePixelRatio || 1);
+      w = hero.clientWidth; h = hero.clientHeight;
+      c.width = Math.round(w * dpr); c.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const n = Math.max(24, Math.min(64, Math.round(w * h / 15000)));
+      nodes = Array.from({ length: n }, () => ({ x: Math.random() * w, y: Math.random() * h, vx: (Math.random() - .5) * .3, vy: (Math.random() - .5) * .3, r: 1 + Math.random() * 1.5 }));
+      pulses = [];
+    }
+    function frame(now) {
+      raf = 0;
+      const dt = Math.min(3, (now - last) / 16 || 1); last = now;
+      const light = document.documentElement.dataset.theme === "light";
+      const ink = light ? "88,72,214" : "160,150,255", hot = light ? "14,150,190" : "70,225,245";
+      const R = Math.max(96, Math.min(150, w * .28)), R2 = R * R, links = [];
+      ctx.clearRect(0, 0, w, h);
+      for (const p of nodes) {
+        const dx = px - p.x, dy = py - p.y, d2 = dx * dx + dy * dy;
+        if (d2 < 26000 && d2 > 400) { p.x += dx * .004 * dt; p.y += dy * .004 * dt; }
+        p.x += p.vx * dt; p.y += p.vy * dt;
+        if (p.x < 0 || p.x > w) p.vx = -p.vx;
+        if (p.y < 0 || p.y > h) p.vy = -p.vy;
+      }
+      ctx.lineWidth = 1;
+      for (let i = 0; i < nodes.length; i++) for (let k = i + 1; k < nodes.length; k++) {
+        const a = nodes[i], b = nodes[k], dx = a.x - b.x, dy = a.y - b.y, d2 = dx * dx + dy * dy;
+        if (d2 > R2) continue;
+        ctx.strokeStyle = "rgba(" + ink + "," + ((1 - d2 / R2) * .42).toFixed(3) + ")";
+        ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+        links.push(i, k);
+      }
+      ctx.fillStyle = "rgba(" + ink + ",.85)";
+      for (const p of nodes) { ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.2832); ctx.fill(); }
+      if (pulses.length < 9 && links.length && Math.random() < .09 * dt) { const q = (Math.random() * links.length / 2 | 0) * 2; pulses.push({ a: links[q], b: links[q + 1], t: 0 }); }
+      pulses = pulses.filter(s => {
+        s.t += .018 * dt;
+        const a = nodes[s.a], b = nodes[s.b], x = a.x + (b.x - a.x) * s.t, y = a.y + (b.y - a.y) * s.t;
+        ctx.fillStyle = "rgba(" + hot + ",.22)"; ctx.beginPath(); ctx.arc(x, y, 6, 0, 6.2832); ctx.fill();
+        ctx.fillStyle = "rgba(" + hot + ",1)"; ctx.beginPath(); ctx.arc(x, y, 2.1, 0, 6.2832); ctx.fill();
+        return s.t < 1;
+      });
+      if (!calm) run();
+    }
+    function run() { if (!raf && !document.hidden && hero.getBoundingClientRect().bottom > 0) raf = requestAnimationFrame(frame); }
+    hero.addEventListener("pointermove", e => { const r = hero.getBoundingClientRect(); px = e.clientX - r.left; py = e.clientY - r.top; });
+    hero.addEventListener("pointerleave", () => { px = py = -1e4; });
+    addEventListener("resize", () => { if (hero.clientWidth !== w) { size(); run(); } });
+    document.addEventListener("visibilitychange", run);
+    size();
+    requestAnimationFrame(frame);
+    return run;
+  }
+
+  function init() {
+    const set = slider();
+    $("tm-in").addEventListener("input", () => time());
+    $("ck-in").addEventListener("input", () => { $("ck-in").dataset.auto = "0"; verdict(); });
+    $("ck-ex").addEventListener("click", e => { const b = e.target.closest("button"); if (b) { $("ck-in").value = b.textContent; $("ck-in").dataset.auto = "0"; verdict(); } });
+    const run = net();
+
+    // The phone leans a little as the page moves; a pointer leans it sideways.
+    const stage = $("player"), ph = stage.querySelector(".phone");
+    let swept = false, counted = false;
+    function onScroll() {
+      run();
+      if (calm) return;
+      const r = stage.getBoundingClientRect();
+      if (r.bottom > 0 && r.top < innerHeight) ph.style.setProperty("--rx", (Math.max(-1, Math.min(1, (r.top + r.height / 2 - innerHeight / 2) / innerHeight)) * 9).toFixed(2) + "deg");
+      if (!swept && $("ba").getBoundingClientRect().top < innerHeight * .6) { swept = true; sweep(set); }
+      if (!counted && $("tm-days").getBoundingClientRect().top < innerHeight * .85) { counted = true; countUp(); }
+    }
+    stage.addEventListener("pointermove", e => { if (e.pointerType !== "mouse") return; const r = stage.getBoundingClientRect(); ph.style.setProperty("--ry", (((e.clientX - r.left) / r.width - .5) * 14).toFixed(2) + "deg"); });
+    stage.addEventListener("pointerleave", () => ph.style.setProperty("--ry", "0deg"));
+    addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+  }
+  function lang() {
+    const t = T[LANG];
+    $("ck-in").placeholder = t.ck_ph;
+    $("ck-ex").innerHTML = t.ck_ex.map(x => '<button type="button"></button>').join("");
+    [...$("ck-ex").children].forEach((b, i) => { b.textContent = t.ck_ex[i]; });
+    if (!$("ck-in").value || $("ck-in").dataset.auto === "1") { $("ck-in").value = t.ck_ex[1]; $("ck-in").dataset.auto = "1"; }
+    verdict(); time(); compare();
+  }
+  return { init, lang };
+})();
+
 document.querySelectorAll(".langs button").forEach(b => b.addEventListener("click", () => apply(b.dataset.lang)));
 build();
 Player.init();
+Extra.init();
 apply(pickLang());
 Player.show(0);
 
@@ -882,7 +1230,7 @@ Player.show(0);
 (() => {
   const bar = document.getElementById("bar");
   const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const els = calm ? [] : [...document.querySelectorAll(".head, .step, .card, .col, .table, .ai-box, .faq, .end-box")];
+  const els = calm ? [] : [...document.querySelectorAll(".head, .step, .card, .col, .table, .ai-box, .faq, .end-box, .ba-wrap, .time, .cmp")];
   els.forEach(el => el.classList.add("rv"));
   let left = els.slice();
   function check() {
