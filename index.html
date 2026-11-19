@@ -222,6 +222,83 @@
   .js .rv { opacity: 0; transform: translateY(16px); transition: opacity .7s ease, transform .7s cubic-bezier(.2, .7, .2, 1); }
   .js .rv.in { opacity: 1; transform: none; }
 
+  /* Modern layer: site search, the visitor's own device, native scroll timelines, view transitions */
+  .prog { position: fixed; left: 0; right: 0; top: 0; height: 2px; z-index: 30; background: var(--fg); transform-origin: left; transform: scaleX(0); pointer-events: none; }
+  @supports (animation-timeline: scroll()) {
+    .prog { animation: grow linear both; animation-timeline: scroll(root); }
+    @keyframes grow { to { transform: scaleX(1); } }
+  }
+  @supports (animation-timeline: view()) {
+    .recede { animation: recede linear both; animation-timeline: view(); animation-range: exit 0% exit 100%; }
+    @keyframes recede { to { transform: scale(.9) translateY(4%); opacity: .25; filter: blur(3px); } }
+  }
+  .recede { display: grid; justify-items: center; }
+
+  .home { position: relative; transform: perspective(1100px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); will-change: transform; }
+  .home::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background: radial-gradient(70% 45% at var(--gx, 50%) var(--gy, 20%), rgba(255,255,255,.08), transparent 70%); }
+  .sbar { display: flex; justify-content: space-between; align-items: center; margin: -16px 0 26px; font: 500 12px/1 var(--mono); color: var(--screen-muted); }
+  .sb-r { display: flex; align-items: center; gap: 8px; }
+  .bat { display: inline-flex; align-items: center; gap: 6px; }
+  .bat b { position: relative; width: 22px; height: 11px; border: 1.5px solid currentColor; border-radius: 3px; padding: 1.5px; display: block; }
+  .bat b::after { content: ""; position: absolute; right: -4px; top: 3px; width: 2px; height: 3px; border-radius: 0 1px 1px 0; background: currentColor; }
+  .bat b i { display: block; height: 100%; width: var(--lv, 80%); background: var(--on-screen); border-radius: 1px; transition: width .6s; }
+  .bat.low b i { background: var(--red); }
+  .bat.chg span::before { content: "+"; margin-right: 1px; }
+
+  .kbtn { height: 38px; display: inline-flex; align-items: center; gap: 8px; padding: 0 10px; border-radius: 999px; color: var(--muted); transition: color .2s, background .2s; }
+  .kbtn:hover { color: var(--fg); background: color-mix(in srgb, var(--fg) 6%, transparent); }
+  .kbtn svg { width: 17px; height: 17px; }
+  .kbd { font: 500 11px/1 var(--mono); padding: 4px 6px; border-radius: 6px; border: 1px solid var(--line); color: var(--muted); }
+  .touch .kbtn .kbd { display: none; }
+
+  .pal { position: fixed; inset: 0; z-index: 50; display: grid; align-items: start; justify-items: center; padding: 12vh 14px 14px; background: color-mix(in srgb, var(--bg) 55%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); opacity: 0; transition: opacity .18s; }
+  .pal.on { opacity: 1; }
+  .pal[hidden] { display: none; }
+  .pal-box { width: 100%; max-width: 560px; background: var(--card); border: 1px solid var(--line); border-radius: 22px; box-shadow: 0 40px 120px -20px rgba(0,0,0,.45); overflow: hidden; transform: translateY(-8px) scale(.98); transition: transform .22s cubic-bezier(.2, .9, .3, 1.2); }
+  .pal.on .pal-box { transform: none; }
+  .pal-in { display: flex; align-items: center; gap: 12px; padding: 16px 18px; border-bottom: 1px solid var(--line); }
+  .pal-in svg { width: 19px; height: 19px; color: var(--muted); flex: none; }
+  .pal-in input { flex: 1; font: 500 19px/1.3 var(--sans); letter-spacing: -.01em; color: var(--fg); background: none; border: 0; outline: none; }
+  .pal-in input::placeholder { color: var(--faint); }
+  .pal-list { list-style: none; max-height: min(54vh, 420px); overflow-y: auto; padding: 8px; }
+  .pal-list .g { font: 500 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--faint); padding: 14px 12px 8px; }
+  .pal-list button { width: 100%; text-align: left; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; font-size: 16.5px; font-weight: 500; letter-spacing: -.01em; }
+  .pal-list button[aria-selected="true"] { background: var(--fg); color: var(--bg); }
+  .pal-list button span { font: 400 12px/1 var(--mono); opacity: .5; }
+  .pal-list mark { background: none; color: inherit; text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; }
+  .pal-none { padding: 22px 12px; color: var(--muted); }
+  .pal-foot { padding: 12px 18px; border-top: 1px solid var(--line); font: 400 12px/1.5 var(--mono); color: var(--muted); }
+
+  .check { margin-top: 64px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; border: 1px solid var(--line); border-radius: 28px; padding: 28px 22px; background: var(--card); }
+  .check h3 { font-size: clamp(22px, 5vw, 28px); letter-spacing: -.03em; margin-top: 14px; }
+  .check .muted { margin-top: 12px; font-size: 16px; }
+  .ck-in { width: 100%; font: 500 20px/1.3 var(--sans); letter-spacing: -.015em; color: var(--fg); background: none; border: 0; border-bottom: 1.5px solid var(--fg); padding: 10px 0; outline: none; border-radius: 0; }
+  .ck-in::placeholder { color: var(--faint); }
+  .ck-ex { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .ck-ex button { font-size: 14px; padding: 8px 13px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); transition: color .2s, border-color .2s; }
+  .ck-ex button:hover { color: var(--fg); border-color: var(--fg); }
+  .ck-out { margin-top: 18px; padding: 16px 18px; border-radius: 16px; border: 1px solid var(--line); min-height: 5.8em; display: grid; gap: 4px; align-content: start; transition: background .25s, border-color .25s; }
+  .ck-out b { font-size: 18px; letter-spacing: -.02em; }
+  .ck-out span { color: var(--muted); font-size: 15px; line-height: 1.45; }
+  .ck-out.bad { border-color: var(--red); background: color-mix(in srgb, var(--red) 8%, transparent); }
+  .ck-out.bad b { color: var(--red); }
+  .ck-out.ok { border-color: var(--fg); }
+  .ck-meta { margin-top: 10px; font: 400 12px/1.5 var(--mono); color: var(--muted); min-height: 1.5em; }
+
+  .share { display: inline-flex; align-items: center; gap: 8px; margin-top: 18px; font-weight: 500; font-size: 15.5px; padding: 10px 4px; }
+  .share svg { width: 17px; height: 17px; }
+  .toast { position: fixed; left: 50%; bottom: 24px; z-index: 60; translate: -50% 20px; opacity: 0; padding: 12px 18px; border-radius: 999px; background: var(--fg); color: var(--bg); font-weight: 500; font-size: 15px; transition: opacity .25s, translate .25s; pointer-events: none; }
+  .toast.on { opacity: 1; translate: -50% 0; }
+
+  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: .28s; }
+  html.vt-theme::view-transition-old(root), html.vt-theme::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+  html.vt-theme::view-transition-old(root) { z-index: 1; }
+  html.vt-theme::view-transition-new(root) { z-index: 2; }
+
+  @media (min-width: 720px) {
+    .check { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 56px; padding: 40px 40px; align-items: start; }
+  }
+
   @media (min-width: 720px) {
     .wrap { padding: 0 36px; }
     section { padding: 120px 0; }
@@ -253,6 +330,7 @@
 </head>
 <body>
 
+<div class="prog" id="prog" aria-hidden="true"></div>
 <header id="top-bar">
   <div class="wrap">
     <a class="logo" href="#top" aria-label="Quiet"><i></i>Quiet</a>
@@ -263,6 +341,7 @@
       <a href="#faq" data-t="nav_faq">Savollar</a>
     </nav>
     <div class="tools">
+      <button type="button" class="kbtn" id="kopen" aria-haspopup="dialog" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/></svg><span class="kbd" id="kbd">Ctrl K</span></button>
       <div class="langs" role="group" aria-label="Til / Язык / Language">
         <button type="button" data-lang="uz" aria-pressed="true">UZ</button>
         <button type="button" data-lang="ru" aria-pressed="false">RU</button>
@@ -293,7 +372,8 @@
         </ul>
       </div>
       <div class="rv" style="display:grid">
-        <div class="screen home" id="home" aria-label="Quiet">
+        <div class="recede"><div class="screen home" id="home" aria-label="Quiet">
+          <div class="sbar" aria-hidden="true"><span data-clock>9:41</span><span class="sb-r"><span id="net" hidden></span><span class="bat" id="bat" hidden><span id="batp"></span><b><i></i></b></span></span></div>
           <div class="clock" data-clock>9:41</div>
           <div class="date" data-date></div>
           <div class="today" data-t="today">Bugun telefonda 38 daqiqa</div>
@@ -301,8 +381,8 @@
             <li data-t="a1">Telefon</li><li data-t="a2">Xabarlar</li><li data-t="a3">Kamera</li><li data-t="a4">Xarita</li><li data-t="a5">Telegram</li><li data-t="a6">Taqvim</li>
           </ul>
           <div class="search" id="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/></svg><span class="ph" data-t="search">Qidirish</span><b id="q"></b><span class="caret"></span></div>
-        </div>
-        <p class="label hero-cap" data-t="hero_cap">Soat — sizning hozirgi vaqtingiz</p>
+        </div></div>
+        <p class="label hero-cap" id="hcap" data-t="hero_cap">Soat — sizning hozirgi vaqtingiz</p>
       </div>
     </div>
   </section>
@@ -390,6 +470,19 @@
           <li><h3 data-t="cant4_h">Xavfsiz rejimni o‘zi to‘sa olmaydi</h3><p data-t="cant4_p">Buning uchun telefonni kompyuter orqali bir marta alohida sozlash kerak.</p></li>
         </ul></div>
       </div>
+      <div class="check rv">
+        <div>
+          <p class="label" data-t="ck_k">Sinab ko‘ring</p>
+          <h3 data-t="ck_h">So‘z tekshiruvi shu brauzerning o‘zida ishlaydi</h3>
+          <p class="muted" data-t="ck_p">Kanal yoki sahifa nomini yozing. Tekshiruv Quiet ilovasidagi so‘z ro‘yxati bilan, shu sahifaning o‘zida bajariladi; hech narsa yuborilmaydi.</p>
+        </div>
+        <div>
+          <input class="ck-in" id="ck-in" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="60" aria-label="Kanal nomi">
+          <div class="ck-ex" id="ck-ex"></div>
+          <div class="ck-out" id="ck-out" aria-live="polite"><b></b><span></span></div>
+          <p class="ck-meta" id="ck-meta"></p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -457,9 +550,19 @@
       <h2 class="rv" data-t="end_h">Telefonni qo‘yish osonroq bo‘lsin.</h2>
       <p class="rv"><span data-t="end_p">Quiet tez orada Google Play’da chiqadi; havola shu sahifada paydo bo‘ladi. Savolingiz bo‘lsa, yozing:</span> <a href="mailto:test@example.com">test@example.com</a></p>
       <span class="status rv"><i></i><span data-t="status">Tez orada Google Play’da</span></span>
+      <div class="rv"><button type="button" class="share" id="share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3.5M7.5 8 12 3.5 16.5 8"/><path d="M5 12v6.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V12"/></svg><span data-t="sh_btn">Havolani ulashish</span></button></div>
     </div>
   </section>
 </main>
+
+<div class="pal" id="pal" hidden role="dialog" aria-modal="true" aria-label="Search">
+  <div class="pal-box">
+    <div class="pal-in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/></svg><input id="pal-q" type="text" autocomplete="off" spellcheck="false" role="combobox" aria-controls="pal-list" aria-expanded="true"><span class="kbd">Esc</span></div>
+    <ul class="pal-list" id="pal-list" role="listbox"></ul>
+    <p class="pal-foot" data-t="pal_foot">Quiet’dagidek: ikki-uch harf yetadi.</p>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <footer>
   <div class="wrap">
@@ -530,7 +633,9 @@ const T = { uz: {}, ru: {
   q5: "Может ли ребёнок удалить Quiet?", a5q: "Пока замок закрыт — нет: окно удаления, настройки приложения, страницы даты и времени закрыты. Чтобы закрыть безопасный режим и сброс к заводским настройкам, телефон нужно один раз настроить через компьютер.",
   q6: "Что будет, если я отменю подписку Pro?", a6q: "Настроенные правила продолжат работать. Вы лишь не сможете добавлять новое, что входит в Pro.",
   end_h: "Пусть телефон будет проще отложить.", end_p: "Quiet скоро выйдет в Google Play; ссылка появится на этой странице. Если есть вопрос, напишите:",
-  foot_privacy: "Политика конфиденциальности", foot_contact: "Связаться"
+  foot_privacy: "Политика конфиденциальности", foot_contact: "Связаться",
+  ck_k: "Попробуйте", ck_h: "Проверка слов работает прямо в этом браузере", ck_p: "Введите название канала или страницы. Проверка идёт по списку слов из приложения Quiet, на самой этой странице; ничего не отправляется.",
+  sh_btn: "Поделиться ссылкой", pal_foot: "Как в Quiet: хватает двух-трёх букв."
 }, en: {
   title: "Quiet — a calm home screen for Android",
   nav_how: "How it works", nav_family: "For families", nav_price: "Price", nav_faq: "Questions",
@@ -590,7 +695,9 @@ const T = { uz: {}, ru: {
   q5: "Can a child remove Quiet?", a5q: "Not while the lock is on: the uninstall dialog, the app’s settings and the date and time pages stay closed. Blocking safe mode and factory reset takes setting the phone up once from a computer.",
   q6: "What happens if I cancel Pro?", a6q: "The rules you set up keep working. You just cannot add new things that are part of Pro.",
   end_h: "Make the phone easier to put down.", end_p: "Quiet is coming to Google Play soon; the link will appear on this page. If you have a question, write to",
-  foot_privacy: "Privacy policy", foot_contact: "Contact"
+  foot_privacy: "Privacy policy", foot_contact: "Contact",
+  ck_k: "Try it", ck_h: "The word check runs right in this browser", ck_p: "Type the name of a channel or a page. It is checked against the word list from the Quiet app, on this page itself; nothing is sent anywhere.",
+  sh_btn: "Share the link", pal_foot: "Like in Quiet: two or three letters will do."
 } };
 // What the scripts write themselves.
 const D = {
@@ -657,10 +764,10 @@ const Wait = (() => {
   function start() {
     clearInterval(timer); n = 10; state = "count"; paint();
     if (calm) { n = 0; state = "ready"; paint(); return; }
-    timer = setInterval(() => { n--; if (n <= 0) { n = 0; state = "ready"; clearInterval(timer); } paint(); }, 1000);
+    timer = setInterval(() => { n--; if (n <= 0) { n = 0; state = "ready"; clearInterval(timer); buzz(14); } paint(); }, 1000);
   }
   function choose(m) {
-    state = "done"; paint();
+    state = "done"; paint(); buzz(8);
     msg.textContent = m === 0 ? D[LANG].home : fill(D[LANG].go, m);
     clearTimeout(box._t);
     box._t = setTimeout(() => { if (live) start(); }, 3200);
@@ -679,6 +786,219 @@ const Wait = (() => {
 /* The usual screen: a grid of icons, some with the red dots. */
 $("icons").innerHTML = Array.from({ length: 20 }, (_, i) => "<i" + ([1, 4, 6, 11, 13, 18].includes(i) ? ' class="r"' : "") + "></i>").join("");
 
+/* ---- Modern layer ---- */
+Object.assign(D.uz, {
+  ph: "Bo‘lim yoki buyruq…", g1: "Bo‘limlar", g2: "Buyruqlar", none: "Hech narsa topilmadi",
+  secs: [["how", "Qanday ishlaydi"], ["more", "Yana nimalar bor"], ["family", "Oila uchun"], ["ai", "Telefondagi AI"], ["privacy", "Maxfiylik"], ["pricing", "Narx"], ["faq", "Savollar"], ["end", "Yuklab olish"]],
+  theme: "Mavzuni almashtirish", share: "Havolani ulashish", top: "Boshiga qaytish", copied: "Havola nusxalandi",
+  cap_dev: "Soat va batareya — sizning qurilmangizniki",
+  ck_ph: "Masalan: Tungi kinolar", ck_ex: ["Sinfdoshlar 7-A", "Tungi kinolar 🔞", "Kino 18+", "Yashirin kinolar"], ck_empty: "Nom yozing yoki misollardan birini bosing.",
+  ck_bad: ["Yopiladi", "Nomida kattalar uchun kontentni bildiruvchi so‘z yoki belgi bor."],
+  ck_ok: ["So‘z tekshiruvidan o‘tadi", "Nomi beozor bo‘lsa ham, rasm tekshiruvi yoqilgan bo‘lsa, ichidagini AI tekshiradi."],
+  ck_meta: "{n} ms · shu brauzerda · serverga 0 so‘rov"
+});
+Object.assign(D.ru, {
+  ph: "Раздел или команда…", g1: "Разделы", g2: "Команды", none: "Ничего не найдено",
+  secs: [["how", "Как это работает"], ["more", "Что ещё есть"], ["family", "Для семьи"], ["ai", "ИИ в телефоне"], ["privacy", "Приватность"], ["pricing", "Цена"], ["faq", "Вопросы"], ["end", "Скачать"]],
+  theme: "Сменить тему", share: "Поделиться ссылкой", top: "Наверх", copied: "Ссылка скопирована",
+  cap_dev: "Часы и батарея — с вашего устройства",
+  ck_ph: "Например: Ночное кино", ck_ex: ["Одноклассники 7-А", "Ночное кино 🔞", "Кино 18+", "Скрытые фильмы"], ck_empty: "Введите название или нажмите на пример.",
+  ck_bad: ["Закроется", "В названии есть слово или знак, указывающий на контент для взрослых."],
+  ck_ok: ["Проверку слов проходит", "Даже при безобидном названии содержимое проверит ИИ, если включена проверка изображений."],
+  ck_meta: "{n} мс · в этом браузере · 0 запросов на сервер"
+});
+Object.assign(D.en, {
+  ph: "A section or a command…", g1: "Sections", g2: "Commands", none: "Nothing found",
+  secs: [["how", "How it works"], ["more", "What else is there"], ["family", "For families"], ["ai", "AI on the phone"], ["privacy", "Privacy"], ["pricing", "Price"], ["faq", "Questions"], ["end", "Get it"]],
+  theme: "Switch theme", share: "Share the link", top: "Back to top", copied: "Link copied",
+  cap_dev: "The clock and battery are your device’s own",
+  ck_ph: "For example: Late night movies", ck_ex: ["Class 7-A", "Late night movies 🔞", "Movies 18+", "Hidden films"], ck_empty: "Type a name or tap an example.",
+  ck_bad: ["It gets closed", "The name has a word or sign that points to adult content."],
+  ck_ok: ["It passes the word check", "Even with a harmless name, the AI checks what is inside when the picture check is on."],
+  ck_meta: "{n} ms · in this browser · 0 server requests"
+});
+
+function buzz(ms) { try { if (navigator.vibrate && navigator.userActivation && navigator.userActivation.hasBeenActive) navigator.vibrate(ms); } catch (e) {} }
+function toast(text) { const el = $("toast"); el.textContent = text; el.classList.add("on"); clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove("on"), 2200); }
+
+/* Language and theme change through the browser's own view transitions where there are any. */
+function setLang(l) {
+  if (l === LANG) return;
+  if (document.startViewTransition && !calm) document.startViewTransition(() => apply(l)); else apply(l);
+}
+function toggleTheme() {
+  const root = document.documentElement, dark = root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  const flip = () => { root.dataset.theme = dark ? "light" : "dark"; try { localStorage.setItem("quiet-theme", root.dataset.theme); } catch (e) {} };
+  if (!document.startViewTransition || calm) { flip(); return; }
+  const b = $("theme").getBoundingClientRect(), x = b.left + b.width / 2, y = b.top + b.height / 2, r = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+  root.classList.add("vt-theme");
+  const vt = document.startViewTransition(flip);
+  vt.ready.then(() => root.animate({ clipPath: ["circle(0px at " + x + "px " + y + "px)", "circle(" + r + "px at " + x + "px " + y + "px)"] }, { duration: 650, easing: "cubic-bezier(.4, 0, .2, 1)", pseudoElement: "::view-transition-new(root)" })).catch(() => {});
+  vt.finished.finally(() => root.classList.remove("vt-theme"));
+}
+async function share() {
+  const url = location.href.split("#")[0];
+  try { if (navigator.share) { await navigator.share({ title: document.title, url }); return; } } catch (e) { if (e && e.name === "AbortError") return; }
+  try { await navigator.clipboard.writeText(url); toast(D[LANG].copied); } catch (e) { toast(url); }
+}
+$("share").addEventListener("click", share);
+
+/* The site searched the way Quiet searches apps: the start of any word, two or three letters. */
+const Pal = (() => {
+  const box = $("pal"), q = $("pal-q"), list = $("pal-list");
+  let shown = [], sel = 0, back = null;
+  const mac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+  $("kbd").textContent = mac ? "⌘K" : "Ctrl K";
+  if (matchMedia("(pointer: coarse)").matches) document.documentElement.classList.add("touch");
+  function items() {
+    const d = D[LANG], go = id => () => { close(); const el = $(id); if (el) el.scrollIntoView({ behavior: calm ? "auto" : "smooth" }); };
+    return d.secs.map(([id, l], i) => ({ g: d.g1, l, k: "0" + (i + 1), run: go(id) })).concat([
+      { g: d.g2, l: "O‘zbekcha", k: "UZ", run: () => { close(); setLang("uz"); } },
+      { g: d.g2, l: "Русский", k: "RU", run: () => { close(); setLang("ru"); } },
+      { g: d.g2, l: "English", k: "EN", run: () => { close(); setLang("en"); } },
+      { g: d.g2, l: d.theme, k: "◐", run: () => { close(); toggleTheme(); } },
+      { g: d.g2, l: d.share, k: "↗", run: () => { close(); share(); } },
+      { g: d.g2, l: d.top, k: "↑", run: go("top") }
+    ]);
+  }
+  function hit(label, s) { if (!s) return -1; let at = 0; for (const w of label.toLowerCase().split(/(\s+)/)) { if (w.trim() && w.startsWith(s)) return at; at += w.length; } return null; }
+  function render() {
+    const s = q.value.trim().toLowerCase();
+    shown = items().map(it => ({ ...it, at: hit(it.l, s) })).filter(it => it.at !== null);
+    sel = Math.min(sel, Math.max(0, shown.length - 1));
+    list.textContent = "";
+    if (!shown.length) { const p = document.createElement("li"); p.className = "pal-none"; p.textContent = D[LANG].none; list.appendChild(p); return; }
+    let g = "";
+    shown.forEach((it, i) => {
+      if (it.g !== g) { g = it.g; const h = document.createElement("li"); h.className = "g"; h.textContent = g; list.appendChild(h); }
+      const li = document.createElement("li"), b = document.createElement("button"), k = document.createElement("span");
+      b.type = "button"; b.setAttribute("role", "option"); b.setAttribute("aria-selected", String(i === sel)); b.id = "pal-o" + i;
+      const name = document.createElement("b"); name.style.fontWeight = "inherit";
+      if (it.at >= 0) { name.append(it.l.slice(0, it.at)); const m = document.createElement("mark"); m.textContent = it.l.slice(it.at, it.at + s.length); name.append(m, it.l.slice(it.at + s.length)); }
+      else name.textContent = it.l;
+      k.textContent = it.k;
+      b.append(name, k);
+      b.addEventListener("click", it.run);
+      b.addEventListener("pointermove", () => { if (sel !== i) { sel = i; mark(); } });
+      li.appendChild(b); list.appendChild(li);
+    });
+    q.setAttribute("aria-activedescendant", "pal-o" + sel);
+  }
+  function mark() { list.querySelectorAll("[role=option]").forEach((b, i) => b.setAttribute("aria-selected", String(i === sel))); const c = $("pal-o" + sel); if (c) { c.scrollIntoView({ block: "nearest" }); q.setAttribute("aria-activedescendant", c.id); } }
+  function open() {
+    if (!box.hidden) return;
+    back = document.activeElement; box.hidden = false; q.value = ""; sel = 0; render();
+    requestAnimationFrame(() => box.classList.add("on"));
+    document.body.style.overflow = "hidden";
+    setTimeout(() => q.focus(), 0);
+  }
+  function close() {
+    if (box.hidden) return;
+    box.classList.remove("on"); document.body.style.overflow = "";
+    setTimeout(() => { box.hidden = true; }, 180);
+    if (back && back.focus) back.focus({ preventScroll: true });
+  }
+  q.addEventListener("input", () => { sel = 0; render(); });
+  q.addEventListener("keydown", e => {
+    if (e.key === "ArrowDown") { e.preventDefault(); sel = (sel + 1) % Math.max(1, shown.length); mark(); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); sel = (sel - 1 + shown.length) % Math.max(1, shown.length); mark(); }
+    else if (e.key === "Enter") { e.preventDefault(); if (shown[sel]) shown[sel].run(); }
+  });
+  box.addEventListener("click", e => { if (e.target === box) close(); });
+  addEventListener("keydown", e => {
+    const typing = e.target.closest && e.target.closest("input, textarea, [contenteditable]");
+    if ((e.key === "k" || e.key === "K") && (e.metaKey || e.ctrlKey)) { e.preventDefault(); box.hidden ? open() : close(); }
+    else if (e.key === "/" && !typing && box.hidden) { e.preventDefault(); open(); }
+    else if (e.key === "Escape" && !box.hidden) { e.preventDefault(); close(); }
+  });
+  $("kopen").addEventListener("click", open);
+  function lang() { q.placeholder = D[LANG].ph; $("kopen").setAttribute("aria-label", D[LANG].ph); if (!box.hidden) render(); }
+  return { lang, open, close };
+})();
+
+/* The visitor's own phone in the hero: its battery and connection, where the browser tells them. */
+const Dev = (() => {
+  let has = false;
+  function cap() { if (has) $("hcap").textContent = D[LANG].cap_dev; }
+  try {
+    const c = navigator.connection;
+    if (c && c.effectiveType) { const n = $("net"); const set = () => { n.textContent = c.effectiveType.toUpperCase(); }; set(); n.hidden = false; c.addEventListener && c.addEventListener("change", set); }
+  } catch (e) {}
+  if (navigator.getBattery) navigator.getBattery().then(b => {
+    const el = $("bat");
+    const set = () => {
+      const p = Math.round(b.level * 100);
+      $("batp").textContent = p + "%";
+      el.style.setProperty("--lv", Math.max(6, p) + "%");
+      el.classList.toggle("low", p <= 20 && !b.charging);
+      el.classList.toggle("chg", b.charging);
+    };
+    set(); el.hidden = false; has = true; cap();
+    ["levelchange", "chargingchange"].forEach(n => b.addEventListener(n, set));
+  }).catch(() => {});
+  return { cap };
+})();
+
+/* The hero screen leans toward the pointer, or with the phone in the hand. */
+(() => {
+  if (calm) return;
+  const el = $("home"), hero = el.closest(".hero");
+  let tx = 0, ty = 0, cx = 0, cy = 0, raf = 0, base = null;
+  const clamp = (v, m) => Math.max(-m, Math.min(m, v));
+  function loop() {
+    cx += (tx - cx) * .1; cy += (ty - cy) * .1;
+    el.style.setProperty("--ry", cx.toFixed(2) + "deg"); el.style.setProperty("--rx", cy.toFixed(2) + "deg");
+    el.style.setProperty("--gx", (50 + cx * 5).toFixed(1) + "%"); el.style.setProperty("--gy", (22 - cy * 4).toFixed(1) + "%");
+    raf = Math.abs(tx - cx) + Math.abs(ty - cy) > .02 ? requestAnimationFrame(loop) : 0;
+  }
+  const kick = () => { if (!raf) raf = requestAnimationFrame(loop); };
+  hero.addEventListener("pointermove", e => {
+    if (e.pointerType !== "mouse") return;
+    const r = el.getBoundingClientRect();
+    tx = clamp((e.clientX - r.left - r.width / 2) / r.width * 14, 9); ty = clamp(-(e.clientY - r.top - r.height / 2) / r.height * 12, 9); kick();
+  });
+  hero.addEventListener("pointerleave", () => { tx = ty = 0; kick(); });
+  // Android reports the tilt without asking; where a permission prompt would be needed, nothing is asked.
+  if (typeof DeviceOrientationEvent !== "undefined" && typeof DeviceOrientationEvent.requestPermission !== "function") {
+    addEventListener("deviceorientation", e => {
+      if (e.beta == null || e.gamma == null) return;
+      if (!base) base = { b: e.beta, g: e.gamma };
+      base.b += (e.beta - base.b) * .02; base.g += (e.gamma - base.g) * .02;
+      tx = clamp((e.gamma - base.g) * .6, 8); ty = clamp(-(e.beta - base.b) * .5, 8); kick();
+    }, { passive: true });
+  }
+})();
+
+/* The word check, run here the way the app runs it: the same words, the same rules. */
+const Check = (() => {
+  const PARTS = ["porn", "порн", "xvideos", "xnxx", "xhamster", "onlyfans", "brazzers", "hentai", "хентай", "nsfw", "erotic", "erotik", "эротик", "секс", "интим", "проститут", "шлюх", "blowjob", "минет", "milf", "nudes", "striptiz", "стриптиз", "18+", "+18", "🔞", "sekis", "секис", "seksual"];
+  const WORDS = ["sex", "sexy", "seks", "seksi", "xxx", "nude", "anal"];
+  const input = $("ck-in"), out = $("ck-out"), meta = $("ck-meta"), ex = $("ck-ex");
+  let own = false;
+  function run() {
+    const raw = input.value.trim(), d = D[LANG];
+    if (!raw) { out.className = "ck-out"; out.firstChild.textContent = ""; out.lastChild.textContent = d.ck_empty; meta.textContent = ""; return; }
+    const t0 = performance.now(), text = raw.toLowerCase();
+    const bad = PARTS.some(p => text.includes(p)) || text.split(/[^\p{L}\p{N}+]+/u).some(w => WORDS.includes(w));
+    const ms = performance.now() - t0;
+    const v = bad ? d.ck_bad : d.ck_ok;
+    out.className = "ck-out " + (bad ? "bad" : "ok");
+    out.firstChild.textContent = v[0]; out.lastChild.textContent = v[1];
+    meta.textContent = fill(d.ck_meta, ms < .01 ? "< 0.01" : ms.toFixed(2));
+  }
+  input.addEventListener("input", () => { own = true; run(); });
+  ex.addEventListener("click", e => { const b = e.target.closest("button"); if (b) { input.value = b.textContent; own = true; run(); buzz(6); } });
+  function lang() {
+    const d = D[LANG];
+    input.placeholder = d.ck_ph;
+    ex.textContent = "";
+    d.ck_ex.forEach(x => { const b = document.createElement("button"); b.type = "button"; b.textContent = x; ex.appendChild(b); });
+    if (!own) input.value = d.ck_ex[1];
+    run();
+  }
+  return { lang };
+})();
+
 function apply(lang) {
   LANG = T[lang] ? lang : "uz";
   const t = T[LANG];
@@ -689,29 +1009,26 @@ function apply(lang) {
   const policy = "https://encrypster.github.io/quiet-privacy/" + (LANG === "en" ? "" : LANG + "/");
   $("privacy-link").href = policy; $("privacy-link-foot").href = policy;
   try { localStorage.setItem("quiet-lang", LANG); } catch (e) {}
-  clock(); Wait.labels(); Search.run();
+  clock(); Wait.labels(); Search.run(); Pal.lang(); Check.lang(); Dev.cap();
 }
 function pickLang() {
   try { const s = localStorage.getItem("quiet-lang"); if (s && T[s]) return s; } catch (e) {}
   const nav = (navigator.language || "uz").slice(0, 2).toLowerCase();
   return T[nav] ? nav : "uz";
 }
-document.querySelectorAll(".langs button").forEach(b => b.addEventListener("click", () => apply(b.dataset.lang)));
+document.querySelectorAll(".langs button").forEach(b => b.addEventListener("click", () => setLang(b.dataset.lang)));
 
 /* Light or dark: the system decides until the visitor does. */
-$("theme").addEventListener("click", () => {
-  const root = document.documentElement, dark = root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
-  root.dataset.theme = dark ? "light" : "dark";
-  try { localStorage.setItem("quiet-theme", root.dataset.theme); } catch (e) {}
-});
+$("theme").addEventListener("click", toggleTheme);
 
 /* Scrolling: the header's line, things rising into place, the demos running only while seen. */
 (() => {
-  const bar = $("top-bar"), rv = [...document.querySelectorAll(".rv")];
+  const bar = $("top-bar"), rv = [...document.querySelectorAll(".rv")], prog = $("prog"), timeline = window.CSS && CSS.supports && CSS.supports("animation-timeline: scroll()");
   let left = rv;
   function inView(el, k) { const r = el.getBoundingClientRect(); return r.top < innerHeight * k && r.bottom > 0; }
   function check() {
     bar.classList.toggle("scrolled", scrollY > 8);
+    if (!timeline) { const max = document.documentElement.scrollHeight - innerHeight; prog.style.transform = "scaleX(" + (max > 0 ? Math.min(1, scrollY / max) : 0) + ")"; }
     if (left.length) left = left.filter(el => { if (inView(el, .94)) { el.classList.add("in"); return false; } return true; });
     Search.visible(inView($("home"), 1) && !document.hidden);
     Wait.visible(inView($("wait"), .85) && !document.hidden);
