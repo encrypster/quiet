@@ -32,6 +32,8 @@
     color-scheme: dark;
   }
 
+  :root { --a1: #7c5cff; --a2: #3b82f6; --a3: #22d3ee; --grad: linear-gradient(100deg, var(--a1), var(--a2) 55%, var(--a3)); }
+
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; min-width: 0; }
   html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-behavior: smooth; }
   body {
@@ -69,8 +71,16 @@
   .theme { width: 36px; height: 36px; border: 1px solid var(--line); border-radius: 50%; display: grid; place-items: center; flex: none; }
   .theme svg { width: 17px; height: 17px; }
 
+  /* The AI accent: one gradient, used sparingly */
+  .badge { display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 500; line-height: 1.3; padding: 7px 14px 7px 10px; border-radius: 999px; border: 1px solid transparent; background: linear-gradient(var(--bg), var(--bg)) padding-box, var(--grad) border-box; margin-bottom: 22px; }
+  .spark { width: 16px; height: 16px; flex: none; }
+  .gt { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
   /* Hero */
-  .hero { padding: 48px 0 64px; }
+  .hero { padding: 48px 0 64px; position: relative; overflow: hidden; }
+  .hero::before { content: ""; position: absolute; inset: -20% -10% auto -10%; height: 90%; pointer-events: none; opacity: .16;
+    background: radial-gradient(42% 60% at 78% 30%, var(--a1), transparent 70%), radial-gradient(36% 50% at 96% 70%, var(--a3), transparent 70%), radial-gradient(30% 40% at 8% 0%, var(--a2), transparent 70%); }
+  .hero .wrap { position: relative; }
   .hero-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 48px; }
   .hero .lead { font-size: 19px; color: var(--muted); margin-top: 20px; max-width: 54ch; }
   .cta { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; margin-top: 28px; }
@@ -82,7 +92,7 @@
   .facts li::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--muted); flex: none; }
 
   /* The phone. Always dark: that is how Quiet looks. */
-  .stage { background: var(--soft); border: 1px solid var(--line); border-radius: 28px; padding: 28px 16px 20px; display: flex; flex-direction: column; align-items: center; }
+  .stage { background: linear-gradient(var(--soft), var(--soft)) padding-box, linear-gradient(160deg, color-mix(in srgb, var(--a1) 55%, var(--line)), var(--line) 45%, color-mix(in srgb, var(--a3) 45%, var(--line))) border-box; border: 1px solid transparent; border-radius: 28px; padding: 28px 16px 20px; display: flex; flex-direction: column; align-items: center; }
   .phone { --pw: min(280px, 72vw); width: var(--pw); aspect-ratio: 9 / 18.5; background: #000; border-radius: calc(var(--pw) * .15); padding: calc(var(--pw) * .032); box-shadow: 0 0 0 1px #2c2c30, 0 24px 60px rgba(0,0,0,.28); flex: none; }
   .screen { position: relative; width: 100%; height: 100%; border-radius: calc(var(--pw) * .12); overflow: hidden; background: #000; color: #fff; font-size: calc(var(--pw) * .05); line-height: 1.35; }
   .sc { position: absolute; inset: 0; padding: 14% 9% 9%; display: flex; flex-direction: column; opacity: 0; visibility: hidden; transition: opacity .45s ease, visibility 0s .45s; }
@@ -135,7 +145,7 @@
   .segs button { text-align: left; padding: 8px 0 4px; font-size: 12.5px; font-weight: 500; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .segs button::before { content: ""; display: block; height: 3px; border-radius: 3px; background: var(--line); margin-bottom: 8px; }
   .segs button { position: relative; }
-  .segs button i { position: absolute; left: 0; top: 8px; height: 3px; width: 100%; border-radius: 3px; background: var(--fg); transform-origin: left; transform: scaleX(0); }
+  .segs button i { position: absolute; left: 0; top: 8px; height: 3px; width: 100%; border-radius: 3px; background: var(--grad); transform-origin: left; transform: scaleX(0); }
   .segs button[aria-selected="true"] { color: var(--fg); }
   .segs button[aria-selected="true"] i { transform: scaleX(1); }
   .segs button.run i { animation: bar var(--d, 5s) linear both; }
@@ -154,7 +164,44 @@
   /* Features */
   .grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
   .card { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 24px; }
-  .card svg { width: 24px; height: 24px; margin-bottom: 18px; display: block; }
+  .card { transition: transform .2s, border-color .2s, box-shadow .2s; }
+  @media (hover: hover) { .card:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--a1) 40%, var(--line)); box-shadow: var(--shadow); } }
+  .card svg { width: 44px; height: 44px; padding: 10px; border-radius: 12px; background: var(--soft); border: 1px solid var(--line); margin-bottom: 18px; display: block; }
+
+  /* AI: a dark panel in both themes */
+  .ai-box { position: relative; overflow: hidden; background: #08080b; color: #f4f4f5; border-radius: 28px; padding: 32px 20px; border: 1px solid #1f1f25; display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .ai-box::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .5;
+    background: radial-gradient(50% 55% at 100% 0%, color-mix(in srgb, var(--a1) 60%, transparent), transparent 70%), radial-gradient(45% 50% at 0% 100%, color-mix(in srgb, var(--a3) 38%, transparent), transparent 70%); }
+  .ai-box > * { position: relative; }
+  .ai-box .badge { background: linear-gradient(#0d0d12, #0d0d12) padding-box, var(--grad) border-box; }
+  .ai-box h2 { max-width: 18ch; }
+  .ai-box .sub { color: #a9a9b4; }
+  .ai-list { list-style: none; margin-top: 28px; }
+  .ai-list li { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 16px; padding: 18px 0; border-top: 1px solid rgba(255,255,255,.1); }
+  .ai-list svg { width: 40px; height: 40px; padding: 9px; border-radius: 12px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); }
+  .ai-list h3 { font-size: 18px; }
+  .ai-list p { color: #a9a9b4; font-size: 16px; margin-top: 4px; }
+  .ai-note { color: #8b8b96; font-size: 14.5px; margin-top: 8px; }
+  .scan { align-self: center; width: 100%; max-width: 420px; margin: 0 auto; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.12); border-radius: 22px; padding: 16px; }
+  .scan-top { display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 500; color: #d6d6de; margin-bottom: 14px; }
+  .scan-top .live { width: 8px; height: 8px; border-radius: 50%; background: var(--a3); box-shadow: 0 0 0 4px color-mix(in srgb, var(--a3) 25%, transparent); flex: none; }
+  .tiles { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; overflow: hidden; border-radius: 14px; }
+  .tile { position: relative; aspect-ratio: 4 / 3; border-radius: 14px; overflow: hidden; background: #17171d; }
+  .tile::before { content: ""; position: absolute; inset: 0; opacity: .55; }
+  .tile:nth-child(1)::before { background: radial-gradient(60% 70% at 30% 35%, #3b4a6b, transparent), linear-gradient(160deg, #1d2333, #12141b); }
+  .tile:nth-child(2)::before { background: radial-gradient(55% 60% at 60% 55%, #7a4a5a, transparent), linear-gradient(200deg, #33202a, #17121a); filter: blur(5px); }
+  .tile:nth-child(3)::before { background: radial-gradient(60% 60% at 65% 40%, #3d6157, transparent), linear-gradient(140deg, #18261f, #111614); }
+  .tile:nth-child(4)::before { background: radial-gradient(50% 65% at 40% 60%, #5a5a7a, transparent), linear-gradient(180deg, #20202e, #131319); }
+  .tile span { position: absolute; left: 8px; right: 8px; bottom: 8px; font-size: 12px; font-weight: 500; line-height: 1.25; padding: 6px 9px; border-radius: 9px; background: rgba(8,8,11,.78); color: #c9f5d9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tile.hit { box-shadow: inset 0 0 0 2px #ff6b81; }
+  .tile.hit span { color: #ffc2cc; }
+  .beam { position: absolute; left: 0; right: 0; top: 0; height: 34%; pointer-events: none; background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--a3) 28%, transparent)); border-bottom: 2px solid var(--a3); transform: translateY(-100%); animation: beam 3.6s cubic-bezier(.5, 0, .5, 1) infinite; }
+  @keyframes beam { to { transform: translateY(300%); } }
+  .scan-foot { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .scan-foot span { font-size: 12.5px; font-weight: 500; padding: 6px 11px; border-radius: 999px; border: 1px solid rgba(255,255,255,.14); color: #d6d6de; }
+  .aichip { position: absolute; left: 9%; top: 27%; z-index: 2; font-size: .78em; font-weight: 500; padding: .45em .9em; border-radius: 999px; background: linear-gradient(#0d0d12, #0d0d12) padding-box, var(--grad) border-box; border: 1px solid transparent; transition: opacity .3s; }
+  .tap .sc.guard.on .aichip, .still .aichip { opacity: 0; }
+  .made { display: inline-flex; align-items: center; gap: 7px; }
   .card p { color: var(--muted); font-size: 16px; margin-top: 8px; }
 
   /* Parents */
@@ -210,6 +257,7 @@
     .card, .col { padding: 28px; }
     .tr { grid-template-columns: minmax(0, 1fr) 120px 120px; padding: 16px 28px; font-size: 16.5px; }
     .end-box { padding: 72px 40px; }
+    .ai-box { padding: 48px 40px; }
     .step { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px; }
     .step:nth-child(even) .shot { order: -1; }
     .steps { gap: 72px; }
@@ -224,6 +272,7 @@
     .shot .phone { --pw: 260px; }
     .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     section { padding: 112px 0; }
+    .ai-box { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 56px; padding: 64px 56px; }
   }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
@@ -238,6 +287,7 @@
     <a class="logo" href="#top"><i></i>Quiet</a>
     <nav>
       <a href="#how" data-t="nav_how"></a>
+      <a href="#ai" data-t="nav_ai"></a>
       <a href="#parents" data-t="nav_parents"></a>
       <a href="#pricing" data-t="nav_pricing"></a>
       <a href="#faq" data-t="nav_faq"></a>
@@ -259,6 +309,7 @@
   <section class="hero">
     <div class="wrap hero-grid">
       <div>
+        <a class="badge" href="#ai" style="text-decoration:none"><svg class="spark" viewBox="0 0 24 24"><defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7c5cff"/><stop offset=".55" stop-color="#3b82f6"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs><path fill="url(#sg)" d="M12 2l2.1 6.2a3 3 0 0 0 1.7 1.7L22 12l-6.2 2.1a3 3 0 0 0-1.7 1.7L12 22l-2.1-6.2a3 3 0 0 0-1.7-1.7L2 12l6.2-2.1a3 3 0 0 0 1.7-1.7z"/></svg><span data-t="ai_badge"></span></a>
         <p class="eyebrow" data-t="kicker"></p>
         <h1 data-t="h1"></h1>
         <p class="lead" data-t="lead"></p>
@@ -298,6 +349,35 @@
         <div class="step">
           <div><p class="n">03</p><h3 data-t="r3_h"></h3><p data-t="r3_p"></p></div>
           <div class="shot" aria-hidden="true"><div class="phone"><div class="screen" data-shot="focus"></div></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="ai">
+    <div class="wrap">
+      <div class="ai-box">
+        <div>
+          <span class="badge"><svg class="spark" viewBox="0 0 24 24"><path fill="url(#sg)" d="M12 2l2.1 6.2a3 3 0 0 0 1.7 1.7L22 12l-6.2 2.1a3 3 0 0 0-1.7 1.7L12 22l-2.1-6.2a3 3 0 0 0-1.7-1.7L2 12l6.2-2.1a3 3 0 0 0 1.7-1.7z"/></svg><span data-t="ai_eyebrow"></span></span>
+          <h2 data-t="ai_h"></h2>
+          <p class="sub" data-t="ai_p"></p>
+          <ul class="ai-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="12" r="2"/><circle cx="12" cy="12" r="1.6"/><path d="M7.8 7l2.8 3.8M7.8 17l2.8-3.8M13.6 12H16"/></svg><div><h3 data-t="ai1_h"></h3><p data-t="ai1_p"></p></div></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M10.5 12.2l1.2 1.2 2.2-2.6"/></svg><div><h3 data-t="ai2_h"></h3><p data-t="ai2_p"></p></div></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 7l-5 5 5 5M15 7l5 5-5 5"/></svg><div><h3 data-t="ai3_h"></h3><p data-t="ai3_p"></p></div></li>
+          </ul>
+          <p class="ai-note" data-t="ai_note"></p>
+        </div>
+        <div class="scan" aria-hidden="true">
+          <div class="scan-top"><i class="live"></i><span data-t="ai_scan"></span></div>
+          <div class="tiles">
+            <div class="tile"><span data-t="ai_ok"></span></div>
+            <div class="tile hit"><span data-t="ai_hit"></span></div>
+            <div class="tile"><span data-t="ai_ok"></span></div>
+            <div class="tile"><span data-t="ai_ok"></span></div>
+            <i class="beam"></i>
+          </div>
+          <div class="scan-foot"><span data-t="ai_local"></span><span data-t="ai_close"></span></div>
         </div>
       </div>
     </div>
@@ -376,7 +456,8 @@
 
 <footer>
   <div class="wrap">
-    <span class="sp">© 2026 Quiet</span>
+    <span>© 2026 Quiet</span>
+    <span class="made sp"><svg class="spark" viewBox="0 0 24 24"><path fill="url(#sg)" d="M12 2l2.1 6.2a3 3 0 0 0 1.7 1.7L22 12l-6.2 2.1a3 3 0 0 0-1.7 1.7L12 22l-2.1-6.2a3 3 0 0 0-1.7-1.7L2 12l6.2-2.1a3 3 0 0 0 1.7-1.7z"/></svg><span data-t="foot_ai"></span></span>
     <a id="privacy-link-foot" href="https://encrypster.github.io/quiet-privacy/uz/" data-t="foot_privacy"></a>
     <a href="mailto:test@example.com" data-t="foot_contact"></a>
   </div>
@@ -601,6 +682,42 @@ T.uz.tabs = ["Bosh ekran", "Kutish", "Fokus", "Himoya"];
 T.ru.tabs = ["Экран", "Пауза", "Фокус", "Защита"];
 T.en.tabs = ["Home", "Pause", "Focus", "Guard"];
 
+// The AI part: what runs on the phone, and how the app was made.
+Object.assign(T.uz, {
+  nav_ai: "AI", ai_badge: "AI bilan yaratilgan · AI telefonda ishlaydi", ai_eyebrow: "Sun’iy intellekt",
+  ai_h: "AI bulutda emas, telefonning o‘zida ishlaydi",
+  ai_p: "Quiet ichida rasmlarni taniydigan neyron tarmoq bor. U ekrandagi rasmni telefonning o‘zida baholaydi va kattalar uchun kontentni ko‘rsa, sahifani yopadi.",
+  ai1_h: "Neyron tarmoq rasmga qaraydi", ai1_p: "So‘zlar yetarli bo‘lmagan joyda model rasmning o‘zini tekshiradi: kanal, bot yoki sayt nomi beozor bo‘lsa ham.",
+  ai2_h: "Internet kerak emas", ai2_p: "Model ilova ichida keladi va oflayn ishlaydi. Rasm ham, natija ham telefondan chiqmaydi.",
+  ai3_h: "AI bilan birga yozilgan", ai3_p: "Quiet kodi Claude AI bilan birga yozilgan va haqiqiy telefonda sinab ko‘rilgan. Buni yashirmaymiz.",
+  ai_note: "Rasm tekshiruvi Pro tarkibida, Android 11 va undan yangi telefonlarda ishlaydi.",
+  ai_scan: "AI tekshirmoqda…", ai_ok: "Xavfsiz", ai_hit: "18+ · 97%", ai_local: "Telefonda · oflayn", ai_close: "Sahifa yopiladi",
+  foot_ai: "Claude AI bilan yaratilgan"
+});
+Object.assign(T.ru, {
+  nav_ai: "ИИ", ai_badge: "Создано с ИИ · ИИ работает на телефоне", ai_eyebrow: "Искусственный интеллект",
+  ai_h: "ИИ работает не в облаке, а в самом телефоне",
+  ai_p: "Внутри Quiet есть нейросеть, которая распознаёт изображения. Она оценивает картинку на экране прямо в телефоне и закрывает страницу, если видит контент для взрослых.",
+  ai1_h: "Нейросеть смотрит на изображение", ai1_p: "Там, где слов недостаточно, модель проверяет саму картинку — даже если у канала, бота или сайта безобидное название.",
+  ai2_h: "Интернет не нужен", ai2_p: "Модель встроена в приложение и работает офлайн. Ни картинка, ни результат не покидают телефон.",
+  ai3_h: "Написано вместе с ИИ", ai3_p: "Код Quiet написан вместе с Claude AI и проверен на настоящем телефоне. Мы этого не скрываем.",
+  ai_note: "Проверка изображений входит в Pro и работает на Android 11 и новее.",
+  ai_scan: "ИИ проверяет…", ai_ok: "Безопасно", ai_hit: "18+ · 97%", ai_local: "На телефоне · офлайн", ai_close: "Страница закрывается",
+  foot_ai: "Создано с Claude AI"
+});
+Object.assign(T.en, {
+  nav_ai: "AI", ai_badge: "Built with AI · AI runs on the phone", ai_eyebrow: "Artificial intelligence",
+  ai_h: "The AI runs on the phone, not in the cloud",
+  ai_p: "Quiet carries a neural network that recognises images. It scores what is on the screen right on the phone and closes the page when it sees adult content.",
+  ai1_h: "A neural network looks at the picture", ai1_p: "Where words are not enough, the model checks the image itself, even when the channel, bot or site has a harmless name.",
+  ai2_h: "No internet needed", ai2_p: "The model ships inside the app and works offline. Neither the image nor the verdict leaves the phone.",
+  ai3_h: "Written together with AI", ai3_p: "Quiet’s code was written together with Claude AI and tested on a real phone. We do not hide that.",
+  ai_note: "The image check is part of Pro and needs Android 11 or newer.",
+  ai_scan: "AI is checking…", ai_ok: "Safe", ai_hit: "18+ · 97%", ai_local: "On device · offline", ai_close: "The page is closed",
+  foot_ai: "Built with Claude AI"
+});
+T.uz.tabs[3] = "AI himoya"; T.ru.tabs[3] = "ИИ-защита"; T.en.tabs[3] = "AI guard";
+
 /* ---- The phone's screens. One set of templates serves the walkthrough and the stills. ---- */
 const SCREENS = {
   home:
@@ -615,7 +732,7 @@ const SCREENS = {
     '<div class="sc focus"><span class="tag" data-t="m_focus"></span><div class="clock">9:41</div><div class="date" data-t="m_date"></div>' +
     '<ul class="apps"><li data-t="m_f1"></li><li data-t="m_f2"></li><li data-t="m_f3"></li><li class="off">Instagram</li><li class="off">YouTube</li></ul></div>',
   guard:
-    '<div class="sc guard"><div class="chat-top"><i></i>Telegram</div><div class="chat"><i></i><i></i><i></i><i></i></div><div class="toast" data-t="m_toast"></div></div>'
+    '<div class="sc guard"><div class="chat-top"><i></i>Telegram</div><span class="aichip" data-t="ai_scan"></span><div class="chat"><i></i><i></i><i></i><i></i></div><div class="toast" data-t="m_toast"></div></div>'
 };
 
 /* ---- The walkthrough: the phone shows itself, nobody has to work out what to press. ---- */
