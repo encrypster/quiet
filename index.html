@@ -357,7 +357,7 @@
     .device .phone.demo { width: 264px; transition: border-radius .6s, width .6s var(--ease); }
     .stage-cap { display: none; }
     .chips { top: 60px; }
-    .chip { --k: .55; transform: translate(-50%, -50%) translate(calc(var(--dx) * .55 * (1 - var(--p))), calc(var(--dy) * .28 * (1 - var(--p)))) scale(calc(.86 - var(--p) * .6)); }
+    .chip { --k: .55; transform: translate(-50%, -50%) translate(calc(var(--dx) * .42 * (1 - var(--p))), calc(var(--dy) * .28 * (1 - var(--p)))) scale(calc(.86 - var(--p) * .6)); }
     .chip:nth-child(n+7) { display: none; }
     body:not([data-scene="0"]):not([data-scene="1"]) .device { transform: translate(-50%, 40px); opacity: 0; height: 0; }
 
@@ -556,6 +556,21 @@
     .par .shot .phone { zoom: 1.2; }
   }
   @media (max-width: 960px) { .logo { font-size: 20px; } .logo i { width: 18px; height: 18px; border-width: 3.5px; } }
+  /* Phone tour: on a phone the demo plays itself, with a finger showing each tap */
+  .finger { position: absolute; left: 0; top: 0; z-index: 9; width: 40px; height: 40px; margin: -20px 0 0 -20px; border-radius: 50%; background: rgba(255,255,255,.28); box-shadow: 0 0 0 2px rgba(255,255,255,.75), 0 6px 18px rgba(0,0,0,.5); opacity: 0; pointer-events: none; transition: transform .6s cubic-bezier(.3, .7, .3, 1), opacity .3s, scale .15s; }
+  .finger.on { opacity: 1; }
+  .finger.press { scale: .72; background: rgba(255,255,255,.6); }
+  @media (max-width: 960px) {
+    #s-try .num, #s-try h2, #s-try .chapter p, #s-try .story-note, #s-try .try-done { display: none !important; }
+    #s-try .tabs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin: 0 calc(var(--gut) * -1); padding: 0 var(--gut); }
+    #s-try .tabs::-webkit-scrollbar { display: none; }
+    #s-try .tabs button { flex: none; }
+    #s-try .chapter h3 { font-size: 22px; margin-top: 14px; }
+    body[data-scene="1"] .device { top: auto; bottom: calc(72px + env(safe-area-inset-bottom)); height: var(--tour-h, 420px); opacity: 1; transform: translateX(-50%); }
+    body[data-scene="1"] .device .phone.demo { zoom: var(--tour-z, .75); }
+    body[data-scene="1"] .chips { display: none; }
+    .chip:nth-child(n+5) { display: none; }
+  }
 </style>
 </head>
 <body data-scene="0" data-step="0" data-stop="0">
@@ -597,6 +612,7 @@
     </div>
     <div class="sb"><span id="demo-clock">7:42</span><span><em></em><b></b></span></div>
     <div id="demo-screen"></div>
+    <i class="finger" id="finger" aria-hidden="true"></i>
     <div class="noisy" aria-hidden="true">
       <div class="icons">
         <i class="n"><b>12</b></i><i></i><i class="n"><b>3</b></i><i></i>
@@ -1275,7 +1291,7 @@ const Demo = (() => {
     $("story-tabs").addEventListener("click", e => { const b = e.target.closest("[data-ch]"); if (b) Deck.go(1, Number(b.dataset.ch)); });
     setInterval(() => { if (st.screen === "home") render(false); }, 20000);
   }
-  return { init, scene, refresh() { render(false); side(); } };
+  return { init, scene, act, home(i) { clear(); cur = i; st.focus = false; document.getElementById("demo-toast").innerHTML = ""; go("home"); side(); }, name, refresh() { render(false); side(); } };
 })();
 
 // The hero scene's words: what a phone shouts before Quiet.
@@ -1437,6 +1453,51 @@ Object.assign(T.en, {
   tb3: "The plan holds even on a day your willpower does not.",
   tb4: "Without colour, the phone is easier to put down."
 });
+/* ---- On a phone the demo plays each chapter by itself: a finger shows every tap, nothing has to be worked out. ---- */
+const Tour = (() => {
+  const $ = id => document.getElementById(id);
+  let run = 0, ch = -1, again = 0;
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  const alive = token => token === run;
+  async function tap(sel, token) {
+    const phone = $("demo"), el = phone.querySelector(sel), f = $("finger");
+    if (!el || !alive(token)) return false;
+    const z = parseFloat(getComputedStyle(phone).zoom) || 1, pr = phone.getBoundingClientRect(), r = el.getBoundingClientRect();
+    const x = (r.left - pr.left + Math.min(r.width / 2, 60)) / z, y = (r.top - pr.top + r.height / 2) / z;
+    f.style.transform = "translate(" + x + "px," + y + "px)"; f.classList.add("on");
+    await wait(700); if (!alive(token)) return false;
+    f.classList.add("press"); await wait(160); f.classList.remove("press");
+    if (!alive(token)) return false;
+    el.click(); await wait(200);
+    return alive(token);
+  }
+  async function type(text, token) {
+    for (let i = 1; i <= text.length; i++) {
+      const q = $("demo-q"); if (!q || !alive(token)) return;
+      q.value = text.slice(0, i); q.dispatchEvent(new Event("input", { bubbles: true })); await wait(380);
+    }
+  }
+  const hide = () => $("finger").classList.remove("on");
+  const SCRIPTS = [
+    async k => { await wait(900); await tap(".d-all", k); await wait(500); await type(Demo.name("telegram").slice(0, 3), k); await wait(700); await tap(".d-scroll .d-app", k); hide(); await wait(1800); },
+    async k => { await wait(900); await tap('[data-act="open:instagram"]', k); hide(); await wait(5600); await tap('[data-act="visit:5"]', k); hide(); await wait(10500); },
+    async k => { await wait(1300); await tap(".d-all", k); await wait(500); await tap('.d-scroll [data-act="open:instagram"]', k); hide(); await wait(2600); await tap('[data-act="home"]', k); hide(); await wait(1600); },
+    async k => { await wait(900); await tap('[data-act="open:youtube"]', k); await wait(700); await tap('[data-act="shorts"]', k); hide(); await wait(3600); },
+    async k => { await wait(900); await tap('[data-act="open:telegram"]', k); await wait(700); await tap('[data-act="chat:2"]', k); hide(); await wait(3600); }
+  ];
+  async function start(i) {
+    const k = ++run; ch = i; clearTimeout(again); hide();
+    if (i === 2) Demo.scene(2); else Demo.home(i);
+    await SCRIPTS[i](k);
+    if (!alive(k)) return;
+    // Then on to the next chapter, and round again after the last.
+    again = setTimeout(() => { if (alive(k)) Deck.go(1, (i + 1) % SCRIPTS.length); }, 900);
+  }
+  function stop() { run++; ch = -1; clearTimeout(again); if ($("finger")) hide(); }
+  // A tap of the visitor's own takes the phone over; the tabs start the tour again.
+  function init() { $("demo").addEventListener("pointerdown", e => { if (e.isTrusted && ch >= 0) stop(); }); }
+  return { start, stop, init };
+})();
 const Deck = (() => {
   const $ = id => document.getElementById(id);
   const slides = [...document.querySelectorAll(".slide")];
@@ -1464,6 +1525,14 @@ const Deck = (() => {
 
   function stop() { let n = k; for (let i = 0; i < s; i++) n += steps[i]; return n; }
 
+  function tourFit() {
+    const b = document.body, bar = document.querySelector(".bar"), col = slides[1].querySelector(".col");
+    if (!narrow() || !bar || !col) return;
+    const bottom = $("deck").getBoundingClientRect().top + col.offsetTop + col.offsetHeight - slides[1].scrollTop;
+    const h = Math.max(300, Math.round(bar.getBoundingClientRect().top - bottom - 24));
+    const z = Math.min(1, Math.max(.5, (h - 8) / (264 * 19 / 9)));
+    b.style.setProperty("--tour-h", h + "px"); b.style.setProperty("--tour-z", z.toFixed(3));
+  }
   function labels() {
     fit();
     $("rail").innerHTML = slides.map((_, i) => '<button type="button" data-go="' + i + '" aria-current="' + (i === s) + '"><span>' + names()[i] + "</span></button>").join("");
@@ -1490,7 +1559,7 @@ const Deck = (() => {
     const b = document.body, key = s + ":" + k, sceneChanged = shown.split(":")[0] !== String(s);
     b.dataset.scene = s; b.dataset.step = k; b.dataset.stop = stop();
     b.classList.toggle("invert", slides[s].hasAttribute("data-invert"));
-    b.classList.toggle("launcher", s === 1 && narrow());
+    b.classList.toggle("launcher", false);
     $("prog").style.setProperty("--sp", total > 1 ? stop() / (total - 1) : 0);
     slides.forEach((el, i) => {
       el.classList.toggle("active", i === s);
@@ -1505,7 +1574,7 @@ const Deck = (() => {
 
     if (key !== shown) {
       if (s === 0) Demo.scene(0);
-      if (s === 1) Demo.scene(k);
+      if (s === 1) { if (narrow()) { tourFit(); Tour.start(k); } else Demo.scene(k); } else Tour.stop();
       if (slides[s].id === "parents" && k === 0) {
         const ph = slides[s].querySelector(".phone");
         ph.classList.add("anim"); ph.classList.remove("play"); void ph.offsetWidth; ph.classList.add("play");
@@ -1575,7 +1644,8 @@ const Deck = (() => {
     });
     $("b-prev").addEventListener("click", prev); $("b-next").addEventListener("click", next);
     $("l-prev").addEventListener("click", prev); $("l-next").addEventListener("click", next);
-    addEventListener("resize", () => { shown = ""; render(); });
+    addEventListener("resize", () => { shown = ""; render(); tourFit(); });
+    Tour.init();
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { shown = ""; render(); });
     const want = location.hash.slice(1), at = slides.findIndex(el => el.id.replace(/^s-/, "") === want);
     if (at > 0) s = at;
