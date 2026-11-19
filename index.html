@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Quiet — Android uchun sokin bosh ekran</title>
-<meta name="description" content="Quiet bosh ekranni oddiy matnli roʻyxatga aylantiradi va vaqtingizni oladigan ilovalar oldiga kichik toʻsiq qoʻyadi. Android 8 va undan yangi.">
+<meta name="description" content="Quiet bosh ekranni oddiy matnli ro‘yxatga aylantiradi va vaqtingizni oladigan ilovalar oldiga kichik to‘siq qo‘yadi. Android 8 va undan yangi.">
 <meta property="og:title" content="Quiet — Android uchun sokin bosh ekran">
-<meta property="og:description" content="Matnli bosh ekran, ilova limitlari, fokus va ota-ona qulfi. Saytning oʻzida sinab koʻring.">
+<meta property="og:description" content="Matnli bosh ekran, ilova limitlari, fokus va ota-ona qulfi. Saytning o‘zida sinab ko‘ring.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#000000">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23000'/%3E%3Ccircle cx='32' cy='32' r='13' fill='none' stroke='%23fff' stroke-width='5'/%3E%3C/svg%3E">
@@ -531,6 +531,27 @@
     .end .hero-actions { margin-top: 20px; }
     .card .btn { max-width: 100%; }
   }
+  /* Desktop pass */
+  .mark, .rail { display: none !important; }
+  .logo { font-size: 22px; gap: 11px; letter-spacing: -.035em; }
+  .logo i { width: 20px; height: 20px; border-width: 4px; }
+  .gain { font-size: clamp(20px, 2vw, 26px); font-weight: 600; letter-spacing: -.025em; line-height: 1.22; color: var(--fg); }
+  .card .gain + p { margin-top: -4px; }
+  @media (min-width: 961px) {
+    /* The brand, the nav and the counter line up with the text of the scenes. */
+    header, .bar { --edge: max(0px, calc((100vw - var(--gut) - 64px - 1120px) / 2)); }
+    header { padding: 0 calc(64px + var(--edge)) 0 calc(var(--gut) + var(--edge)); }
+    .bar { left: calc(var(--gut) + var(--edge)); }
+    /* The phone on the parents' scene, at a size that can be read. */
+    #parents .inner { position: relative; }
+    .par { grid-template-columns: minmax(0, 1fr) 300px; }
+    .par .shot { position: absolute; right: 0; top: 50%; transform: translateY(-50%); }
+    .par .shot .phone { zoom: 1.4; }
+  }
+  @media (min-width: 961px) and (max-height: 780px) {
+    .par .shot .phone { zoom: 1.2; }
+  }
+  @media (max-width: 960px) { .logo { font-size: 20px; } .logo i { width: 18px; height: 18px; border-width: 3.5px; } }
 </style>
 </head>
 <body data-scene="0" data-step="0" data-stop="0">
@@ -562,7 +583,7 @@
 <aside class="rail" id="rail" aria-label="Scenes"></aside>
 
 <!-- One live phone. It stays in place while the first scenes change around it. -->
-<div class="device tilt" id="device" data-tilt="soft">
+<div class="device" id="device">
   <div class="chips" id="chips" aria-hidden="true"></div>
   <div class="phone demo" id="demo">
     <div class="lstrip" id="lstrip">
@@ -649,11 +670,11 @@
           <button type="button" data-step="4" data-t="d6_h"></button>
         </div>
         <div class="rv" style="--i:3">
-          <div class="card" data-k="0"><p data-t="w_time_p"></p><div class="ex" id="time-seg"></div><div class="bars" id="time-bars"></div><p class="w-read" id="time-read"></p></div>
-          <div class="card" data-k="1"><p data-t="w_hold_p"></p><label class="sw"><input type="checkbox" id="hold-on" checked><i></i><span data-t="w_hold_sw"></span></label><div class="hold-box" id="hold-box"></div></div>
-          <div class="card" data-k="2"><p data-t="w_sched_p"></p><div class="day" aria-hidden="true"><i class="closed a"></i><i class="closed b"></i></div><input type="range" id="sched" min="0" max="1430" step="10" value="1300"><p class="w-read" id="sched-read"></p></div>
-          <div class="card" data-k="3"><p data-t="w_strict_p"></p><div class="timer" id="strict-time">25:00</div><button class="btn ghost" type="button" id="strict-end" data-t="w_strict_btn"></button><p class="w-read" id="strict-read"></p></div>
-          <div class="card" data-k="4"><p data-t="w_gray_p"></p><label class="sw"><input type="checkbox" id="gray-on"><i></i><span data-t="w_gray_sw"></span></label><div class="feed" id="feed" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+          <div class="card" data-k="0"><h3 class="gain" data-t="tb0"></h3><p data-t="w_time_p"></p><div class="ex" id="time-seg"></div><div class="bars" id="time-bars"></div><p class="w-read" id="time-read"></p></div>
+          <div class="card" data-k="1"><h3 class="gain" data-t="tb1"></h3><p data-t="w_hold_p"></p><label class="sw"><input type="checkbox" id="hold-on" checked><i></i><span data-t="w_hold_sw"></span></label><div class="hold-box" id="hold-box"></div></div>
+          <div class="card" data-k="2"><h3 class="gain" data-t="tb2"></h3><p data-t="w_sched_p"></p><div class="day" aria-hidden="true"><i class="closed a"></i><i class="closed b"></i></div><input type="range" id="sched" min="0" max="1430" step="10" value="1300"><p class="w-read" id="sched-read"></p></div>
+          <div class="card" data-k="3"><h3 class="gain" data-t="tb3"></h3><p data-t="w_strict_p"></p><div class="timer" id="strict-time">25:00</div><button class="btn ghost" type="button" id="strict-end" data-t="w_strict_btn"></button><p class="w-read" id="strict-read"></p></div>
+          <div class="card" data-k="4"><h3 class="gain" data-t="tb4"></h3><p data-t="w_gray_p"></p><label class="sw"><input type="checkbox" id="gray-on"><i></i><span data-t="w_gray_sw"></span></label><div class="feed" id="feed" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
         </div>
       </div>
     </div>
@@ -798,69 +819,69 @@ uz: {
   title: "Quiet — Android uchun sokin bosh ekran",
   nav_how: "Qanday ishlaydi", nav_parents: "Ota-onalar uchun", nav_pricing: "Narxlar", nav_faq: "Savollar",
   kicker: "Android uchun bosh ekran",
-  h1: "Telefonni ochasiz, ishingizni qilasiz, qoʻyasiz.",
-  lead: "Quiet bosh ekranni oddiy matnli roʻyxatga aylantiradi va vaqtingizni oladigan ilovalar oldiga kichik toʻsiq qoʻyadi. Nimani cheklashni oʻzingiz hal qilasiz.",
-  status: "Tez orada Google Play’da", more: "Qanday ishlashini koʻrish",
-  fact1: "Android 8 va undan yangi", fact2: "Oʻzbek, rus va ingliz tillarida", fact3: "Roʻyxatdan oʻtish shart emas",
+  h1: "Telefonni ochasiz, ishingizni qilasiz, qo‘yasiz.",
+  lead: "Quiet bosh ekranni oddiy matnli ro‘yxatga aylantiradi va vaqtingizni oladigan ilovalar oldiga kichik to‘siq qo‘yadi. Nimani cheklashni o‘zingiz hal qilasiz.",
+  status: "Tez orada Google Play’da", more: "Qanday ishlashini ko‘rish",
+  fact1: "Android 8 va undan yangi", fact2: "O‘zbek, rus va ingliz tillarida", fact3: "Ro‘yxatdan o‘tish shart emas",
   m_date: "Payshanba, 19-noyabr", m_today: "Bugun telefonda 38 daqiqa",
   m_a1: "Telefon", m_a2: "Xabarlar", m_a3: "Kamera", m_a4: "Xarita", m_a5: "Taqvim",
   m_open: "Instagram ochilmoqda", m_wait: "8 soniya kuting.", m_used: "Bugun 3 marta, 24 daqiqa.", m_why: "Nima uchun ochyapsiz?",
   m_home: "Uyga qaytish", m_c5: "5 daqiqaga davom etish", m_c10: "10 daqiqaga davom etish", m_c20: "20 daqiqaga davom etish",
   m_focus: "Ish · 25 daqiqa qoldi", m_f1: "Pochta", m_f2: "Taqvim", m_f3: "Hujjatlar",
   m_toast: "Quiet yopdi: kattalar uchun kontent.",
-  how_h: "Oʻrnatganingizdan keyin uch narsa oʻzgaradi",
-  how_p: "Quiet hech narsani oʻzicha bloklamaydi. Qaysi ilovani cheklashni oʻzingiz tanlaysiz, xohlagan payt oʻzgartirasiz.",
+  how_h: "O‘rnatganingizdan keyin uch narsa o‘zgaradi",
+  how_p: "Quiet hech narsani o‘zicha bloklamaydi. Qaysi ilovani cheklashni o‘zingiz tanlaysiz, xohlagan payt o‘zgartirasiz.",
   r1_h: "Bosh ekranda sakkizta nom qoladi",
-  r1_p: "Belgilar, qizil nuqtalar va vidjetlar oʻrnida soat, sana va oʻzingiz tanlagan sakkiztagacha ilova turadi. Qolganlari bir surishda ochiladi yoki nomining ikki-uch harfi bilan topiladi.",
-  r2_h: "Odat boʻlib qolgan ilovalar darhol ochilmaydi",
-  r2_p: "Masalan, Instagramni bosdingiz. Quiet oʻn soniya kuttiradi va nima uchun ochayotganingizni soʻraydi. Davom etsangiz, 5, 10 yoki 20 daqiqani tanlaysiz; vaqt tugagach, ilova yopiladi. Kunlik limit qoʻyish ham mumkin.",
+  r1_p: "Belgilar, qizil nuqtalar va vidjetlar o‘rnida soat, sana va o‘zingiz tanlagan sakkiztagacha ilova turadi. Qolganlari bir surishda ochiladi yoki nomining ikki-uch harfi bilan topiladi.",
+  r2_h: "Odat bo‘lib qolgan ilovalar darhol ochilmaydi",
+  r2_p: "Masalan, Instagramni bosdingiz. Quiet o‘n soniya kuttiradi va nima uchun ochayotganingizni so‘raydi. Davom etsangiz, 5, 10 yoki 20 daqiqani tanlaysiz; vaqt tugagach, ilova yopiladi. Kunlik limit qo‘yish ham mumkin.",
   r3_h: "Ish paytida ekranda faqat ish turadi",
-  r3_p: "Fokus seansini boshlaganingizda bosh ekranda shu ish uchun tanlagan ilovalaringiz qoladi, qolganlari seans tugaguncha ochilmaydi. Bildirishnomalar yigʻilib turadi, qoʻngʻiroqlar esa har doim oʻtadi.",
+  r3_p: "Fokus seansini boshlaganingizda bosh ekranda shu ish uchun tanlagan ilovalaringiz qoladi, qolganlari seans tugaguncha ochilmaydi. Bildirishnomalar yig‘ilib turadi, qo‘ng‘iroqlar esa har doim o‘tadi.",
   also_h: "Yana nimalar bor",
-  d1_h: "Shorts va Reels", d1_p: "YouTube va Instagramning oʻzi ishlayveradi. Qisqa videolar tasmasi ochilsa, Quiet orqaga qaytaradi. Kerak boʻlgan kuni uni bir muddatga ochib qoʻyish mumkin.",
-  d2_h: "Bildirishnomalar", d2_p: "Tanlangan ilovalarning bildirishnomalari sizni chalgʻitmay yigʻilib turadi. Ularni oʻzingizga qulay paytda bitta roʻyxatda oʻqiysiz.",
-  d3_h: "Ekran vaqti", d3_p: "Bugun, oxirgi yetti kun va sakkiz hafta boʻyicha: qaysi ilovaga qancha vaqt ketgani va telefonni necha marta ochganingiz.",
-  d4_h: "Jadval", d4_p: "Ilovalarni kunning maʼlum soatlarida yopib qoʻyish mumkin. Masalan, ijtimoiy tarmoqlar 23:00 dan 07:00 gacha ochilmaydi.",
-  d5_h: "Qatʼiy rejim", d5_p: "Oʻzingizga ishonmagan kunlar uchun. Seansni muddatidan oldin tugatib ham, qoidalarni yumshatib ham boʻlmaydi.",
-  d6_h: "Kulrang ekran", d6_p: "Rangsiz ekran oʻziga kamroq tortadi. Buni yoqish uchun telefonni bir marta kompyuterga ulash kerak boʻladi.",
+  d1_h: "Shorts va Reels", d1_p: "YouTube va Instagramning o‘zi ishlayveradi. Qisqa videolar tasmasi ochilsa, Quiet orqaga qaytaradi. Kerak bo‘lgan kuni uni bir muddatga ochib qo‘yish mumkin.",
+  d2_h: "Bildirishnomalar", d2_p: "Tanlangan ilovalarning bildirishnomalari sizni chalg‘itmay yig‘ilib turadi. Ularni o‘zingizga qulay paytda bitta ro‘yxatda o‘qiysiz.",
+  d3_h: "Ekran vaqti", d3_p: "Bugun, oxirgi yetti kun va sakkiz hafta bo‘yicha: qaysi ilovaga qancha vaqt ketgani va telefonni necha marta ochganingiz.",
+  d4_h: "Jadval", d4_p: "Ilovalarni kunning maʼlum soatlarida yopib qo‘yish mumkin. Masalan, ijtimoiy tarmoqlar 23:00 dan 07:00 gacha ochilmaydi.",
+  d5_h: "Qatʼiy rejim", d5_p: "O‘zingizga ishonmagan kunlar uchun. Seansni muddatidan oldin tugatib ham, qoidalarni yumshatib ham bo‘lmaydi.",
+  d6_h: "Kulrang ekran", d6_p: "Rangsiz ekran o‘ziga kamroq tortadi. Buni yoqish uchun telefonni bir marta kompyuterga ulash kerak bo‘ladi.",
   par_h: "Farzandingizning telefoni uchun",
-  par_p: "Quietni bolaning telefoniga oʻrnatib, sozlamalarni PIN-kod bilan yopib qoʻyish mumkin. Bu qism dastlab oʻz oilamiz uchun yozilgan, shuning uchun nimani uddalashini ham, nimani uddalay olmasligini ham ochiq aytamiz.",
+  par_p: "Quietni bolaning telefoniga o‘rnatib, sozlamalarni PIN-kod bilan yopib qo‘yish mumkin. Bu qism dastlab o‘z oilamiz uchun yozilgan, shuning uchun nimani uddalashini ham, nimani uddalay olmasligini ham ochiq aytamiz.",
   can_h: "Nima qiladi",
-  can1_h: "Qoidalarni PIN-kod bilan yopadi", can1_p: "Qulf yopiq paytda limitlarni yumshatib ham, Quietni oʻchirib ham boʻlmaydi.",
-  can2_h: "Kattalar uchun sahifalarni yopadi", can2_p: "Telegram, brauzer va ijtimoiy tarmoqlarda ekrandagi soʻzlarni, yoqilgan boʻlsa rasmlarni ham tekshiradi. Tekshiruv telefonning oʻzida oʻtadi.",
-  can3_h: "Begona Telegram botlarini ochtirmaydi", can3_p: "Faqat oʻzingiz roʻyxatga qoʻshgan botlar ochiladi.",
+  can1_h: "Qoidalarni PIN-kod bilan yopadi", can1_p: "Qulf yopiq paytda limitlarni yumshatib ham, Quietni o‘chirib ham bo‘lmaydi.",
+  can2_h: "Kattalar uchun sahifalarni yopadi", can2_p: "Telegram, brauzer va ijtimoiy tarmoqlarda ekrandagi so‘zlarni, yoqilgan bo‘lsa rasmlarni ham tekshiradi. Tekshiruv telefonning o‘zida o‘tadi.",
+  can3_h: "Begona Telegram botlarini ochtirmaydi", can3_p: "Faqat o‘zingiz ro‘yxatga qo‘shgan botlar ochiladi.",
   can4_h: "Sizga xabar beradi", can4_p: "Xohlasangiz, biror sahifa yopilganda Telegramingizga yozadi: qaysi ilova, soat nechada va nima sababdan.",
   cant_h: "Nima qilmaydi",
-  cant1_h: "Hamma narsani ushlay olmaydi", cant1_p: "Buni hech bir filtr uddalamaydi. Family Link kabi vositalarni oʻchirmang, Quiet ular bilan birga ishlaydi.",
-  cant2_h: "Yozishmalarni oʻqimaydi", cant2_p: "Sizga ekrandagi matn ham, rasm ham yuborilmaydi. Faqat ilova nomi, vaqt va sabab.",
-  cant3_h: "Yashirin ishlamaydi", cant3_p: "Xabar yuborish yoqilgan boʻlsa, bolaning telefonida bu haqda doimiy bildirishnoma turadi.",
-  cant4_h: "Xavfsiz rejimni oʻzi toʻsa olmaydi", cant4_p: "Telefon Xavfsiz rejimda yoqilsa, Quiet ishlamaydi. Buni yopish uchun telefonni kompyuter orqali bir marta alohida sozlash kerak.",
+  cant1_h: "Hamma narsani ushlay olmaydi", cant1_p: "Buni hech bir filtr uddalamaydi. Family Link kabi vositalarni o‘chirmang, Quiet ular bilan birga ishlaydi.",
+  cant2_h: "Yozishmalarni o‘qimaydi", cant2_p: "Sizga ekrandagi matn ham, rasm ham yuborilmaydi. Faqat ilova nomi, vaqt va sabab.",
+  cant3_h: "Yashirin ishlamaydi", cant3_p: "Xabar yuborish yoqilgan bo‘lsa, bolaning telefonida bu haqda doimiy bildirishnoma turadi.",
+  cant4_h: "Xavfsiz rejimni o‘zi to‘sa olmaydi", cant4_p: "Telefon Xavfsiz rejimda yoqilsa, Quiet ishlamaydi. Buni yopish uchun telefonni kompyuter orqali bir marta alohida sozlash kerak.",
   pr_h: "Bepul va Pro",
-  pr_p: "Kundalik foydalanishga bepul qismi yetadi. Pro muddati tugasa ham, sozlab qoʻygan narsalaringiz ishlashda davom etadi.",
+  pr_p: "Kundalik foydalanishga bepul qismi yetadi. Pro muddati tugasa ham, sozlab qo‘ygan narsalaringiz ishlashda davom etadi.",
   t_what: "Imkoniyat", t_free: "Bepul",
   t1: "Matnli bosh ekran va qidiruv", t2: "Qoidalar: kutish, limit, blok", t3: "Fokus profillari", t4: "Ekran vaqti tarixi", t5: "Bildirishnomalar filtri",
   t6: "Shorts va Reelsni yopish", t7: "Qatʼiy rejim", t8: "Ota-ona qulfi va kontent tekshiruvi", t9: "Ota-onaga Telegram orqali xabar",
   v_yes: "Bor", v_two: "2 ta", v_one: "1 ta", v_unl: "Cheksiz", v_7d: "7 kun", v_8w: "8 hafta",
-  pr_note: "Pro yillik obuna yoki bir martalik toʻlov bilan olinadi. Narxlar ilova chiqqanda Google Play’da koʻrsatiladi.",
+  pr_note: "Pro yillik obuna yoki bir martalik to‘lov bilan olinadi. Narxlar ilova chiqqanda Google Play’da ko‘rsatiladi.",
   pv_h: "Maʼlumotlar telefonda qoladi",
-  pv_p1: "Quietda akkaunt, reklama va analitika yoʻq, serverimiz ham yoʻq. Sozlamalaringiz va foydalanish tarixi faqat telefoningizda saqlanadi; ilovani oʻchirsangiz, ular ham oʻchadi.",
-  pv_p2: "Bitta istisno bor: ota-ona oʻz Telegram botini ulasa, yopilgan ilovaning nomi va vaqti shu botga yuboriladi. Ilovalarni cheklash uchun Quiet Androidning maxsus imkoniyatlar xizmatidan foydalanadi; u nimani oʻqishi oʻrnatish paytida koʻrsatiladi.",
-  pv_link: "Maxfiylik siyosatini toʻliq oʻqish",
+  pv_p1: "Quietda akkaunt, reklama va analitika yo‘q, serverimiz ham yo‘q. Sozlamalaringiz va foydalanish tarixi faqat telefoningizda saqlanadi; ilovani o‘chirsangiz, ular ham o‘chadi.",
+  pv_p2: "Bitta istisno bor: ota-ona o‘z Telegram botini ulasa, yopilgan ilovaning nomi va vaqti shu botga yuboriladi. Ilovalarni cheklash uchun Quiet Androidning maxsus imkoniyatlar xizmatidan foydalanadi; u nimani o‘qishi o‘rnatish paytida ko‘rsatiladi.",
+  pv_link: "Maxfiylik siyosatini to‘liq o‘qish",
   q_h: "Savollar",
-  q1: "Avvalgi bosh ekranimga qaytsam boʻladimi?",
-  a1: "Ha. Telefon sozlamalaridagi “Standart ilovalar” boʻlimida istalgan payt avvalgi bosh ekranni tanlaysiz. Quietni oʻchirsangiz, hammasi oʻz holiga qaytadi.",
-  q2: "Muhim qoʻngʻiroq yoki xabarni oʻtkazib yubormaymanmi?",
-  a2: "Qoʻngʻiroqlar va budilnik hech qachon toʻsilmaydi. Bildirishnomalar faqat oʻzingiz tanlagan ilovalar uchun ushlab turiladi.",
+  q1: "Avvalgi bosh ekranimga qaytsam bo‘ladimi?",
+  a1: "Ha. Telefon sozlamalaridagi “Standart ilovalar” bo‘limida istalgan payt avvalgi bosh ekranni tanlaysiz. Quietni o‘chirsangiz, hammasi o‘z holiga qaytadi.",
+  q2: "Muhim qo‘ng‘iroq yoki xabarni o‘tkazib yubormaymanmi?",
+  a2: "Qo‘ng‘iroqlar va budilnik hech qachon to‘silmaydi. Bildirishnomalar faqat o‘zingiz tanlagan ilovalar uchun ushlab turiladi.",
   q3: "Qaysi telefonlarda ishlaydi?",
-  a3: "Android 8.0 va undan yangi telefonlarda. Samsung Galaxy’da alohida sinab koʻrilgan. Rasm tekshiruvi uchun Android 11 kerak.",
-  q4: "Nega maxsus imkoniyatlar ruxsati soʻraladi?",
-  a4: "Android ilovaga hozir qaysi ilova ochiqligini boshqa yoʻl bilan bildirmaydi. Quiet bu ruxsatdan ilovalarni cheklash va, siz yoqsangiz, kattalar uchun sahifalarni yopish uchun foydalanadi. Yozayotgan matningizni va parollaringizni oʻqimaydi.",
-  q5: "Bola Quietni oʻchirib tashlay oladimi?",
-  a5: "Qulf yopiq paytda yoʻq: oʻchirish oynasi, ilova sozlamalari, sana va vaqt sahifalari yopiq turadi. Xavfsiz rejim va zavod sozlamalariga qaytarishni ham yopish uchun telefonni kompyuter orqali bir marta sozlash kerak.",
-  q6: "Pro obunasini bekor qilsam nima boʻladi?",
-  a6: "Sozlab qoʻygan qoidalaringiz ishlayveradi. Faqat Pro’ga kiradigan yangi narsalarni qoʻsha olmaysiz.",
+  a3: "Android 8.0 va undan yangi telefonlarda. Samsung Galaxy’da alohida sinab ko‘rilgan. Rasm tekshiruvi uchun Android 11 kerak.",
+  q4: "Nega maxsus imkoniyatlar ruxsati so‘raladi?",
+  a4: "Android ilovaga hozir qaysi ilova ochiqligini boshqa yo‘l bilan bildirmaydi. Quiet bu ruxsatdan ilovalarni cheklash va, siz yoqsangiz, kattalar uchun sahifalarni yopish uchun foydalanadi. Yozayotgan matningizni va parollaringizni o‘qimaydi.",
+  q5: "Bola Quietni o‘chirib tashlay oladimi?",
+  a5: "Qulf yopiq paytda yo‘q: o‘chirish oynasi, ilova sozlamalari, sana va vaqt sahifalari yopiq turadi. Xavfsiz rejim va zavod sozlamalariga qaytarishni ham yopish uchun telefonni kompyuter orqali bir marta sozlash kerak.",
+  q6: "Pro obunasini bekor qilsam nima bo‘ladi?",
+  a6: "Sozlab qo‘ygan qoidalaringiz ishlayveradi. Faqat Pro’ga kiradigan yangi narsalarni qo‘sha olmaysiz.",
   end_h: "Quiet tez orada Google Play’da chiqadi",
-  end_p: "Chiqqan kuni havola shu sahifada paydo boʻladi. Savolingiz boʻlsa, yozing:",
+  end_p: "Chiqqan kuni havola shu sahifada paydo bo‘ladi. Savolingiz bo‘lsa, yozing:",
   foot_privacy: "Maxfiylik siyosati", foot_contact: "Aloqa"
 },
 ru: {
@@ -1005,19 +1026,19 @@ en: {
 
 // The demo's own words.
 Object.assign(T.uz, {
-  more: "Hozir sinab koʻrish", try_num: "NAMOYISH",
-  try_h: "Oʻzingiz sinab koʻring",
-  try_p: "Bu telefon haqiqiy Quiet kabi ishlaydi: ilovalarni bosing, kutish ekranidan oʻting, fokusni yoqing. Namoyishda daqiqalar soniyalarga qisqartirilgan.",
+  more: "Hozir sinab ko‘rish", try_num: "NAMOYISH",
+  try_h: "O‘zingiz sinab ko‘ring",
+  try_p: "Bu telefon haqiqiy Quiet kabi ishlaydi: ilovalarni bosing, kutish ekranidan o‘ting, fokusni yoqing. Namoyishda daqiqalar soniyalarga qisqartirilgan.",
   d: {
-    steps: ["Instagramni oching", "Kutib turing, 5 daqiqani tanlang va vaqt tugashini kuting", "Fokusni boshlang va “Barcha ilovalar”dan Instagramni ochib koʻring", "YouTube’da Shorts boʻlimiga oʻting", "Telegram’da “Kinolar” botini oching"],
+    steps: ["Instagramni oching", "Kutib turing, 5 daqiqani tanlang va vaqt tugashini kuting", "Fokusni boshlang va “Barcha ilovalar”dan Instagramni ochib ko‘ring", "YouTube’da Shorts bo‘limiga o‘ting", "Telegram’da “Kinolar” botini oching"],
     focus_on: "Fokusni boshlash", focus_off: "Fokusni tugatish", reset: "Boshidan boshlash",
-    done: "Hammasini sinab koʻrdingiz. Haqiqiy ilovada bularning barchasini oʻzingiz sozlaysiz.",
+    done: "Hammasini sinab ko‘rdingiz. Haqiqiy ilovada bularning barchasini o‘zingiz sozlaysiz.",
     today: "Bugun telefonda 38 daqiqa", all: "Barcha ilovalar", search: "Ilovalarni qidirish", back: "Orqaga", home_btn: "Bosh ekran",
     opening: "{app} ochilmoqda", wait: "{n} soniya kuting.", used: "Bugun 3 marta, 24 daqiqa.", why: "Nima uchun ochyapsiz?",
     go_home: "Uyga qaytish", cont: "{n} daqiqaga davom etish", chip: "{n} daqiqa · namoyishda {s} soniya",
     timeup: "Vaqt tugadi. {app} yopildi.", pill: "Ish · 25 daqiqa qoldi",
-    block_h: "{app} hozir ochilmaydi", block_p: "Fokus tugaguncha faqat shu ish uchun tanlangan ilovalar ochiladi. Qoʻngʻiroqlar har doim oʻtadi.",
-    shorts_toast: "Qisqa videolar oʻchirilgan.", bot_toast: "Quiet yopdi: bu telefonda Telegram botlari yopiq.",
+    block_h: "{app} hozir ochilmaydi", block_p: "Fokus tugaguncha faqat shu ish uchun tanlangan ilovalar ochiladi. Qo‘ng‘iroqlar har doim o‘tadi.",
+    shorts_toast: "Qisqa videolar o‘chirilgan.", bot_toast: "Quiet yopdi: bu telefonda Telegram botlari yopiq.",
     tab_home: "Bosh sahifa", chats: ["Oila", "Sinfdoshlar", "Kinolar", "Ustoz"], subs: ["Kechki ovqatga kelasizmi?", "Ertaga soat 9 da", "bot", "Rahmat"],
     apps: { phone: "Telefon", messages: "Xabarlar", camera: "Kamera", maps: "Xarita", calendar: "Taqvim", instagram: "Instagram", youtube: "YouTube", telegram: "Telegram", mail: "Pochta", docs: "Hujjatlar", notes: "Qaydlar", clock: "Soat" }
   }
@@ -1255,7 +1276,7 @@ const Demo = (() => {
 
 // The hero scene's words: what a phone shouts before Quiet.
 Object.assign(T.uz, { cap_before: "Odatdagi telefon", cap_after: "Quiet bilan", scroll_hint: "Pastga suring" });
-T.uz.d.noise = ["99+ oʻqilmagan", "Yangi Reels", "Sizni belgilashdi", "Chegirma bugun tugaydi", "3 ta yangi video", "Hikoyangizni koʻrishdi", "Jonli efir boshlandi", "Siz uchun tavsiya", "Qaytib keling", "Yangi obunachi"];
+T.uz.d.noise = ["99+ o‘qilmagan", "Yangi Reels", "Sizni belgilashdi", "Chegirma bugun tugaydi", "3 ta yangi video", "Hikoyangizni ko‘rishdi", "Jonli efir boshlandi", "Siz uchun tavsiya", "Qaytib keling", "Yangi obunachi"];
 Object.assign(T.ru, { cap_before: "Обычный телефон", cap_after: "С Quiet", scroll_hint: "Листайте вниз" });
 T.ru.d.noise = ["99+ непрочитанных", "Новые Reels", "Вас отметили", "Скидка только сегодня", "3 новых видео", "Вашу историю посмотрели", "Начался прямой эфир", "Рекомендуем вам", "Возвращайтесь", "Новый подписчик"];
 Object.assign(T.en, { cap_before: "An ordinary phone", cap_after: "With Quiet", scroll_hint: "Scroll" });
@@ -1387,6 +1408,28 @@ const FX = (() => {
 })();
 
 /* ---- Deck: the page is one screen. Scrolling moves through scenes, and through steps inside a scene. ---- */
+// What each tool gives, said before how to try it.
+Object.assign(T.uz, {
+  tb0: "Vaqt qayerga ketayotganini aniq ko‘rasiz.",
+  tb1: "Bildirishnomalar sizni har daqiqada uzib qo‘ymaydi.",
+  tb2: "Kechasi va ish paytida ilovalar o‘zi yopiladi.",
+  tb3: "Irodangiz bo‘shashgan kunda ham reja buzilmaydi.",
+  tb4: "Rangsiz ekran telefonni qo‘yishni osonlashtiradi."
+});
+Object.assign(T.ru, {
+  tb0: "Видно, куда на самом деле уходит время.",
+  tb1: "Уведомления не дёргают вас каждую минуту.",
+  tb2: "Ночью и в рабочие часы приложения закрываются сами.",
+  tb3: "План держится даже в день, когда сила воли на нуле.",
+  tb4: "Без цвета телефон легче отложить."
+});
+Object.assign(T.en, {
+  tb0: "See where your time really goes.",
+  tb1: "Notifications stop pulling at you every minute.",
+  tb2: "At night and during work, apps close by themselves.",
+  tb3: "The plan holds even on a day your willpower does not.",
+  tb4: "Without colour, the phone is easier to put down."
+});
 const Deck = (() => {
   const $ = id => document.getElementById(id);
   const slides = [...document.querySelectorAll(".slide")];
@@ -1493,6 +1536,7 @@ const Deck = (() => {
   }
 
   function init() {
+    slides.forEach((el, i) => el.querySelectorAll(".num:not([data-t])").forEach(n => { n.textContent = String(i + 1).padStart(2, "0"); }));
     addEventListener("wheel", e => {
       if (Math.abs(e.deltaY) < 8 || scrolls(e.target, e.deltaY)) return;
       const now = Date.now();
@@ -1535,44 +1579,44 @@ const Deck = (() => {
 
 // Words for the story's chapters and for the parts of the page that can be touched.
 Object.assign(T.uz, {
-  how_h: "Bu telefon ishlaydi. Bosib koʻring.",
-  how_p: "Sahifani surganingizda telefon keyingi holatga oʻtadi. Har birida ilovalarni oʻzingiz bosib koʻrishingiz mumkin.",
+  how_h: "Bu telefon ishlaydi. Bosib ko‘ring.",
+  how_p: "Sahifani surganingizda telefon keyingi holatga o‘tadi. Har birida ilovalarni o‘zingiz bosib ko‘rishingiz mumkin.",
   r4_h: "YouTube qoladi, Shorts ketadi",
-  r4_p: "YouTube va Instagramning oʻzi ishlayveradi. Qisqa videolar tasmasi ochilsa, Quiet orqaga qaytaradi. Kerak boʻlgan kuni uni bir muddatga ochib qoʻyish mumkin.",
+  r4_p: "YouTube va Instagramning o‘zi ishlayveradi. Qisqa videolar tasmasi ochilsa, Quiet orqaga qaytaradi. Kerak bo‘lgan kuni uni bir muddatga ochib qo‘yish mumkin.",
   r5_h: "Begona botlar ochilmaydi",
-  r5_p: "Telegramdagi oddiy chatlar ishlaydi. Bot esa, nomi va rasmi qanchalik beozor boʻlmasin, ota-ona roʻyxatiga kiritilmagan boʻlsa yopiladi.",
-  k1: "Sinab koʻring: “Barcha ilovalar”ni oching va biror ilovani qidiring.",
-  k2: "Sinab koʻring: sanoq tugashini kuting va 5 daqiqani tanlang.",
-  k3: "Sinab koʻring: “Barcha ilovalar”dan Instagramni oching.",
-  k4: "Sinab koʻring: pastdagi Shorts boʻlimini bosing.",
-  k5: "Sinab koʻring: “Kinolar” botini oching.",
+  r5_p: "Telegramdagi oddiy chatlar ishlaydi. Bot esa, nomi va rasmi qanchalik beozor bo‘lmasin, ota-ona ro‘yxatiga kiritilmagan bo‘lsa yopiladi.",
+  k1: "Sinab ko‘ring: “Barcha ilovalar”ni oching va biror ilovani qidiring.",
+  k2: "Sinab ko‘ring: sanoq tugashini kuting va 5 daqiqani tanlang.",
+  k3: "Sinab ko‘ring: “Barcha ilovalar”dan Instagramni oching.",
+  k4: "Sinab ko‘ring: pastdagi Shorts bo‘limini bosing.",
+  k5: "Sinab ko‘ring: “Kinolar” botini oching.",
   try_note: "Namoyishda daqiqalar soniyalarga qisqartirilgan.",
-  also_h: "Qolganini ham ushlab koʻring",
-  w_time_p: "Namuna maʼlumot. Ustunlarni bosib koʻring.",
-  w_hold_p: "Kalitni oʻchiring va farqini koʻring.", w_hold_sw: "Bildirishnomalarni ushlab turish",
-  w_sched_p: "Ijtimoiy tarmoqlar 23:00 dan 07:00 gacha yopiq. Vaqtni surib koʻring.",
-  w_strict_p: "Qatʼiy seans ketmoqda. Uni toʻxtatishga urinib koʻring.", w_strict_btn: "Seansni tugatish",
+  also_h: "Qolganini ham ushlab ko‘ring",
+  w_time_p: "Namuna maʼlumot. Ustunlarni bosib ko‘ring.",
+  w_hold_p: "Kalitni o‘chiring va farqini ko‘ring.", w_hold_sw: "Bildirishnomalarni ushlab turish",
+  w_sched_p: "Ijtimoiy tarmoqlar 23:00 dan 07:00 gacha yopiq. Vaqtni surib ko‘ring.",
+  w_strict_p: "Qatʼiy seans ketmoqda. Uni to‘xtatishga urinib ko‘ring.", w_strict_btn: "Seansni tugatish",
   w_gray_p: "Rang diqqatni tortadi. Kalitni yoqing. Haqiqiy telefonda buning uchun uni bir marta kompyuterga ulash kerak.", w_gray_sw: "Kulrang ekran",
-  g_label: "Kanal yoki chat nomini yozing. Quiet uni qanday baholashini koʻrasiz.",
+  g_label: "Kanal yoki chat nomini yozing. Quiet uni qanday baholashini ko‘rasiz.",
   ch_p: "Sizga nimalar kerak? Belgilang, qaysi biri yetishini aytamiz."
 });
 T.uz.d.tabs = ["Bosh ekran", "Kutish", "Fokus", "Shorts", "Botlar"];
 T.uz.w = {
-  seg: ["Bugun", "7 kun", "8 hafta"], days: ["Du", "Se", "Ch", "Pa", "Ju", "Sh", "Ya"], week: "{n}-hafta", weekLong: "{n}-hafta, kuniga oʻrtacha",
+  seg: ["Bugun", "7 kun", "8 hafta"], days: ["Du", "Se", "Ch", "Pa", "Ju", "Sh", "Ya"], week: "{n}-hafta", weekLong: "{n}-hafta, kuniga o‘rtacha",
   h: "{h} soat {m} daqiqa", m: "{m} daqiqa", total: "Jami: {t}",
-  holdCount: "ta bildirishnoma jimgina kutib turibdi", holdNames: ["Instagram: yangi yoqtirish", "YouTube: yangi video chiqdi", "Doʻkon: chegirma tugayapti", "Oʻyin: sovgʻangiz tayyor"],
+  holdCount: "ta bildirishnoma jimgina kutib turibdi", holdNames: ["Instagram: yangi yoqtirish", "YouTube: yangi video chiqdi", "Do‘kon: chegirma tugayapti", "O‘yin: sovg‘angiz tayyor"],
   open: "{t} · Instagram ochiq", closed: "{t} · Instagram yopiq, 07:00 da ochiladi",
-  strictNo: "Boʻlmaydi. Qatʼiy seans oʻz vaqtida tugaydi: {t} qoldi.",
+  strictNo: "Bo‘lmaydi. Qatʼiy seans o‘z vaqtida tugaydi: {t} qoldi.",
   gPh: "Masalan: Tungi kinolar", gEx: ["Sinfdoshlar 7-A", "Tungi kinolar 🔞", "Kino 18+", "Kinolar yashirin"],
-  gClose: ["Yopiladi.", "Nomida kattalar uchun kontentni bildiruvchi soʻz yoki belgi bor."],
-  gPass: ["Soʻz tekshiruvidan oʻtadi.", "Shuning uchun rasm tekshiruvi va botlarni yopish ham bor: nomi beozor boʻlsa-da, ichidagisi tekshiriladi."],
-  needs: [["Matnli bosh ekran", 0], ["Kutish va kunlik limit", 0], ["Bildirishnomalar filtri", 0], ["Ikkitadan koʻp qoida", 1], ["Bir nechta fokus profili", 1], ["Shorts va Reelsni yopish", 1], ["Qatʼiy rejim", 1], ["Farzandim telefoni nazorati", 1]],
-  needNone: "Hali hech narsa belgilanmagan.", needFree: "Sizga bepul qismi yetadi.", needPro: "Buning uchun Pro kerak boʻladi.",
-  perms: [["Maxsus imkoniyatlar", "Qaysi ilova ochiqligini bilish va uni cheklash uchun. Siz yoqsangiz, kattalar uchun sahifalarni yopishda ekrandagi soʻzlarni ham tekshiradi. Yozayotgan matningizni va parollaringizni oʻqimaydi."],
-    ["Foydalanish tarixi", "Ekran vaqtini hisoblash va kunlik limitlarni qoʻllash uchun. Bu maʼlumot telefondan chiqmaydi."],
+  gClose: ["Yopiladi.", "Nomida kattalar uchun kontentni bildiruvchi so‘z yoki belgi bor."],
+  gPass: ["So‘z tekshiruvidan o‘tadi.", "Shuning uchun rasm tekshiruvi va botlarni yopish ham bor: nomi beozor bo‘lsa-da, ichidagisi tekshiriladi."],
+  needs: [["Matnli bosh ekran", 0], ["Kutish va kunlik limit", 0], ["Bildirishnomalar filtri", 0], ["Ikkitadan ko‘p qoida", 1], ["Bir nechta fokus profili", 1], ["Shorts va Reelsni yopish", 1], ["Qatʼiy rejim", 1], ["Farzandim telefoni nazorati", 1]],
+  needNone: "Hali hech narsa belgilanmagan.", needFree: "Sizga bepul qismi yetadi.", needPro: "Buning uchun Pro kerak bo‘ladi.",
+  perms: [["Maxsus imkoniyatlar", "Qaysi ilova ochiqligini bilish va uni cheklash uchun. Siz yoqsangiz, kattalar uchun sahifalarni yopishda ekrandagi so‘zlarni ham tekshiradi. Yozayotgan matningizni va parollaringizni o‘qimaydi."],
+    ["Foydalanish tarixi", "Ekran vaqtini hisoblash va kunlik limitlarni qo‘llash uchun. Bu maʼlumot telefondan chiqmaydi."],
     ["Bildirishnomalar", "Siz tanlagan ilovalarning bildirishnomalarini ushlab turish uchun. Boshqalariga tegmaydi."],
-    ["Internet", "Faqat bitta holatda ishlatiladi: ota-ona oʻz Telegram botini ulasa, yopilgan ilovaning nomi va vaqti shu botga yuboriladi. Bot ulanmagan boʻlsa, hech narsa yuborilmaydi."],
-    ["Kontaktlar va taqvim", "Ixtiyoriy. Qidiruvda kontaktni topish va keyingi tadbirni bosh ekranda koʻrsatish uchun. Hech biri saqlanmaydi."]],
+    ["Internet", "Faqat bitta holatda ishlatiladi: ota-ona o‘z Telegram botini ulasa, yopilgan ilovaning nomi va vaqti shu botga yuboriladi. Bot ulanmagan bo‘lsa, hech narsa yuborilmaydi."],
+    ["Kontaktlar va taqvim", "Ixtiyoriy. Qidiruvda kontaktni topish va keyingi tadbirni bosh ekranda ko‘rsatish uchun. Hech biri saqlanmaydi."]],
   ring: "Halqani bosing", breatheIn: "Nafas oling", breatheOut: "Nafas chiqaring"
 };
 Object.assign(T.ru, {
@@ -1658,10 +1702,10 @@ T.en.w = {
   ring: "Press the ring", breatheIn: "Breathe in", breatheOut: "Breathe out"
 };
 
-Object.assign(T.uz, { y_num: "HISOB", y_h: "Telefon yiliga necha kuningizni oladi?", y_p: "Surgichlarni oʻzingizga moslang. Bu vaʼda emas, oddiy arifmetika.", y_unit: "kun / yil", y_l1: "Kuniga telefonda", y_l2: "Kuniga qancha kamaytirmoqchisiz", y_k1: "telefonda oʻtadigan kunlar", y_k2: "oʻzingizga qaytadigan kunlar",
-  try_note: "Namoyishda daqiqalar soniyalarga qisqartirilgan. Maslahat: istalgan ilova nomini bosib turing va unga oʻzingiz qoida qoʻying." });
-Object.assign(T.uz.w, { yPct: "Bu uygʻoq vaqtingizning {p} foizi.", ySave: "Kuniga {c} kam boʻlsa, yiliga {d} kun oʻzingizga qaytadi.", yNone: "Pastki surgichni suring: qancha kun qaytishini koʻrasiz." });
-Object.assign(T.uz.d, { sheet_p: "Bu ilova uchun qoida:", sheet_wait: "Ochishdan oldin kutish", sheet_block: "Har doim bloklash", sheet_none: "Qoidasiz", sheet_ok: "{app} uchun qoida saqlandi.", block2_h: "{app} bloklangan", block2_p: "Bu qoidani oʻzingiz qoʻydingiz. Oʻzgartirish uchun ilova nomini bosib turing." });
+Object.assign(T.uz, { y_num: "HISOB", y_h: "Telefon yiliga necha kuningizni oladi?", y_p: "Surgichlarni o‘zingizga moslang. Bu vaʼda emas, oddiy arifmetika.", y_unit: "kun / yil", y_l1: "Kuniga telefonda", y_l2: "Kuniga qancha kamaytirmoqchisiz", y_k1: "telefonda o‘tadigan kunlar", y_k2: "o‘zingizga qaytadigan kunlar",
+  try_note: "Namoyishda daqiqalar soniyalarga qisqartirilgan. Maslahat: istalgan ilova nomini bosib turing va unga o‘zingiz qoida qo‘ying." });
+Object.assign(T.uz.w, { yPct: "Bu uyg‘oq vaqtingizning {p} foizi.", ySave: "Kuniga {c} kam bo‘lsa, yiliga {d} kun o‘zingizga qaytadi.", yNone: "Pastki surgichni suring: qancha kun qaytishini ko‘rasiz." });
+Object.assign(T.uz.d, { sheet_p: "Bu ilova uchun qoida:", sheet_wait: "Ochishdan oldin kutish", sheet_block: "Har doim bloklash", sheet_none: "Qoidasiz", sheet_ok: "{app} uchun qoida saqlandi.", block2_h: "{app} bloklangan", block2_p: "Bu qoidani o‘zingiz qo‘ydingiz. O‘zgartirish uchun ilova nomini bosib turing." });
 Object.assign(T.ru, { y_num: "РАСЧЁТ", y_h: "Сколько дней в году забирает телефон?", y_p: "Подвиньте ползунки под себя. Это не обещание, а простая арифметика.", y_unit: "дней в год", y_l1: "В день в телефоне", y_l2: "На сколько хотите сократить в день", y_k1: "дни, уходящие на телефон", y_k2: "дни, которые к вам вернутся",
   try_note: "В демо минуты сокращены до секунд. Подсказка: нажмите и удерживайте название любого приложения, чтобы задать ему своё правило." });
 Object.assign(T.ru.w, { yPct: "Это {p}% времени, когда вы не спите.", ySave: "Если сократить на {c} в день, за год к вам вернётся {d} дн.", yNone: "Подвиньте нижний ползунок и увидите, сколько дней вернётся." });
@@ -1808,10 +1852,10 @@ const Touch = (() => {
 })();
 
 // The names of the scenes, for the rail and the counter.
-T.uz.scenes = ["Boshlanish", "Sinab koʻring", "Hisob", "Vositalar", "Ota-onalar", "Narxlar", "Maxfiylik", "Yakun"];
+T.uz.scenes = ["Boshlanish", "Sinab ko‘ring", "Hisob", "Vositalar", "Ota-onalar", "Narxlar", "Maxfiylik", "Yakun"];
 T.ru.scenes = ["Начало", "Попробуйте", "Расчёт", "Инструменты", "Родителям", "Цены", "Приватность", "Финал"];
 T.en.scenes = ["Start", "Try it", "The sum", "Tools", "Parents", "Pricing", "Privacy", "The end"];
-Object.assign(T.uz, { how_h: "Bu telefon ishlaydi. Bosib koʻring.", scroll_hint: "Suring", also_h: "Qolganini ham ushlab koʻring" });
+Object.assign(T.uz, { how_h: "Bu telefon ishlaydi. Bosib ko‘ring.", scroll_hint: "Suring", also_h: "Qolganini ham ushlab ko‘ring" });
 Object.assign(T.ru, { how_h: "Этот телефон работает. Нажимайте.", scroll_hint: "Листайте", also_h: "Остальное тоже можно потрогать" });
 Object.assign(T.en, { how_h: "This phone works. Go on, tap it.", scroll_hint: "Scroll", also_h: "The rest is yours to play with too" });
 
