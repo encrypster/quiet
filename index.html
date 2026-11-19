@@ -2,1633 +2,726 @@
 <html lang="uz">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Quiet — Android uchun sokin bosh ekran</title>
-<meta name="description" content="Quiet bosh ekranni oddiy matnli ro‘yxatga aylantiradi va vaqtingizni oladigan ilovalar oldiga kichik to‘siq qo‘yadi. Android 8 va undan yangi.">
+<meta name="description" content="Quiet bosh ekranni oddiy matnli ro‘yxatga aylantiradi va vaqtingizni oladigan ilovalar oldiga kichik pauza qo‘yadi. Android 8 va undan yangi. Akkaunt, reklama va server yo‘q.">
 <meta property="og:title" content="Quiet — Android uchun sokin bosh ekran">
-<meta property="og:description" content="Matnli bosh ekran, ilova limitlari, fokus va ota-ona qulfi. Ro‘yxatdan o‘tish shart emas.">
+<meta property="og:description" content="Matnli bosh ekran, ilovalar oldidagi pauza, fokus va ota-ona qulfi. Hammasi telefonning o‘zida.">
 <meta property="og:type" content="website">
-<meta name="theme-color" content="#07070a">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23000'/%3E%3Ccircle cx='32' cy='32' r='13' fill='none' stroke='%23fff' stroke-width='5'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#f5f4f0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0e0d" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23121212'/%3E%3Ccircle cx='32' cy='32' r='13' fill='none' stroke='%23f5f4f0' stroke-width='5'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add("js");try{var q=localStorage.getItem("quiet-theme");if(q==="dark"||q==="light")document.documentElement.dataset.theme=q}catch(e){}</script>
 <style>
-  /* AI look, pass 3 */
+  /* Quiet: paper and ink. One typeface for words, one for numbers and labels. No colour but the red that Quiet takes away. */
   :root {
-    --bg: #07070a; --fg: #f4f4f6; --muted: #a2a2ad; --line: #22222b; --soft: #101015; --card: #0d0d12;
-    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 18px 48px rgba(0,0,0,.5);
-    --glow: .42;
-    color-scheme: dark;
-  }
-  :root[data-theme="light"] {
-    --bg: #ffffff; --fg: #0b0b0c; --muted: #5d5f66; --line: #e7e7ea; --soft: #f5f5f7; --card: #ffffff;
-    --shadow: 0 1px 2px rgba(0,0,0,.04), 0 12px 32px rgba(0,0,0,.06);
-    --glow: .22;
+    --bg: #f5f4f0; --fg: #121212; --muted: #6b6a65; --faint: #a3a19a; --line: #e0ded7; --card: #fbfaf7;
+    --screen: #0b0b0b; --on-screen: #f2f2ef; --screen-muted: #8a8984; --screen-line: #222220;
+    --red: #e5483b;
+    --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    --sans: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     color-scheme: light;
   }
-
-  :root { --a1: #7c5cff; --a2: #3b82f6; --a3: #22d3ee; --grad: linear-gradient(100deg, var(--a1), var(--a2) 55%, var(--a3)); }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --bg: #0e0e0d; --fg: #ecebe6; --muted: #9a9892; --faint: #64625d; --line: #252523; --card: #141413; --screen: #000; --screen-line: #1d1d1b; color-scheme: dark; }
+  }
+  :root[data-theme="dark"] { --bg: #0e0e0d; --fg: #ecebe6; --muted: #9a9892; --faint: #64625d; --line: #252523; --card: #141413; --screen: #000; --screen-line: #1d1d1b; color-scheme: dark; }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; min-width: 0; }
-  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-behavior: smooth; }
-  body {
-    background: var(--bg); color: var(--fg);
-    font: 400 17px/1.6 Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    -webkit-font-smoothing: antialiased; overflow-x: hidden; overflow-wrap: break-word;
-  }
-  a { color: inherit; }
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 72px; }
+  body { background: var(--bg); color: var(--fg); font: 400 17px/1.6 var(--sans); -webkit-font-smoothing: antialiased; overflow-x: hidden; overflow-wrap: break-word; transition: background .3s, color .3s; }
+  a { color: inherit; text-underline-offset: 4px; text-decoration-thickness: 1px; }
   button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
-  :focus-visible { outline: 2px solid var(--fg); outline-offset: 3px; border-radius: 6px; }
-  h1, h2, h3 { font-weight: 600; letter-spacing: -.03em; line-height: 1.1; text-wrap: balance; }
-  h1 { font-size: clamp(34px, 8.6vw, 62px); letter-spacing: -.04em; line-height: 1.04; }
-  h2 { font-size: clamp(27px, 5.6vw, 42px); }
-  h3 { font-size: 19px; letter-spacing: -.015em; line-height: 1.3; }
+  :focus-visible { outline: 2px solid var(--fg); outline-offset: 3px; border-radius: 4px; }
+  h1, h2, h3 { font-weight: 600; letter-spacing: -.035em; line-height: 1.08; text-wrap: balance; }
+  h1 { font-size: clamp(40px, 10.4vw, 86px); letter-spacing: -.05em; line-height: 1; }
+  h2 { font-size: clamp(30px, 6.6vw, 54px); letter-spacing: -.045em; }
+  h3 { font-size: 20px; letter-spacing: -.02em; line-height: 1.3; }
   p { text-wrap: pretty; }
-  .wrap { width: 100%; max-width: 1128px; margin: 0 auto; padding: 0 20px; }
-  section { padding: 72px 0; scroll-margin-top: 60px; }
-  section + section { border-top: 1px solid var(--line); }
-  .eyebrow { font-size: 13px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
-  .sub { color: var(--muted); font-size: 18px; margin-top: 16px; max-width: 62ch; }
-  .head { margin-bottom: 40px; }
+  .wrap { width: 100%; max-width: 1160px; margin: 0 auto; padding: 0 20px; }
+  .muted { color: var(--muted); }
+  .label { font: 500 12px/1.4 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 
   /* Header */
-  header { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter: saturate(1.4) blur(14px); -webkit-backdrop-filter: saturate(1.4) blur(14px); border-bottom: 1px solid var(--line); }
-  header .wrap { display: flex; align-items: center; gap: 16px; height: 60px; }
-  .logo { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; font-size: 18px; letter-spacing: -.02em; text-decoration: none; }
-  .logo i { width: 18px; height: 18px; border-radius: 50%; border: 3.5px solid var(--fg); display: block; }
-  header nav { display: none; gap: 28px; margin-left: 28px; }
-  header nav a { text-decoration: none; font-size: 15px; color: var(--muted); }
+  header { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 88%, transparent); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border-bottom: 1px solid transparent; transition: border-color .3s; }
+  header.scrolled { border-bottom-color: var(--line); }
+  header .wrap { height: 64px; display: flex; align-items: center; gap: 16px; }
+  .logo { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; font-size: 19px; letter-spacing: -.03em; text-decoration: none; }
+  .logo i { width: 20px; height: 20px; border-radius: 50%; border: 4px solid currentColor; display: block; }
+  header nav { display: none; gap: 28px; margin-left: 32px; }
+  header nav a { text-decoration: none; font-size: 15px; color: var(--muted); transition: color .2s; }
   header nav a:hover { color: var(--fg); }
-  .tools { margin-left: auto; display: flex; align-items: center; gap: 8px; }
-  .langs { display: flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; }
-  .langs button { font-size: 13px; font-weight: 500; padding: 5px 10px; border-radius: 999px; color: var(--muted); line-height: 1.2; }
-  .langs button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
-  .theme { width: 36px; height: 36px; border: 1px solid var(--line); border-radius: 50%; display: grid; place-items: center; flex: none; }
-  .theme svg { width: 17px; height: 17px; }
-
-  /* The AI accent: one gradient, used sparingly */
-  .badge { display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 500; line-height: 1.3; padding: 7px 14px 7px 10px; border-radius: 999px; border: 1px solid transparent; background: linear-gradient(var(--bg), var(--bg)) padding-box, var(--grad) border-box; margin-bottom: 22px; }
-  .spark { width: 16px; height: 16px; flex: none; }
-  .gt { background: linear-gradient(100deg, var(--a1), var(--a2) 35%, var(--a3) 65%, var(--a1)); background-size: 220% 100%; animation: sheen 7s linear infinite; padding-bottom: .08em; -webkit-background-clip: text; background-clip: text; color: transparent; }
-
-  @keyframes sheen { to { background-position: -220% 0; } }
-  #bar { position: fixed; left: 0; top: 0; right: 0; height: 2px; z-index: 30; background: var(--grad); transform-origin: left; transform: scaleX(0); }
-  .rv { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s cubic-bezier(.2, .7, .2, 1); }
-  .rv.in { opacity: 1; transform: none; }
+  .tools { margin-left: auto; display: flex; align-items: center; gap: 6px; }
+  .langs { display: flex; }
+  .langs button { font: 500 12.5px/1 var(--mono); letter-spacing: .06em; padding: 9px 8px; color: var(--faint); }
+  .langs button[aria-pressed="true"] { color: var(--fg); }
+  .theme { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 50%; }
+  .theme svg { width: 18px; height: 18px; }
 
   /* Hero */
-  .hero { padding: 48px 0 64px; position: relative; overflow: hidden; }
-  .hero { background-image: radial-gradient(color-mix(in srgb, var(--fg) 13%, transparent) 1px, transparent 1px); background-size: 22px 22px; }
-  .hero::before, .hero::after { content: ""; position: absolute; border-radius: 50%; pointer-events: none; opacity: var(--glow); will-change: transform; }
-  .hero::before { width: 120vw; height: 120vw; max-width: 760px; max-height: 760px; right: -40%; top: -22%; background: radial-gradient(circle, var(--a1), transparent 62%); animation: drift 15s ease-in-out infinite alternate; }
-  .hero::after { width: 110vw; height: 110vw; max-width: 680px; max-height: 680px; left: -45%; top: 34%; background: radial-gradient(circle, var(--a3), transparent 62%); opacity: calc(var(--glow) * .7); animation: drift 19s ease-in-out infinite alternate-reverse; }
-  @keyframes drift { to { transform: translate3d(7%, 9%, 0) scale(1.18); } }
-  .hero > .wrap::after { content: ""; position: absolute; left: 0; right: 0; bottom: -64px; height: 120px; background: linear-gradient(transparent, var(--bg)); pointer-events: none; }
-  .hero .wrap { position: relative; }
-  .hero-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 48px; }
-  .hero .lead { font-size: 19px; color: var(--muted); margin-top: 20px; max-width: 54ch; }
-  .cta { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; margin-top: 28px; }
-  .pill { display: inline-flex; align-items: center; gap: 10px; background: var(--fg); color: var(--bg); font-weight: 500; font-size: 16px; padding: 13px 20px; border-radius: 999px; line-height: 1.2; }
-  .cta .pill { box-shadow: 0 10px 34px color-mix(in srgb, var(--a1) 50%, transparent), 0 2px 10px color-mix(in srgb, var(--a3) 30%, transparent); }
-  .pill i { width: 8px; height: 8px; border-radius: 50%; background: var(--a2); box-shadow: 0 0 0 4px color-mix(in srgb, var(--a2) 28%, transparent); flex: none; }
-  .more { font-weight: 500; font-size: 16px; text-underline-offset: 5px; }
-  .facts { list-style: none; display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 32px; color: var(--muted); font-size: 14.5px; }
-  .facts li { display: flex; align-items: center; gap: 8px; }
-  .facts li::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--muted); flex: none; }
+  .hero { padding: 40px 0 72px; }
+  .hero .wrap { display: grid; grid-template-columns: minmax(0, 1fr); gap: 48px; }
+  .hero .lead { font-size: 19px; color: var(--muted); margin-top: 24px; max-width: 46ch; }
+  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; margin-top: 32px; }
+  .status { display: inline-flex; align-items: center; gap: 10px; padding: 14px 22px; border-radius: 999px; background: var(--fg); color: var(--bg); font-weight: 500; font-size: 16px; line-height: 1.2; }
+  .status i { width: 7px; height: 7px; border-radius: 50%; background: currentColor; opacity: .55; animation: breathe 2.4s ease-in-out infinite; }
+  @keyframes breathe { 50% { opacity: .15; } }
+  .more { font-weight: 500; font-size: 16px; }
+  .facts { list-style: none; display: flex; flex-wrap: wrap; gap: 6px 20px; margin-top: 36px; }
+  .facts li { font: 400 12.5px/1.6 var(--mono); color: var(--muted); }
+  .facts li::before { content: "— "; color: var(--faint); }
 
-  /* The phone. Always dark: that is how Quiet looks. */
-  .stage { background: linear-gradient(var(--soft), var(--soft)) padding-box, linear-gradient(160deg, color-mix(in srgb, var(--a1) 55%, var(--line)), var(--line) 45%, color-mix(in srgb, var(--a3) 45%, var(--line))) border-box; border: 1px solid transparent; border-radius: 28px; padding: 28px 16px 20px; display: flex; flex-direction: column; align-items: center; position: relative; overflow: hidden; }
-  .stage::before { content: ""; position: absolute; left: 50%; top: 42%; width: 130%; aspect-ratio: 1; transform: translate(-50%, -50%); background: radial-gradient(circle, color-mix(in srgb, var(--a1) 55%, transparent), color-mix(in srgb, var(--a3) 22%, transparent) 38%, transparent 62%); opacity: var(--glow); pointer-events: none; animation: breathe 6s ease-in-out infinite alternate; }
-  @keyframes breathe { to { transform: translate(-50%, -50%) scale(1.14); } }
-  .stage > * { position: relative; }
-  .phone { --pw: min(270px, 66vw, 31svh); width: var(--pw); aspect-ratio: 9 / 18.5; background: #000; border-radius: calc(var(--pw) * .15); padding: calc(var(--pw) * .032); box-shadow: 0 0 0 1px #34343c, 0 0 0 5px rgba(255,255,255,.04), 0 26px 70px color-mix(in srgb, var(--a1) 38%, rgba(0,0,0,.5)); flex: none; }
-  .screen { position: relative; width: 100%; height: 100%; border-radius: calc(var(--pw) * .12); overflow: hidden; background: #000; color: #fff; font-size: calc(var(--pw) * .05); line-height: 1.35; }
-  .sc { position: absolute; inset: 0; padding: 14% 9% 9%; display: flex; flex-direction: column; opacity: 0; visibility: hidden; transition: opacity .45s ease, visibility 0s .45s; }
-  .sc.on { opacity: 1; visibility: visible; transition: opacity .45s ease; }
-  .sc .dim { color: #8d8d95; }
-  .clock { font-size: 3.5em; font-weight: 300; letter-spacing: -.04em; line-height: 1; }
-  .date { margin-top: .5em; font-size: .92em; }
-  .today { font-size: .8em; color: #8d8d95; margin-top: .2em; }
-  .apps { list-style: none; margin-top: auto; display: flex; flex-direction: column; gap: .15em; }
-  .apps li { font-size: 1.3em; font-weight: 500; padding: .28em .5em; margin: 0 -.5em; border-radius: .5em; transition: background .25s; position: relative; }
-  .apps li.off { color: #4a4a50; text-decoration: line-through; text-decoration-thickness: 1px; }
-  .hint { font-size: .78em; color: #6d6d75; margin-top: .9em; }
-  .dot { position: absolute; right: 18%; top: 50%; width: 2.2em; height: 2.2em; margin-top: -1.1em; border-radius: 50%; background: rgba(255,255,255,.28); box-shadow: 0 0 0 .35em rgba(255,255,255,.1); opacity: 0; transform: scale(.4); transition: opacity .25s, transform .25s; pointer-events: none; }
-  .tap .sc.on .tapme { background: rgba(255,255,255,.14); }
-  .tap .sc.on .tapme .dot { opacity: 1; transform: scale(1); }
+  /* The screen: Quiet itself, without a phone drawn round it */
+  .screen { background: var(--screen); color: var(--on-screen); border-radius: 34px; padding: 34px 28px 24px; display: flex; flex-direction: column; box-shadow: 0 1px 0 rgba(255,255,255,.04) inset, 0 30px 80px -30px rgba(0,0,0,.45); }
+  .home { aspect-ratio: 9 / 15.5; width: 100%; max-width: 360px; justify-self: center; }
+  .clock { font-weight: 300; font-size: clamp(60px, 18vw, 76px); line-height: 1; letter-spacing: -.05em; font-variant-numeric: tabular-nums; }
+  .date { margin-top: 12px; font-size: 15px; font-weight: 500; }
+  .today { font-size: 13px; color: var(--screen-muted); margin-top: 2px; }
+  .apps { list-style: none; margin-top: auto; display: flex; flex-direction: column; }
+  .apps li { font-size: clamp(21px, 5.8vw, 24px); font-weight: 500; letter-spacing: -.02em; line-height: 1.55; transition: opacity .25s, color .25s; }
+  .apps li.dim { opacity: .14; }
+  .search { margin-top: 16px; display: flex; align-items: center; gap: 10px; border-top: 1px solid var(--screen-line); padding-top: 14px; font-size: 14px; color: var(--screen-muted); min-height: 22px; }
+  .search svg { width: 15px; height: 15px; flex: none; }
+  .search b { font-weight: 500; color: var(--on-screen); }
+  .search .caret { width: 1.5px; height: 17px; background: var(--on-screen); margin-left: -8px; animation: blink 1s steps(1) infinite; }
+  .search.typing .ph { display: none; }
+  .search:not(.typing) .caret { display: none; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .hero-cap { margin-top: 14px; text-align: center; }
 
-  .sc.wait { justify-content: flex-end; }
-  .wait b { font-size: 1.35em; font-weight: 600; letter-spacing: -.02em; line-height: 1.2; }
-  .wait .bar { height: 3px; background: #26262a; border-radius: 3px; margin: .9em 0; overflow: hidden; }
-  .wait .bar i { display: block; height: 100%; width: 100%; background: #fff; transform-origin: left; transform: scaleX(.35); }
-  .auto .sc.wait.on .bar i { animation: bar var(--d, 5s) linear both; }
-  @keyframes bar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-  .wait .why { margin-top: .9em; font-weight: 500; }
-  .btns { display: flex; flex-direction: column; gap: .5em; margin-top: .8em; }
-  .btns > span { display: block; text-align: center; font-size: .9em; font-weight: 500; padding: .75em .6em; border-radius: .9em; border: 1px solid #2a2a2e; color: #8d8d95; position: relative; transition: transform .2s; }
-  .btns > span.main { background: #fff; color: #000; border-color: #fff; }
-  .tap .sc.on .btns > span.main { transform: scale(.96); }
-  .btns .dot { right: 12%; background: rgba(0,0,0,.25); box-shadow: 0 0 0 .35em rgba(0,0,0,.1); }
-  .tap .sc.on .btns .dot { opacity: 1; transform: scale(1); }
+  /* Sections */
+  section { padding: 88px 0; border-top: 1px solid var(--line); }
+  .shead { display: grid; gap: 18px; margin-bottom: 48px; }
+  .shead .sub { font-size: 18px; color: var(--muted); max-width: 58ch; }
 
-  .tag { align-self: flex-start; font-size: .8em; font-weight: 500; border: 1px solid #3a3a40; border-radius: 999px; padding: .35em .9em; margin-bottom: 1.2em; display: inline-flex; align-items: center; gap: .5em; }
-  .tag::before { content: ""; width: .5em; height: .5em; border-radius: 50%; background: #fff; }
+  /* Three changes */
+  .steps { display: grid; gap: 72px; }
+  .step { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; align-items: center; }
+  .step .n { font: 500 13px/1 var(--mono); color: var(--faint); margin-bottom: 18px; display: block; }
+  .step h3 { font-size: clamp(25px, 5.4vw, 34px); letter-spacing: -.035em; line-height: 1.12; }
+  .step > div:first-child p { color: var(--muted); margin-top: 14px; max-width: 48ch; }
+  .demo { width: 100%; max-width: 440px; justify-self: center; }
 
-  .sc.guard { padding: 0; }
-  .chat-top { padding: 13% 9% 4%; border-bottom: 1px solid #1d1d20; font-weight: 600; display: flex; align-items: center; gap: .6em; }
-  .chat-top i { width: 1.8em; height: 1.8em; border-radius: 50%; background: linear-gradient(135deg, #3a3a44, #24242b); flex: none; }
-  .g-body { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: .7em; padding: 6% 9% 9%; }
-  .aichip { align-self: flex-start; display: inline-flex; align-items: center; gap: .55em; font-size: .78em; font-weight: 500; line-height: 1.2; padding: .5em .95em .5em .7em; border-radius: 999px; background: linear-gradient(#0d0d12, #0d0d12) padding-box, var(--grad) border-box; border: 1px solid transparent; }
-  .aichip i { width: .55em; height: .55em; border-radius: 50%; background: var(--a3); animation: pulse 1.2s ease-in-out infinite alternate; }
-  @keyframes pulse { to { opacity: .3; transform: scale(.7); } }
-  .chat { display: flex; flex-direction: column; gap: .5em; }
-  .chat i { display: block; height: 2em; border-radius: .8em; background: #1c1c21; width: 72%; }
-  .chat i:nth-child(2) { width: 46%; }
-  .pic { position: relative; flex: 1; min-height: 0; border-radius: 1.1em; overflow: hidden; background: radial-gradient(60% 50% at 34% 38%, #7d4a63, transparent 70%), radial-gradient(55% 55% at 72% 68%, #4a3f7d, transparent 70%), linear-gradient(160deg, #2a1d2b, #15131d); transition: filter .4s; }
-  .pic b { position: absolute; width: 1.3em; height: 1.3em; border: 2px solid var(--a3); }
-  .pic .c1 { left: .7em; top: .7em; border-right: 0; border-bottom: 0; border-radius: .4em 0 0 0; }
-  .pic .c2 { right: .7em; top: .7em; border-left: 0; border-bottom: 0; border-radius: 0 .4em 0 0; }
-  .pic .c3 { left: .7em; bottom: .7em; border-right: 0; border-top: 0; border-radius: 0 0 0 .4em; }
-  .pic .c4 { right: .7em; bottom: .7em; border-left: 0; border-top: 0; border-radius: 0 0 .4em 0; }
-  .gbeam { position: absolute; left: 0; right: 0; top: 0; height: 30%; background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--a3) 30%, transparent)); border-bottom: 2px solid var(--a3); transform: translateY(-100%); animation: beam 2.2s cubic-bezier(.5, 0, .5, 1) infinite; }
-  .verdict { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(.8); font-style: normal; font-weight: 600; font-size: 1em; white-space: nowrap; padding: .45em .9em; border-radius: 999px; background: rgba(8,8,11,.82); color: #ffc2cc; box-shadow: 0 0 0 1.5px #ff6b81; opacity: 0; transition: opacity .3s, transform .3s; }
-  .toast { margin: 0; background: #fff; color: #000; border-radius: 1.1em; padding: .9em 1em; font-size: .9em; font-weight: 500; line-height: 1.35; display: flex; gap: .8em; align-items: center; opacity: 0; transform: translateY(10px); transition: opacity .35s, transform .35s; }
-  .toast::before { content: ""; width: 1.3em; height: 1.3em; border-radius: 50%; border: .28em solid #000; flex: none; }
-  .tap .sc.guard.on .pic, .still .pic { filter: saturate(.4) brightness(.6); }
-  .tap .sc.guard.on .pic b, .still .pic b { border-color: #ff6b81; }
-  .tap .sc.guard.on .gbeam, .still .gbeam { display: none; }
-  .tap .sc.guard.on .verdict, .still .verdict { opacity: 1; transform: translate(-50%, -50%); }
-  .tap .sc.guard.on .aichip i, .still .aichip i { background: #ff6b81; animation: none; }
-  .tap .sc.guard.on .toast, .still .toast { opacity: 1; transform: none; }
+  /* 01: before and after, in counts you can see */
+  .compare { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .compare > div { border-radius: 24px; padding: 18px 16px; aspect-ratio: 9 / 13; display: flex; flex-direction: column; }
+  .before { background: var(--card); border: 1px solid var(--line); }
+  .after { background: var(--screen); color: var(--on-screen); }
+  .compare .label { margin-bottom: 14px; }
+  .after .label { color: var(--screen-muted); }
+  .icons { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 9px 8px; margin-top: auto; }
+  .icons i { position: relative; aspect-ratio: 1; border-radius: 28%; background: var(--line); display: block; }
+  .icons i.r::after { content: ""; position: absolute; right: -3px; top: -3px; width: 9px; height: 9px; border-radius: 50%; background: var(--red); box-shadow: 0 0 0 2px var(--card); }
+  .names { list-style: none; margin-top: auto; }
+  .names li { font-size: 14.5px; font-weight: 500; line-height: 1.75; letter-spacing: -.01em; }
+  .mini-clock { font-weight: 300; font-size: 30px; letter-spacing: -.04em; line-height: 1; }
 
-  /* Under the phone: what it is showing, and the four parts */
-  .cap { margin-top: 22px; text-align: center; font-weight: 500; font-size: 16px; line-height: 1.35; min-height: 2.7em; max-width: 30ch; display: flex; align-items: center; justify-content: center; }
-  .segs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; width: 100%; max-width: 360px; margin-top: 12px; }
-  .segs button { text-align: left; padding: 8px 0 4px; font-size: 12.5px; font-weight: 500; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .segs button::before { content: ""; display: block; height: 3px; border-radius: 3px; background: var(--line); margin-bottom: 8px; }
-  .segs button { position: relative; }
-  .segs button i { position: absolute; left: 0; top: 8px; height: 3px; width: 100%; border-radius: 3px; background: var(--grad); transform-origin: left; transform: scaleX(0); }
-  .segs button[aria-selected="true"] { color: var(--fg); }
-  .segs button[aria-selected="true"] i { transform: scaleX(1); }
-  .segs button.run i { animation: bar var(--d, 5s) linear both; }
+  /* 02: the pause, which the visitor sits through */
+  .wait { aspect-ratio: auto; min-height: 480px; justify-content: flex-end; gap: 0; }
+  .w-app { font-size: 24px; font-weight: 600; letter-spacing: -.03em; line-height: 1.2; }
+  .w-count { position: relative; width: 112px; height: 112px; margin: 28px 0 22px; }
+  .w-count svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .w-count circle { fill: none; stroke-width: 3; }
+  .w-track { stroke: var(--screen-line); }
+  .w-prog { stroke: var(--on-screen); stroke-linecap: round; stroke-dasharray: 339.3; stroke-dashoffset: 339.3; transition: stroke-dashoffset 1s linear; }
+  .w-count b { position: absolute; inset: 0; display: grid; place-items: center; font-weight: 300; font-size: 44px; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+  .w-state { font-size: 15px; color: var(--screen-muted); min-height: 1.6em; }
+  .w-why { font-weight: 500; margin-top: 18px; }
+  .w-btns { display: grid; gap: 8px; margin-top: 14px; }
+  .w-btns button { padding: 14px 12px; border-radius: 16px; border: 1px solid var(--screen-line); color: var(--on-screen); font-weight: 500; font-size: 15px; transition: opacity .3s, background .2s, transform .15s; }
+  .w-btns button.main { background: var(--on-screen); color: var(--screen); border-color: var(--on-screen); }
+  .w-btns button:disabled { opacity: .28; cursor: default; }
+  .w-btns button:not(:disabled):active { transform: scale(.98); }
+  .wait.ready .w-state { color: var(--on-screen); }
 
-  /* How it works */
-  .steps { display: grid; gap: 56px; }
-  .step { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; align-items: center; }
-  .step .n { display: inline-block; font-size: 13px; font-weight: 600; letter-spacing: .08em; margin-bottom: 12px; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  .step h3 { font-size: clamp(22px, 4.6vw, 28px); letter-spacing: -.025em; line-height: 1.2; }
-  .step p { color: var(--muted); margin-top: 12px; max-width: 52ch; }
-  .shot { background: radial-gradient(80% 60% at 50% 100%, color-mix(in srgb, var(--a1) 22%, transparent), transparent 70%) padding-box, linear-gradient(var(--soft), var(--soft)) padding-box, linear-gradient(160deg, color-mix(in srgb, var(--a1) 45%, var(--line)), var(--line) 45%, color-mix(in srgb, var(--a3) 40%, var(--line))) border-box; border: 1px solid transparent; border-radius: 24px; padding: 28px 16px 0; display: flex; justify-content: center; overflow: hidden; }
-  .shot .phone { --pw: min(240px, 62vw); aspect-ratio: 9 / 13; border-radius: calc(var(--pw) * .15) calc(var(--pw) * .15) 0 0; padding-bottom: 0; box-shadow: 0 0 0 1px #2c2c30; }
-  .shot .screen { border-radius: calc(var(--pw) * .12) calc(var(--pw) * .12) 0 0; }
-  .shot .sc { opacity: 1; visibility: visible; padding-bottom: 12%; }
+  /* 03: focus */
+  .focus { min-height: 420px; }
+  .f-tag { align-self: flex-start; font: 500 12px/1 var(--mono); letter-spacing: .04em; padding: 8px 12px; border-radius: 999px; border: 1px solid var(--screen-line); display: inline-flex; align-items: center; gap: 8px; }
+  .f-tag i { width: 6px; height: 6px; border-radius: 50%; background: var(--on-screen); animation: breathe 2.4s ease-in-out infinite; }
+  .focus .mini-clock { margin-top: 22px; font-size: 52px; }
+  .focus .apps li { font-size: 22px; }
+  .focus .apps li.off { color: var(--screen-muted); opacity: .4; text-decoration: line-through; text-decoration-thickness: 1px; }
+  .f-note { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--screen-line); font-size: 13px; color: var(--screen-muted); }
 
-  /* Features */
-  .grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 24px; }
-  .card { transition: transform .2s, border-color .2s, box-shadow .2s; }
-  @media (hover: hover) { .card:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--a1) 40%, var(--line)); box-shadow: var(--shadow); } }
-  .card svg { width: 44px; height: 44px; padding: 10px; border-radius: 12px; background: linear-gradient(135deg, color-mix(in srgb, var(--a1) 26%, var(--soft)), color-mix(in srgb, var(--a3) 16%, var(--soft))); border: 1px solid color-mix(in srgb, var(--a1) 30%, var(--line)); margin-bottom: 18px; display: block; }
+  /* More */
+  .grid { display: grid; grid-template-columns: minmax(0, 1fr); border-top: 1px solid var(--line); }
+  .cell { padding: 28px 0; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 16px; }
+  .cell svg { width: 22px; height: 22px; margin-top: 3px; }
+  .cell p { color: var(--muted); font-size: 16px; margin-top: 6px; }
 
-  /* AI: a dark panel in both themes */
-  .ai-box { position: relative; overflow: hidden; background: linear-gradient(#08080b, #08080b) padding-box, linear-gradient(140deg, var(--a1), #1f1f25 30%, #1f1f25 70%, var(--a3)) border-box; color: #f4f4f5; border-radius: 28px; padding: 32px 20px; border: 1px solid transparent; display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; }
-  .ai-box::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .5;
-    background: radial-gradient(50% 55% at 100% 0%, color-mix(in srgb, var(--a1) 60%, transparent), transparent 70%), radial-gradient(45% 50% at 0% 100%, color-mix(in srgb, var(--a3) 38%, transparent), transparent 70%); }
-  .ai-box > * { position: relative; }
-  .ai-box .badge { background: linear-gradient(#0d0d12, #0d0d12) padding-box, var(--grad) border-box; }
-  .ai-box h2 { max-width: 18ch; }
-  .ai-box .sub { color: #a9a9b4; }
-  .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 26px; }
-  .stats div { border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.04); border-radius: 16px; padding: 14px 12px; }
-  .stats b { display: block; font-size: clamp(20px, 6vw, 28px); font-weight: 600; letter-spacing: -.03em; line-height: 1.1; white-space: nowrap; }
-  .stats span { display: block; font-size: 12.5px; color: #a9a9b4; line-height: 1.3; margin-top: 6px; }
-  .ai-list { list-style: none; margin-top: 28px; }
-  .ai-list li { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 16px; padding: 18px 0; border-top: 1px solid rgba(255,255,255,.1); }
-  .ai-list svg { width: 40px; height: 40px; padding: 9px; border-radius: 12px; background: linear-gradient(135deg, color-mix(in srgb, var(--a1) 38%, transparent), color-mix(in srgb, var(--a3) 20%, transparent)); border: 1px solid rgba(255,255,255,.16); }
-  .ai-list h3 { font-size: 18px; }
-  .ai-list p { color: #a9a9b4; font-size: 16px; margin-top: 4px; }
-  .ai-note { color: #8b8b96; font-size: 14.5px; margin-top: 8px; }
-  .scan { align-self: center; width: 100%; max-width: 420px; margin: 0 auto; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.12); border-radius: 22px; padding: 16px; }
-  .scan-top { display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 500; color: #d6d6de; margin-bottom: 14px; }
-  .scan-top .live { width: 8px; height: 8px; border-radius: 50%; background: var(--a3); box-shadow: 0 0 0 4px color-mix(in srgb, var(--a3) 25%, transparent); flex: none; }
-  .tiles { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; overflow: hidden; border-radius: 14px; }
-  .tile { position: relative; aspect-ratio: 4 / 3; border-radius: 14px; overflow: hidden; background: #17171d; }
-  .tile::before { content: ""; position: absolute; inset: 0; opacity: .55; }
-  .tile:nth-child(1)::before { background: radial-gradient(60% 70% at 30% 35%, #3b4a6b, transparent), linear-gradient(160deg, #1d2333, #12141b); }
-  .tile:nth-child(2)::before { background: radial-gradient(55% 60% at 60% 55%, #7a4a5a, transparent), linear-gradient(200deg, #33202a, #17121a); filter: blur(5px); }
-  .tile:nth-child(3)::before { background: radial-gradient(60% 60% at 65% 40%, #3d6157, transparent), linear-gradient(140deg, #18261f, #111614); }
-  .tile:nth-child(4)::before { background: radial-gradient(50% 65% at 40% 60%, #5a5a7a, transparent), linear-gradient(180deg, #20202e, #131319); }
-  .tile span { position: absolute; left: 8px; right: 8px; bottom: 8px; font-size: 12px; font-weight: 500; line-height: 1.25; padding: 6px 9px; border-radius: 9px; background: rgba(8,8,11,.78); color: #c9f5d9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .tile.hit { box-shadow: inset 0 0 0 2px #ff6b81; }
-  .tile.hit span { color: #ffc2cc; }
-  .beam { position: absolute; left: 0; right: 0; top: 0; height: 34%; pointer-events: none; background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--a3) 28%, transparent)); border-bottom: 2px solid var(--a3); transform: translateY(-100%); animation: beam 3.6s cubic-bezier(.5, 0, .5, 1) infinite; }
-  @keyframes beam { to { transform: translateY(300%); } }
-  .scan-foot { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
-  .scan-foot span { font-size: 12.5px; font-weight: 500; padding: 6px 11px; border-radius: 999px; border: 1px solid rgba(255,255,255,.14); color: #d6d6de; }
-  .made { display: inline-flex; align-items: center; gap: 7px; }
-  .card p { color: var(--muted); font-size: 16px; margin-top: 8px; }
+  /* Family */
+  .cols { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; }
+  .col ul { list-style: none; margin-top: 18px; border-top: 1px solid var(--line); }
+  .col li { padding: 20px 0; border-bottom: 1px solid var(--line); }
+  .col li h3 { font-size: 18px; display: flex; gap: 12px; align-items: baseline; }
+  .col li h3::before { content: "+"; font: 500 15px/1 var(--mono); color: var(--muted); width: 14px; flex: none; }
+  .col.no li h3::before { content: "−"; }
+  .col li p { color: var(--muted); font-size: 16px; margin: 6px 0 0 26px; }
 
-  /* Parents */
-  .cols { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
-  .col { border: 1px solid var(--line); border-radius: 20px; padding: 24px; background: var(--card); }
-  .col > h3 { font-size: 13px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
-  .col ul { list-style: none; }
-  .col li { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 14px; padding: 16px 0; }
-  .col li + li { border-top: 1px solid var(--line); }
-  .col li svg { width: 22px; height: 22px; margin-top: 2px; }
-  .col li p { color: var(--muted); font-size: 16px; margin-top: 4px; }
-  .col li h4 { font-size: 17px; font-weight: 600; letter-spacing: -.01em; line-height: 1.35; }
-
-  /* Pricing */
-  .table { border: 1px solid var(--line); border-radius: 20px; background: var(--card); overflow: hidden; }
-  .tr { display: grid; grid-template-columns: minmax(0, 1fr) 68px 78px; gap: 10px; padding: 14px 18px; align-items: center; font-size: 15.5px; line-height: 1.35; }
-  .tr + .tr { border-top: 1px solid var(--line); }
-  .tr.th { font-size: 12.5px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); background: var(--soft); }
-  .tr span:nth-child(2) { color: var(--muted); }
-  .tr span:nth-child(3) { font-weight: 600; }
-  .tr.th span:nth-child(3) { color: var(--fg); }
-  .note { color: var(--muted); font-size: 15px; margin-top: 18px; max-width: 62ch; }
+  /* AI */
+  .flow { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; margin-top: 8px; }
+  .node { border: 1px solid var(--line); border-radius: 20px; padding: 20px 22px; background: var(--card); }
+  .node.core { background: var(--screen); color: var(--on-screen); border-color: var(--screen); }
+  .node .label { margin-bottom: 8px; }
+  .node.core .label { color: var(--screen-muted); }
+  .node b { font-weight: 600; font-size: 18px; letter-spacing: -.02em; display: block; line-height: 1.3; }
+  .node span:last-child { display: block; font-size: 14.5px; color: var(--muted); margin-top: 4px; }
+  .node.core span:last-child { color: var(--screen-muted); }
+  .arrow { height: 36px; display: grid; place-items: center; color: var(--faint); font: 400 16px/1 var(--mono); position: relative; }
+  .arrow::before { content: ""; position: absolute; left: 50%; top: 4px; bottom: 4px; width: 1px; background: var(--line); }
+  .arrow i { position: absolute; left: 50%; top: 4px; width: 5px; height: 5px; margin-left: -2px; border-radius: 50%; background: var(--fg); animation: pulse-y 2.2s ease-in-out infinite; }
+  @keyframes pulse-y { from { transform: translateY(0); opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } to { transform: translateY(24px); opacity: 0; } }
+  .ai-facts { list-style: none; display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 28px; }
+  .ai-facts li { font: 400 12.5px/1.6 var(--mono); color: var(--muted); }
+  .ai-facts li::before { content: "— "; color: var(--faint); }
 
   /* Privacy */
-  .privacy p { color: var(--muted); font-size: 18px; max-width: 62ch; }
-  .privacy p + p { margin-top: 16px; }
-  .privacy a { color: var(--fg); font-weight: 500; text-underline-offset: 5px; }
+  .big { font-size: clamp(38px, 10vw, 92px); font-weight: 600; letter-spacing: -.055em; line-height: .98; }
+  .big span { display: block; }
+  .big span:nth-child(2) { color: var(--muted); }
+  .big span:nth-child(3) { color: var(--faint); }
+  .privacy .pv-text { color: var(--muted); font-size: 18px; max-width: 60ch; margin-top: 32px; }
+  .privacy .link { display: inline-block; margin-top: 20px; font-weight: 500; }
+
+  /* Pricing */
+  .plans { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .plan { border-radius: 28px; padding: 30px 26px; border: 1px solid var(--line); background: var(--card); }
+  .plan.pro { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+  .plan h3 { font-size: 28px; letter-spacing: -.04em; }
+  .plan .label { margin-top: 6px; }
+  .plan.pro .label { color: color-mix(in srgb, var(--bg) 60%, transparent); }
+  .plan ul { list-style: none; margin-top: 24px; }
+  .plan li { padding: 11px 0; border-top: 1px solid var(--line); font-size: 16px; display: flex; gap: 12px; }
+  .plan.pro li { border-top-color: color-mix(in srgb, var(--bg) 16%, transparent); }
+  .plan li::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; margin-top: 10px; flex: none; opacity: .5; }
+  .note { color: var(--muted); font-size: 15px; margin-top: 22px; max-width: 62ch; }
 
   /* FAQ */
   .faq { border-top: 1px solid var(--line); }
   .faq details { border-bottom: 1px solid var(--line); }
-  .faq summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; padding: 20px 0; font-weight: 500; font-size: 18px; line-height: 1.35; }
+  .faq summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; gap: 20px; padding: 22px 0; font-weight: 500; font-size: 18px; line-height: 1.4; letter-spacing: -.01em; }
   .faq summary::-webkit-details-marker { display: none; }
-  .faq summary::after { content: "+"; font-weight: 400; font-size: 22px; line-height: 1.1; color: var(--muted); flex: none; }
-  .faq details[open] summary::after { content: "–"; }
-  .faq details p { color: var(--muted); padding: 0 0 22px; max-width: 66ch; }
+  .faq summary::after { content: "+"; font: 400 20px/1.2 var(--mono); color: var(--muted); flex: none; transition: transform .25s; }
+  .faq details[open] summary::after { transform: rotate(45deg); }
+  .faq details p { color: var(--muted); padding: 0 40px 24px 0; max-width: 68ch; }
 
   /* End */
-  .end-box { position: relative; overflow: hidden; background: radial-gradient(70% 90% at 50% 120%, color-mix(in srgb, var(--a1) 55%, transparent), transparent 70%) padding-box, radial-gradient(50% 60% at 100% 0%, color-mix(in srgb, var(--a3) 30%, transparent), transparent 70%) padding-box, linear-gradient(#08080b, #08080b) padding-box, linear-gradient(140deg, var(--a1), #1f1f25 35%, #1f1f25 65%, var(--a3)) border-box; border: 1px solid transparent; color: #f4f4f6; border-radius: 28px; padding: 48px 24px; text-align: center; }
-  .end-box h2 { max-width: 18ch; margin: 0 auto; }
-  .end-box p { opacity: .72; margin: 16px auto 0; max-width: 46ch; }
-  .end-box .pill { background: #fff; color: #0b0b0c; margin-top: 26px; }
-  footer { border-top: 1px solid var(--line); padding: 28px 0 40px; color: var(--muted); font-size: 14.5px; }
-  footer .wrap { display: flex; flex-wrap: wrap; gap: 10px 24px; align-items: center; }
-  footer a { text-underline-offset: 4px; }
+  .end { padding: 112px 0 96px; text-align: center; }
+  .end .ring { width: 64px; height: 64px; border-radius: 50%; border: 12px solid currentColor; margin: 0 auto 36px; }
+  .end h2 { font-size: clamp(34px, 8vw, 68px); max-width: 15ch; margin: 0 auto; }
+  .end p { color: var(--muted); max-width: 44ch; margin: 20px auto 0; }
+  .end .status { margin-top: 32px; }
+  footer { border-top: 1px solid var(--line); padding: 28px 0 36px; }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: 10px 24px; align-items: center; font-size: 14.5px; color: var(--muted); }
   footer .sp { margin-right: auto; }
 
-  /* Pass 4: the page shows what it can do */
-  .hero { background-image: none; }
-  #net { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; -webkit-mask-image: linear-gradient(#000 60%, transparent); mask-image: linear-gradient(#000 60%, transparent); }
-  .stage { perspective: 1200px; }
-  #player .phone { transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .3s ease-out; will-change: transform; }
-
-  .tape { border-top: 1px solid var(--line); overflow: hidden; padding: 14px 0; }
-  .tape div { display: flex; width: max-content; animation: tape 40s linear infinite; }
-  .tape span { font-size: 12.5px; font-weight: 500; letter-spacing: .14em; color: var(--muted); white-space: nowrap; }
-  .tape span::after { content: "✦"; margin: 0 22px; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  @keyframes tape { to { transform: translateX(-50%); } }
-  .tape + section { border-top: 1px solid var(--line); }
-
-  /* Before and after */
-  .ba-wrap { display: flex; flex-direction: column; align-items: center; gap: 18px; }
-  .phone.ba { --pw: min(300px, 74vw, 36svh); touch-action: pan-y; cursor: ew-resize; user-select: none; -webkit-user-select: none; box-shadow: 0 0 0 1px #34343c, 0 0 0 5px rgba(255,255,255,.04), 0 26px 80px color-mix(in srgb, var(--a2) 40%, rgba(0,0,0,.5)); }
-  .noisy { position: absolute; inset: 0; padding: 12% 7% 6%; display: flex; flex-direction: column; gap: .7em; background: linear-gradient(160deg, #3b1d6e, #0f4c81 55%, #b4235a); }
-  .nz-ban { display: flex; gap: .6em; align-items: flex-start; background: rgba(255,255,255,.94); border-radius: .9em; padding: .6em .7em; }
-  .nz-ban i { width: 1.7em; height: 1.7em; border-radius: .5em; flex: none; display: block; }
-  .nz-ban u { flex: 1; display: block; height: .5em; border-radius: .3em; background: #b9b9c4; box-shadow: 0 .9em 0 #dcdce3; margin: .15em 0 1em; }
-  .nz-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .9em .8em; margin-top: .3em; }
-  .nz-grid i, .nz-dock i { position: relative; aspect-ratio: 1; border-radius: 28%; display: block; }
-  .nz-grid i[data-n]::after { content: attr(data-n); position: absolute; right: -.5em; top: -.5em; min-width: 1.6em; height: 1.6em; padding: 0 .35em; border-radius: 1em; background: #ff3b30; color: #fff; font-size: .62em; font-weight: 600; font-style: normal; line-height: 1.6em; text-align: center; box-shadow: 0 0 0 .14em rgba(0,0,0,.25); }
-  .nz-dock { margin-top: auto; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .8em; background: rgba(255,255,255,.18); border-radius: 1.4em; padding: .7em; }
-  .calm { position: absolute; inset: 0; background: #000; clip-path: inset(0 calc(100% - var(--x, 55%)) 0 0); }
-  .calm .sc { opacity: 1; visibility: visible; }
-  .ba-line { position: absolute; top: 0; bottom: 0; left: var(--x, 55%); width: 2px; margin-left: -1px; background: linear-gradient(var(--a1), var(--a3)); box-shadow: 0 0 18px var(--a2); }
-  .ba-line b { position: absolute; left: 50%; top: 50%; width: 2.7em; height: 2.7em; margin: -1.35em 0 0 -1.35em; border-radius: 50%; background: #fff; color: #000; display: grid; place-items: center; font-weight: 600; box-shadow: 0 .3em 1.2em rgba(0,0,0,.5); }
-  .ba-tags { display: flex; gap: 10px; }
-  .ba-tags span { font-size: 13.5px; font-weight: 500; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
-  .ba-tags span:first-child { color: var(--fg); border-color: transparent; background: linear-gradient(var(--bg), var(--bg)) padding-box, var(--grad) border-box; }
-
-  /* The year */
-  .time { text-align: center; }
-  .time h2 { max-width: 16ch; margin: 0 auto; }
-  .tm-num { margin-top: 20px; display: flex; flex-direction: column; align-items: center; }
-  .tm-num b { font-size: clamp(110px, 38vw, 220px); font-weight: 600; letter-spacing: -.06em; line-height: 1; font-variant-numeric: tabular-nums; padding: 0 .06em; }
-  .tm-num span { font-size: 14px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
-  .tm-ctl { max-width: 460px; margin: 32px auto 0; text-align: left; }
-  .tm-row { display: flex; justify-content: space-between; gap: 12px; font-weight: 500; font-size: 16px; }
-  .tm-ctl input { width: 100%; height: 36px; accent-color: var(--a1); margin-top: 6px; }
-  .tm-bar { height: 8px; border-radius: 8px; background: var(--line); overflow: hidden; margin-top: 10px; }
-  .tm-bar i { display: block; height: 100%; width: 100%; background: var(--grad); transform-origin: left; transform: scaleX(.17); transition: transform .3s; }
-  .tm-pct { color: var(--muted); font-size: 14.5px; margin-top: 8px; }
-  .time .note { margin: 14px auto 0; }
-
-  /* The checker */
-  .ck { grid-column: 1 / -1; border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.04); border-radius: 22px; padding: 22px 18px; }
-  .ck h3 { font-size: 20px; }
-  .ck > p { color: #a9a9b4; font-size: 16px; margin-top: 6px; max-width: 62ch; }
-  .ck input { width: 100%; margin-top: 16px; font: 500 17px/1.3 Inter, system-ui, sans-serif; color: #fff; background: #0d0d12; border: 1px solid rgba(255,255,255,.2); border-radius: 14px; padding: 14px 16px; outline: none; transition: border-color .2s, box-shadow .2s; }
-  .ck input:focus { border-color: var(--a2); box-shadow: 0 0 0 4px color-mix(in srgb, var(--a2) 25%, transparent); }
-  .ck-ex { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-  .ck-ex button { font-size: 14px; font-weight: 500; color: #d6d6de; padding: 8px 13px; border-radius: 999px; border: 1px solid rgba(255,255,255,.16); }
-  .ck-out { margin-top: 16px; border-radius: 14px; padding: 14px 16px; border: 1px solid rgba(255,255,255,.12); display: grid; gap: 4px; align-content: start; min-height: 5.6em; transition: border-color .25s, background .25s; }
-  .ck-out b { font-size: 17px; }
-  .ck-out span { color: #a9a9b4; font-size: 15px; line-height: 1.45; }
-  .ck-out.bad { border-color: #ff6b81; background: rgba(255,107,129,.09); }
-  .ck-out.bad b { color: #ffc2cc; }
-  .ck-out.ok { border-color: #34d399; background: rgba(52,211,153,.08); }
-  .ck-out.ok b { color: #b9f5dc; }
-
-  /* One app instead of three */
-  .cmp { border: 1px solid var(--line); border-radius: 20px; background: var(--card); overflow: hidden; }
-  .cr { display: grid; grid-template-columns: minmax(0, 1fr) repeat(4, 50px); align-items: stretch; font-size: 15px; line-height: 1.3; }
-  .cr + .cr { border-top: 1px solid var(--line); }
-  .cr > * { display: grid; place-items: center; padding: 14px 2px; text-align: center; }
-  .cr > :first-child { justify-items: start; text-align: left; padding-left: 16px; font-weight: 500; }
-  .cr > :nth-child(2) { background: color-mix(in srgb, var(--a1) 12%, transparent); }
-  .cr.th { font-size: 10px; font-weight: 600; color: var(--muted); background: var(--soft); }
-  .cr.th > :nth-child(2) { color: var(--fg); font-size: 12px; }
-  .yes, .no { display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; }
-  .yes { background: var(--grad); color: #fff; }
-  .yes.dim { background: var(--line); color: var(--fg); }
-  .yes svg { width: 14px; height: 14px; }
-  .no::before { content: ""; width: 10px; height: 2px; border-radius: 2px; background: var(--muted); opacity: .5; }
-  @media (min-width: 720px) {
-    .cr { grid-template-columns: minmax(0, 1fr) repeat(4, 124px); font-size: 16.5px; }
-    .cr > * { padding: 16px 8px; }
-    .cr > :first-child { padding-left: 28px; }
-    .cr.th { font-size: 12.5px; letter-spacing: .06em; text-transform: uppercase; }
-    .ck { padding: 30px 28px; }
-  }
-
-  /* Pass 6: the story told by one field of dots, and the small print in mono */
-  :root { --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace; }
-  .eyebrow, .tape span, .step .n, .segs button, .tr.th, .cr.th, .col > h3, .tm-num span, .scan-top, .stats span { font-family: var(--mono); }
-  .eyebrow { font-size: 12px; letter-spacing: .14em; }
-  .story { padding: 0; height: 430vh; height: 430svh; }
-  .st-pin { position: sticky; top: 60px; height: calc(100vh - 60px); height: calc(100svh - 60px); overflow: hidden; touch-action: pan-y; -webkit-user-select: none; user-select: none; }
-  .st-pin canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-  .ghost { position: absolute; right: -.04em; top: .06em; font: 600 clamp(190px, 60vw, 440px)/.8 Inter, system-ui, sans-serif; letter-spacing: -.07em; color: transparent; -webkit-text-stroke: 1px var(--line); pointer-events: none; }
-  .st-meta { position: absolute; left: 20px; top: 20px; display: flex; align-items: center; gap: 12px; font: 500 12px/1 var(--mono); letter-spacing: .14em; color: var(--muted); pointer-events: none; }
-  .st-meta b { color: var(--fg); font-weight: 500; }
-  .st-ticks { display: flex; gap: 4px; }
-  .st-ticks i { width: 18px; height: 2px; border-radius: 2px; background: var(--line); transition: background .3s; }
-  .st-ticks i.on { background: var(--fg); }
-  .st-caps { position: absolute; left: 20px; right: 20px; bottom: 11%; height: 0; pointer-events: none; }
-  .st-caps p { position: absolute; left: 0; right: 0; bottom: 0; margin: 0 auto; max-width: 19ch; text-align: center; font-size: clamp(23px, 6.4vw, 38px); font-weight: 600; letter-spacing: -.03em; line-height: 1.14; text-wrap: balance; text-shadow: 0 0 22px var(--bg), 0 0 8px var(--bg), 0 0 2px var(--bg); opacity: 0; transform: translateY(12px); transition: opacity .45s, transform .45s; }
-  .st-caps p.on { opacity: 1; transform: none; }
-  .st-hint { position: absolute; left: 0; right: 0; bottom: 3.5%; text-align: center; font: 500 11.5px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); pointer-events: none; transition: opacity .4s; }
-  .st-hint::after { content: "↓"; display: inline-block; margin-left: 8px; animation: nudge 1.4s ease-in-out infinite alternate; }
-  @keyframes nudge { to { transform: translateY(5px); } }
-  .started .st-hint { opacity: 0; }
-  section[data-n]:not(.story) { position: relative; overflow: clip; }
-  section[data-n]:not(.story)::before { content: attr(data-n); position: absolute; right: -.04em; top: 28px; font: 600 clamp(150px, 46vw, 340px)/.8 Inter, system-ui, sans-serif; letter-spacing: -.07em; color: transparent; -webkit-text-stroke: 1px var(--line); pointer-events: none; }
-  section[data-n] > .wrap { position: relative; }
-  @media (min-width: 720px) { .st-meta { left: 32px; top: 28px; } }
-
-  /* Pass 7: the page is loud at the top and quiet by the time Quiet is in. --nz runs from 1 to 0. */
-  :root { --nz: 1; }
-  .hero::before { background: radial-gradient(circle, color-mix(in srgb, #ff453a calc(var(--nz) * 100%), var(--a1)), transparent 62%); }
-  .hero::after { background: radial-gradient(circle, color-mix(in srgb, #ff9f0a calc(var(--nz) * 100%), var(--a3)), transparent 62%); }
-  [data-bz] { position: relative; }
-  [data-bz]::after { content: attr(data-bz); position: absolute; right: -8px; top: -8px; min-width: 19px; height: 19px; padding: 0 5px; border-radius: 10px; background: #ff3b30; color: #fff; font: 600 11px/19px Inter, system-ui, sans-serif; letter-spacing: 0; text-align: center; text-transform: none; box-shadow: 0 0 0 2px var(--bg); opacity: var(--nz); scale: calc(.3 + var(--nz) * .7); pointer-events: none; z-index: 2; }
-  .nz-on [data-bz]::after { animation: wob .9s ease-in-out infinite alternate; }
-  [data-bz]:nth-of-type(2n)::after { animation-delay: -.4s; }
-  @keyframes wob { from { rotate: -9deg; translate: 0 0; } to { rotate: 9deg; translate: 0 -2px; } }
-
-  #nz-toasts { position: fixed; inset: 0; z-index: 15; pointer-events: none; overflow: hidden; }
-  .nzt { position: absolute; display: flex; gap: 10px; align-items: center; padding: 10px 12px; border-radius: 16px; background: rgba(250,250,252,.96); color: #111; box-shadow: 0 10px 34px rgba(0,0,0,.35); rotate: var(--r, 0deg); opacity: calc(.3 + var(--nz) * .7); animation: nzin .28s cubic-bezier(.2, 1.3, .4, 1) backwards; transition: opacity .35s, translate .35s; }
-  .nzt.out { opacity: 0; translate: 0 -10px; }
-  .nzt i { width: 34px; height: 34px; border-radius: 10px; flex: none; display: block; }
-  .nzt span { display: block; font-size: 13px; line-height: 1.3; color: #444; overflow: hidden; }
-  .nzt b { display: block; font-size: 13px; font-weight: 600; color: #111; }
-  .nzt span span { white-space: nowrap; text-overflow: ellipsis; }
-  @keyframes nzin { from { scale: .7; translate: 0 14px; } }
-
-  .tape { display: grid; }
-  .tape > div { grid-area: 1 / 1; }
-  .tape .tech { opacity: calc(1 - var(--nz)); }
-  .tape .loud { opacity: var(--nz); animation-duration: 14s; }
-  .tape .loud span { font-weight: 600; color: #ff453a; }
-  .tape .loud span:nth-child(3n) { color: #ff9f0a; }
-  .tape .loud span:nth-child(3n + 1) { color: #0a84ff; }
-  .tape .loud span::after { content: "•"; background: none; color: var(--muted); }
-
-  .pz { z-index: 3; opacity: calc((var(--nz) - .3) * 2.5); pointer-events: none; }
-
-  /* The switch */
-  .qsw { position: relative; display: inline-flex; align-items: center; gap: 14px; margin-top: 28px; padding: 8px 22px 8px 8px; border-radius: 999px; border: 1px solid transparent; background: linear-gradient(var(--card), var(--card)) padding-box, var(--grad) border-box; font-weight: 600; font-size: 17px; line-height: 1.2; text-align: left; box-shadow: 0 10px 34px color-mix(in srgb, var(--a1) 40%, transparent); }
-  .qsw .trk { position: relative; width: 58px; height: 34px; border-radius: 999px; background: color-mix(in srgb, var(--fg) 22%, transparent); transition: background .35s; flex: none; }
-  .qsw .trk::after { content: ""; position: absolute; left: 3px; top: 3px; width: 28px; height: 28px; border-radius: 50%; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,.4); transition: translate .35s cubic-bezier(.3, 1.4, .5, 1); }
-  .qsw[aria-checked="true"] .trk { background: var(--grad); }
-  .qsw[aria-checked="true"] .trk::after { translate: 24px 0; }
-  .qsw[aria-checked="false"]::before { content: ""; position: absolute; inset: -1px; border-radius: 999px; border: 2px solid var(--a2); animation: ping 2s ease-out infinite; pointer-events: none; }
-  @keyframes ping { from { scale: 1; opacity: .8; } to { scale: 1.12 1.5; opacity: 0; } }
-  .sw-hint { font: 500 12px/1.5 var(--mono); letter-spacing: .02em; color: var(--muted); margin-top: 14px; max-width: 44ch; opacity: calc(var(--nz) * 4); }
-  .hero .cta { margin-top: 22px; }
-  .cta .pill { box-shadow: none; background: transparent; color: var(--fg); border: 1px solid var(--line); }
-
-  /* The meter */
-  .nzm { position: fixed; left: 50%; bottom: 14px; translate: -50% 0; z-index: 25; display: flex; align-items: center; gap: 10px; padding: 10px 15px 10px 13px; border-radius: 999px; background: color-mix(in srgb, var(--bg) 84%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border: 1px solid var(--line); font: 500 11.5px/1 var(--mono); letter-spacing: .12em; color: var(--fg); box-shadow: var(--shadow); white-space: nowrap; transition: opacity .5s; }
-  body:not(.nz-on) .nzm { opacity: .55; }
-  .eq { display: flex; align-items: flex-end; gap: 2px; height: 14px; }
-  .eq i { width: 3px; height: calc(3px + 11px * var(--nz)); border-radius: 2px; background: color-mix(in srgb, #ff453a calc(var(--nz) * 100%), var(--a3)); transform-origin: bottom; }
-  .nz-on .eq i { animation: eq .42s ease-in-out infinite alternate; }
-  .eq i:nth-child(2) { animation-delay: -.3s; } .eq i:nth-child(3) { animation-delay: -.12s; } .eq i:nth-child(4) { animation-delay: -.36s; } .eq i:nth-child(5) { animation-delay: -.2s; }
-  @keyframes eq { from { transform: scaleY(.35); } to { transform: scaleY(1); } }
-  footer { padding-bottom: 76px; }
+  /* Reveal: only when scripts run, so nothing stays hidden without them */
+  .js .rv { opacity: 0; transform: translateY(16px); transition: opacity .7s ease, transform .7s cubic-bezier(.2, .7, .2, 1); }
+  .js .rv.in { opacity: 1; transform: none; }
 
   @media (min-width: 720px) {
-    .wrap { padding: 0 32px; }
-    section { padding: 96px 0; }
-    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-    .cols { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-    .card, .col { padding: 28px; }
-    .tr { grid-template-columns: minmax(0, 1fr) 120px 120px; padding: 16px 28px; font-size: 16.5px; }
-    .end-box { padding: 72px 40px; }
-    .ai-box { padding: 48px 40px; }
-    .step { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px; }
-    .step:nth-child(even) .shot { order: -1; }
-    .steps { gap: 72px; }
-    .head { margin-bottom: 56px; }
+    .wrap { padding: 0 36px; }
+    section { padding: 120px 0; }
+    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 48px; }
+    .cols { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px; }
+    .plans { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .plan { padding: 40px 36px; }
+    .step { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 64px; }
+    .step:nth-child(even) .demo { order: -1; }
+    .flow { grid-template-columns: minmax(0, 1fr) 40px minmax(0, 1.15fr) 40px minmax(0, 1fr); align-items: stretch; }
+    .arrow { height: auto; }
+    .arrow::before { left: 4px; right: 4px; top: 50%; bottom: auto; width: auto; height: 1px; }
+    .arrow i { left: 4px; top: 50%; margin: -2px 0 0; animation-name: pulse-x; }
+    @keyframes pulse-x { from { transform: translateX(0); opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } to { transform: translateX(28px); opacity: 0; } }
   }
-  @media (min-width: 960px) {
+  @media (min-width: 980px) {
     header nav { display: flex; }
-    .hero { padding: 72px 0 96px; }
-    .hero-grid { grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr); gap: 64px; align-items: center; }
-    .stage { padding: 40px 24px 28px; }
-    .phone { --pw: 290px; }
-    .shot .phone { --pw: 260px; }
+    .hero { padding: 72px 0 120px; }
+    .hero .wrap { grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr); gap: 72px; align-items: center; }
     .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    section { padding: 112px 0; }
-    .ai-box { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 56px; padding: 64px 56px; }
+    .shead { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: end; gap: 56px; }
   }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     *, *::before, *::after { animation: none !important; transition: none !important; }
+    .js .rv { opacity: 1; transform: none; }
   }
 </style>
 </head>
 <body>
-<div id="bar" aria-hidden="true"></div>
-<div id="nz-toasts" aria-hidden="true"></div>
-<button type="button" class="nzm" id="nzm" aria-pressed="false"><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><span id="nzm-l"></span></button>
 
-<header>
+<header id="top-bar">
   <div class="wrap">
-    <a class="logo" href="#top"><i></i>Quiet</a>
+    <a class="logo" href="#top" aria-label="Quiet"><i></i>Quiet</a>
     <nav>
-      <a href="#how" data-t="nav_how"></a>
-      <a href="#ai" data-t="nav_ai"></a>
-      <a href="#parents" data-t="nav_parents"></a>
-      <a href="#pricing" data-t="nav_pricing"></a>
-      <a href="#faq" data-t="nav_faq"></a>
+      <a href="#how" data-t="nav_how">Qanday ishlaydi</a>
+      <a href="#family" data-t="nav_family">Oila uchun</a>
+      <a href="#pricing" data-t="nav_price">Narx</a>
+      <a href="#faq" data-t="nav_faq">Savollar</a>
     </nav>
     <div class="tools">
-      <div class="langs" role="group" aria-label="Language">
-        <button type="button" data-lang="uz">UZ</button>
-        <button type="button" data-lang="ru">RU</button>
-        <button type="button" data-lang="en">EN</button>
+      <div class="langs" role="group" aria-label="Til / Язык / Language">
+        <button type="button" data-lang="uz" aria-pressed="true">UZ</button>
+        <button type="button" data-lang="ru" aria-pressed="false">RU</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
       </div>
       <button type="button" class="theme" id="theme" aria-label="Theme">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17a8.5 8.5 0 0 0 0-17z" fill="currentColor"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17a8.5 8.5 0 0 0 0-17z" fill="currentColor"/></svg>
       </button>
     </div>
   </div>
 </header>
 
 <main id="top">
-  <section class="hero">
-    <canvas id="net" aria-hidden="true"></canvas>
-    <div class="wrap hero-grid">
+  <section class="hero" style="border-top:0">
+    <div class="wrap">
       <div>
-        <a class="badge" href="#ai" style="text-decoration:none"><svg class="spark" viewBox="0 0 24 24"><defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7c5cff"/><stop offset=".55" stop-color="#3b82f6"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs><path fill="url(#sg)" d="M12 2l2.1 6.2a3 3 0 0 0 1.7 1.7L22 12l-6.2 2.1a3 3 0 0 0-1.7 1.7L12 22l-2.1-6.2a3 3 0 0 0-1.7-1.7L2 12l6.2-2.1a3 3 0 0 0 1.7-1.7z"/></svg><span data-t="ai_badge"></span></a>
-        <p class="eyebrow" data-t="kicker"></p>
-        <h1 data-t="h1"></h1>
-        <p class="lead" data-t="lead"></p>
-        <button type="button" class="qsw" id="qsw" role="switch" aria-checked="false"><span class="trk"></span><span id="qsw-l"></span></button>
-        <p class="sw-hint" data-t="sw_hint"></p>
-        <div class="cta">
-          <span class="pill"><i></i><span data-t="status"></span></span>
-          <a class="more" href="#how" data-t="more"></a>
+        <p class="label rv" data-t="kicker">Android uchun bosh ekran</p>
+        <h1 class="rv" style="margin-top:18px" data-t="h1">Kerakli ishni qiling. Qolgan vaqt — sizniki.</h1>
+        <p class="lead rv" data-t="lead">Quiet bosh ekranni oddiy matnli ro‘yxatga aylantiradi va vaqtingizni oladigan ilovalar oldiga kichik pauza qo‘yadi. Nimani cheklashni o‘zingiz hal qilasiz.</p>
+        <div class="actions rv">
+          <span class="status"><i></i><span data-t="status">Tez orada Google Play’da</span></span>
+          <a class="more" href="#how" data-t="more">Qanday ishlashini ko‘rish</a>
         </div>
-        <ul class="facts">
-          <li data-t="fact1"></li>
-          <li data-t="fact2"></li>
-          <li data-t="fact3"></li>
+        <ul class="facts rv">
+          <li data-t="fact1">Android 8 va undan yangi</li>
+          <li data-t="fact2">O‘zbek, rus va ingliz tillarida</li>
+          <li data-t="fact3">Akkaunt kerak emas</li>
         </ul>
       </div>
-      <div class="stage" id="player">
-        <div class="phone"><div class="screen" id="p-screen" aria-hidden="true"></div></div>
-        <p class="cap" id="p-cap" aria-live="off"></p>
-        <div class="segs" id="p-segs" role="tablist"></div>
+      <div class="rv" style="display:grid">
+        <div class="screen home" id="home" aria-label="Quiet">
+          <div class="clock" data-clock>9:41</div>
+          <div class="date" data-date></div>
+          <div class="today" data-t="today">Bugun telefonda 38 daqiqa</div>
+          <ul class="apps" id="apps">
+            <li data-t="a1">Telefon</li><li data-t="a2">Xabarlar</li><li data-t="a3">Kamera</li><li data-t="a4">Xarita</li><li data-t="a5">Telegram</li><li data-t="a6">Taqvim</li>
+          </ul>
+          <div class="search" id="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/></svg><span class="ph" data-t="search">Qidirish</span><b id="q"></b><span class="caret"></span></div>
+        </div>
+        <p class="label hero-cap" data-t="hero_cap">Soat — sizning hozirgi vaqtingiz</p>
       </div>
-    </div>
-  </section>
-
-  <div class="tape" aria-hidden="true"><div class="loud"><span>99+</span><span>LIVE</span><span>NEW</span><span>SALE −70%</span><span>🔥 HOT</span><span>🔔 12</span><span>▶ SHORTS</span><span>❤ 1.2K</span><span>!!!</span><span>99+</span><span>LIVE</span><span>NEW</span><span>SALE −70%</span><span>🔥 HOT</span><span>🔔 12</span><span>▶ SHORTS</span><span>❤ 1.2K</span><span>!!!</span><span>99+</span><span>LIVE</span><span>NEW</span><span>SALE −70%</span><span>🔥 HOT</span><span>🔔 12</span><span>▶ SHORTS</span><span>❤ 1.2K</span><span>!!!</span><span>99+</span><span>LIVE</span><span>NEW</span><span>SALE −70%</span><span>🔥 HOT</span><span>🔔 12</span><span>▶ SHORTS</span><span>❤ 1.2K</span><span>!!!</span></div><div class="tech"><span>ON-DEVICE AI</span><span>TENSORFLOW LITE</span><span>KOTLIN</span><span>0 SERVERS</span><span>OFFLINE</span><span>ANDROID 8+</span><span>NO ACCOUNT</span><span>ON-DEVICE AI</span><span>TENSORFLOW LITE</span><span>KOTLIN</span><span>0 SERVERS</span><span>OFFLINE</span><span>ANDROID 8+</span><span>NO ACCOUNT</span><span>ON-DEVICE AI</span><span>TENSORFLOW LITE</span><span>KOTLIN</span><span>0 SERVERS</span><span>OFFLINE</span><span>ANDROID 8+</span><span>NO ACCOUNT</span><span>ON-DEVICE AI</span><span>TENSORFLOW LITE</span><span>KOTLIN</span><span>0 SERVERS</span><span>OFFLINE</span><span>ANDROID 8+</span><span>NO ACCOUNT</span></div></div>
-
-  <section id="story" class="story">
-    <div class="st-pin" id="st-pin">
-      <canvas id="scv" aria-hidden="true"></canvas>
-      <div class="ghost" aria-hidden="true">01</div>
-      <div class="st-meta" aria-hidden="true"><span><b id="st-n">01</b> / 04</span><span class="st-ticks" id="st-ticks"></span><span id="st-l"></span></div>
-      <div class="st-caps" id="st-caps"></div>
-      <div class="st-hint" id="st-hint" aria-hidden="true"></div>
-    </div>
-  </section>
-
-  <section id="shift">
-    <div class="wrap">
-      <div class="head">
-        <h2 data-t="sh_h"></h2>
-        <p class="sub" data-t="sh_p"></p>
-      </div>
-      <div class="ba-wrap">
-        <div class="phone ba" id="ba" aria-hidden="true"><div class="screen">
-          <div class="noisy" id="noisy"></div>
-          <div class="calm" data-shot="home"></div>
-          <i class="ba-line"><b>&#8249;&#8250;</b></i>
-        </div></div>
-        <div class="ba-tags"><span data-t="sh_b"></span><span data-t="sh_a"></span></div>
-      </div>
-    </div>
-  </section>
-
-  <section id="time">
-    <div class="wrap time">
-      <h2 data-t="tm_h"></h2>
-      <div class="tm-num"><b class="gt" id="tm-days">61</b><span data-t="tm_unit"></span></div>
-      <div class="tm-ctl">
-        <div class="tm-row"><label for="tm-in" data-t="tm_l"></label><output id="tm-out" for="tm-in"></output></div>
-        <input type="range" id="tm-in" min="1" max="10" step="0.5" value="4">
-        <div class="tm-bar"><i id="tm-fill"></i></div>
-        <p class="tm-pct" id="tm-pct"></p>
-      </div>
-      <p class="note" data-t="tm_note"></p>
     </div>
   </section>
 
   <section id="how">
     <div class="wrap">
-      <div class="head">
-        <h2 data-t="how_h"></h2>
-        <p class="sub" data-t="how_p"></p>
+      <div class="shead rv">
+        <div><p class="label" data-t="how_k">01 — Qanday ishlaydi</p><h2 style="margin-top:18px" data-t="how_h">O‘rnatganingizdan keyin uch narsa o‘zgaradi</h2></div>
+        <p class="sub" data-t="how_p">Quiet hech narsani o‘zicha bloklamaydi. Qaysi ilovani cheklashni o‘zingiz tanlaysiz va xohlagan payt o‘zgartirasiz.</p>
       </div>
       <div class="steps">
         <div class="step">
-          <div><p class="n">01</p><h3 data-t="r1_h"></h3><p data-t="r1_p"></p></div>
-          <div class="shot" aria-hidden="true"><div class="phone"><div class="screen" data-shot="home"></div></div></div>
+          <div class="rv"><span class="n">1/3</span><h3 data-t="s1_h">Bosh ekranda sakkizta nom qoladi</h3><p data-t="s1_p">Belgilar, qizil nuqtalar va vidjetlar o‘rnida — soat, sana va o‘zingiz tanlagan sakkiztagacha ilova. Qolganlari bir surishda ochiladi yoki nomining ikki-uch harfi bilan topiladi.</p></div>
+          <div class="demo rv" aria-hidden="true">
+            <div class="compare">
+              <div class="before"><p class="label" data-t="before">Odatiy ekran</p><div class="icons" id="icons"></div></div>
+              <div class="after"><p class="label" data-t="after">Quiet</p><div class="mini-clock" data-clock>9:41</div>
+                <ul class="names"><li data-t="a1">Telefon</li><li data-t="a2">Xabarlar</li><li data-t="a3">Kamera</li><li data-t="a4">Xarita</li><li data-t="a5">Telegram</li><li data-t="a6">Taqvim</li></ul></div>
+            </div>
+          </div>
         </div>
         <div class="step">
-          <div><p class="n">02</p><h3 data-t="r2_h"></h3><p data-t="r2_p"></p></div>
-          <div class="shot" aria-hidden="true"><div class="phone"><div class="screen" data-shot="wait"></div></div></div>
+          <div class="rv"><span class="n">2/3</span><h3 data-t="s2_h">Odat bo‘lib qolgan ilovalar darhol ochilmaydi</h3><p data-t="s2_p">Tanlagan ilovangizni bosganingizda Quiet o‘n soniya kuttiradi va nima uchun ochayotganingizni so‘raydi. Davom etsangiz, 5, 10 yoki 20 daqiqani tanlaysiz; vaqt tugagach, ilova yopiladi. Kunlik limit ham qo‘yish mumkin.</p><p class="label" style="margin-top:20px" data-t="w_note">Yonidagi pauza haqiqiy: o‘n soniya kuting.</p></div>
+          <div class="demo rv">
+            <div class="screen wait" id="wait">
+              <p class="w-app" data-t="w_open">Instagram ochilmoqda</p>
+              <div class="w-count" aria-hidden="true"><svg viewBox="0 0 120 120"><circle class="w-track" cx="60" cy="60" r="54"/><circle class="w-prog" id="w-prog" cx="60" cy="60" r="54"/></svg><b id="w-n">10</b></div>
+              <p class="w-state" id="w-state" aria-live="polite"></p>
+              <p class="w-why" data-t="w_why">Nima uchun ochyapsiz?</p>
+              <div class="w-btns">
+                <button type="button" class="main" data-w="0" data-t="w_home">Uyga qaytish</button>
+                <button type="button" data-w="5"></button>
+                <button type="button" data-w="10"></button>
+                <button type="button" data-w="20"></button>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="step">
-          <div><p class="n">03</p><h3 data-t="r3_h"></h3><p data-t="r3_p"></p></div>
-          <div class="shot" aria-hidden="true"><div class="phone"><div class="screen" data-shot="focus"></div></div></div>
+          <div class="rv"><span class="n">3/3</span><h3 data-t="s3_h">Ish paytida ekranda faqat ish turadi</h3><p data-t="s3_p">Fokus seansida bosh ekranda shu ish uchun tanlangan ilovalar qoladi, qolganlari seans tugaguncha ochilmaydi. Bildirishnomalar yig‘ilib turadi, qo‘ng‘iroqlar esa har doim o‘tadi.</p></div>
+          <div class="demo rv" aria-hidden="true">
+            <div class="screen focus">
+              <span class="f-tag"><i></i><span data-t="f_tag">Ish · 25 daqiqa qoldi</span></span>
+              <div class="mini-clock" data-clock>9:41</div>
+              <ul class="apps"><li data-t="f1">Pochta</li><li data-t="f2">Taqvim</li><li data-t="f3">Hujjatlar</li><li class="off">Instagram</li><li class="off">YouTube</li></ul>
+              <p class="f-note" data-t="f_note">Qo‘ng‘iroqlar o‘tadi · 14 ta bildirishnoma kutib turibdi</p>
+            </div>
+          </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="more">
+    <div class="wrap">
+      <div class="shead rv"><div><p class="label" data-t="more_k">02 — Yana</p><h2 style="margin-top:18px" data-t="more_h">Telefonni qo‘yishga yordam beradigan boshqa narsalar</h2></div></div>
+      <div class="grid">
+        <div class="cell rv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><rect x="6" y="3" width="12" height="18" rx="3"/><path d="M10.5 9.5v5l4-2.5z"/></svg><div><h3 data-t="c1_h">Shorts va Reels</h3><p data-t="c1_p">YouTube va Instagram ishlayveradi, qisqa videolar tasmasi esa yopiladi. Kerak bo‘lgan kuni uni bir muddatga ochish mumkin.</p></div></div>
+        <div class="cell rv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5h4"/></svg><div><h3 data-t="c2_h">Bildirishnomalar</h3><p data-t="c2_p">Tanlangan ilovalarning bildirishnomalari jimgina yig‘ilib turadi va qulay paytda bitta ro‘yxatda o‘qiladi.</p></div></div>
+        <div class="cell rv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 20V12M12 20V5M19 20v-5"/></svg><div><h3 data-t="c3_h">Ekran vaqti</h3><p data-t="c3_p">Bugun, so‘nggi yetti kun va sakkiz hafta: qaysi ilovaga qancha vaqt ketgani va telefonni necha marta ochganingiz.</p></div></div>
+        <div class="cell rv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><div><h3 data-t="c4_h">Jadval</h3><p data-t="c4_p">Ilovalarni kunning ma’lum soatlarida yopish mumkin. Masalan, ijtimoiy tarmoqlar 23:00 dan 07:00 gacha ochilmaydi.</p></div></div>
+        <div class="cell rv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg><div><h3 data-t="c5_h">Qat’iy rejim</h3><p data-t="c5_p">O‘zingizga ishonmagan kunlar uchun: seansni muddatidan oldin tugatib ham, qoidalarni yumshatib ham bo‘lmaydi.</p></div></div>
+        <div class="cell rv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17a8.5 8.5 0 0 0 0-17z" fill="currentColor"/></svg><div><h3 data-t="c6_h">Kulrang ekran</h3><p data-t="c6_p">Rangsiz ekran kamroq tortadi. Buni yoqish uchun telefonni bir marta kompyuterga ulash kerak.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="family">
+    <div class="wrap">
+      <div class="shead rv">
+        <div><p class="label" data-t="fam_k">03 — Oila uchun</p><h2 style="margin-top:18px" data-t="fam_h">Farzandingizning telefoni uchun</h2></div>
+        <p class="sub" data-t="fam_p">Quietni bolaning telefoniga o‘rnatib, sozlamalarni PIN-kod bilan yopish mumkin. Nimani uddalashini ham, nimani uddalay olmasligini ham ochiq aytamiz.</p>
+      </div>
+      <div class="cols">
+        <div class="col rv"><p class="label" data-t="can_h">Nima qiladi</p><ul>
+          <li><h3 data-t="can1_h">Qoidalarni PIN-kod bilan yopadi</h3><p data-t="can1_p">Qulf yopiq paytda limitlarni yumshatib ham, Quietni o‘chirib ham bo‘lmaydi.</p></li>
+          <li><h3 data-t="can2_h">Kattalar uchun sahifalarni yopadi</h3><p data-t="can2_p">Telegram, brauzer va ijtimoiy tarmoqlarda ekrandagi so‘zlarni, yoqilgan bo‘lsa rasmlarni ham tekshiradi.</p></li>
+          <li><h3 data-t="can3_h">Begona Telegram botlarini ochtirmaydi</h3><p data-t="can3_p">Faqat siz ro‘yxatga qo‘shgan botlar ochiladi.</p></li>
+          <li><h3 data-t="can4_h">Sizga xabar beradi</h3><p data-t="can4_p">Xohlasangiz, sahifa yopilganda Telegram’ingizga yozadi: qaysi ilova, soat nechada va nima sababdan.</p></li>
+        </ul></div>
+        <div class="col no rv"><p class="label" data-t="cant_h">Nima qilmaydi</p><ul>
+          <li><h3 data-t="cant1_h">Hamma narsani ushlay olmaydi</h3><p data-t="cant1_p">Buni hech bir filtr uddalamaydi. Family Link kabi vositalarni o‘chirmang — Quiet ular bilan birga ishlaydi.</p></li>
+          <li><h3 data-t="cant2_h">Yozishmalarni o‘qimaydi</h3><p data-t="cant2_p">Sizga ekrandagi matn ham, rasm ham yuborilmaydi. Faqat ilova nomi, vaqt va sabab.</p></li>
+          <li><h3 data-t="cant3_h">Yashirin ishlamaydi</h3><p data-t="cant3_p">Xabar yuborish yoqilgan bo‘lsa, bolaning telefonida bu haqda doimiy bildirishnoma turadi.</p></li>
+          <li><h3 data-t="cant4_h">Xavfsiz rejimni o‘zi to‘sa olmaydi</h3><p data-t="cant4_p">Buning uchun telefonni kompyuter orqali bir marta alohida sozlash kerak.</p></li>
+        </ul></div>
       </div>
     </div>
   </section>
 
   <section id="ai">
     <div class="wrap">
-      <div class="ai-box">
-        <div>
-          <span class="badge"><svg class="spark" viewBox="0 0 24 24"><path fill="url(#sg)" d="M12 2l2.1 6.2a3 3 0 0 0 1.7 1.7L22 12l-6.2 2.1a3 3 0 0 0-1.7 1.7L12 22l-2.1-6.2a3 3 0 0 0-1.7-1.7L2 12l6.2-2.1a3 3 0 0 0 1.7-1.7z"/></svg><span data-t="ai_eyebrow"></span></span>
-          <h2 data-t="ai_h"></h2>
-          <p class="sub" data-t="ai_p"></p>
-          <div class="stats"><div><b class="gt">24 MB</b><span data-t="ai_s1"></span></div><div><b class="gt">0</b><span data-t="ai_s2"></span></div><div><b class="gt">100%</b><span data-t="ai_s3"></span></div></div>
-          <ul class="ai-list">
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="12" r="2"/><circle cx="12" cy="12" r="1.6"/><path d="M7.8 7l2.8 3.8M7.8 17l2.8-3.8M13.6 12H16"/></svg><div><h3 data-t="ai1_h"></h3><p data-t="ai1_p"></p></div></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M10.5 12.2l1.2 1.2 2.2-2.6"/></svg><div><h3 data-t="ai2_h"></h3><p data-t="ai2_p"></p></div></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 7l-5 5 5 5M15 7l5 5-5 5"/></svg><div><h3 data-t="ai3_h"></h3><p data-t="ai3_p"></p></div></li>
-          </ul>
-          <p class="ai-note" data-t="ai_note"></p>
-        </div>
-        <div class="scan" aria-hidden="true">
-          <div class="scan-top"><i class="live"></i><span data-t="ai_scan"></span></div>
-          <div class="tiles">
-            <div class="tile"><span data-t="ai_ok"></span></div>
-            <div class="tile hit"><span data-t="ai_hit"></span></div>
-            <div class="tile"><span data-t="ai_ok"></span></div>
-            <div class="tile"><span data-t="ai_ok"></span></div>
-            <i class="beam"></i>
-          </div>
-          <div class="scan-foot"><span data-t="ai_local"></span><span data-t="ai_close"></span></div>
-        </div>
-        <div class="ck">
-          <h3 data-t="ck_h"></h3>
-          <p data-t="ck_p"></p>
-          <input id="ck-in" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="60">
-          <div class="ck-ex" id="ck-ex"></div>
-          <div class="ck-out" id="ck-out" aria-live="polite"><b></b><span></span></div>
-        </div>
+      <div class="shead rv">
+        <div><p class="label" data-t="ai_k">04 — Telefondagi AI</p><h2 style="margin-top:18px" data-t="ai_h">Rasmni bulut emas, telefonning o‘zi tekshiradi</h2></div>
+        <p class="sub" data-t="ai_p">Quiet ichida rasmlarni taniydigan kichik neyron tarmoq bor. Rasm tekshiruvi yoqilgan bo‘lsa, u ekrandagi rasmni telefonda baholaydi va kattalar uchun kontentni ko‘rsa, sahifani yopadi.</p>
       </div>
+      <div class="flow rv" aria-hidden="true">
+        <div class="node"><p class="label" data-t="ai1_k">Kirish</p><b data-t="ai1_b">Ekrandagi rasm</b><span data-t="ai1_s">Telegram, brauzer yoki ijtimoiy tarmoq ochiq paytda</span></div>
+        <div class="arrow"><i></i></div>
+        <div class="node core"><p class="label" data-t="ai2_k">Telefonda</p><b data-t="ai2_b">Neyron tarmoq baholaydi</b><span data-t="ai2_s">Rasm shu zahoti o‘chiriladi, hech qayerda saqlanmaydi</span></div>
+        <div class="arrow"><i></i></div>
+        <div class="node"><p class="label" data-t="ai3_k">Natija</p><b data-t="ai3_b">Sahifa yopiladi</b><span data-t="ai3_s">Xohlasangiz, ota-onaga qisqa xabar boradi</span></div>
+      </div>
+      <ul class="ai-facts rv"><li data-t="ai_f1">Internetsiz ishlaydi</li><li data-t="ai_f2">Android 11 va undan yangi</li><li data-t="ai_f3">Pro tarkibida</li></ul>
     </div>
   </section>
 
-  <section id="why">
+  <section id="privacy" class="privacy">
     <div class="wrap">
-      <div class="head">
-        <h2 data-t="cmp_h"></h2>
-        <p class="sub" data-t="cmp_p"></p>
-      </div>
-      <div class="cmp" id="cmp"></div>
-      <p class="note" data-t="cmp_note"></p>
-    </div>
-  </section>
-
-  <section id="more">
-    <div class="wrap">
-      <div class="head"><h2 data-t="also_h"></h2></div>
-      <div class="grid">
-        <div class="card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="6" y="3" width="12" height="18" rx="3"/><path d="M10.5 9.5v5l4-2.5z"/></svg><h3 data-t="d1_h"></h3><p data-t="d1_p"></p></div>
-        <div class="card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5h4"/></svg><h3 data-t="d2_h"></h3><p data-t="d2_p"></p></div>
-        <div class="card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M5 20V11M12 20V4M19 20v-6"/></svg><h3 data-t="d3_h"></h3><p data-t="d3_p"></p></div>
-        <div class="card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><h3 data-t="d4_h"></h3><p data-t="d4_p"></p></div>
-        <div class="card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg><h3 data-t="d5_h"></h3><p data-t="d5_p"></p></div>
-        <div class="card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17a8.5 8.5 0 0 0 0-17z" fill="currentColor"/></svg><h3 data-t="d6_h"></h3><p data-t="d6_p"></p></div>
-      </div>
-    </div>
-  </section>
-
-  <section id="parents">
-    <div class="wrap">
-      <div class="head">
-        <h2 data-t="par_h"></h2>
-        <p class="sub" data-t="par_p"></p>
-      </div>
-      <div class="cols">
-        <div class="col">
-          <h3 data-t="can_h"></h3>
-          <ul id="can"></ul>
-        </div>
-        <div class="col">
-          <h3 data-t="cant_h"></h3>
-          <ul id="cant"></ul>
-        </div>
-      </div>
+      <p class="label rv" data-t="pv_k">05 — Maxfiylik</p>
+      <p class="big rv" style="margin-top:22px"><span data-t="pv1">Akkaunt yo‘q.</span><span data-t="pv2">Reklama yo‘q.</span><span data-t="pv3">Server yo‘q.</span></p>
+      <p class="pv-text rv" data-t="pv_p">Sozlamalaringiz va foydalanish tarixi faqat telefoningizda saqlanadi; ilovani o‘chirsangiz, ular ham o‘chadi. Bitta istisno bor: ota-ona o‘z Telegram botini ulasa, yopilgan sahifaning ilova nomi va vaqti shu botga yuboriladi.</p>
+      <a class="link rv" id="privacy-link" href="https://encrypster.github.io/quiet-privacy/uz/" data-t="pv_link">Maxfiylik siyosatini o‘qish →</a>
     </div>
   </section>
 
   <section id="pricing">
     <div class="wrap">
-      <div class="head">
-        <h2 data-t="pr_h"></h2>
-        <p class="sub" data-t="pr_p"></p>
+      <div class="shead rv">
+        <div><p class="label" data-t="pr_k">06 — Narx</p><h2 style="margin-top:18px" data-t="pr_h">Bepul va Pro</h2></div>
+        <p class="sub" data-t="pr_p">Kundalik foydalanishga bepul qismi yetadi. Pro muddati tugasa ham, sozlab qo‘ygan narsalaringiz ishlashda davom etadi.</p>
       </div>
-      <div class="table" id="table"></div>
-      <p class="note" data-t="pr_note"></p>
-    </div>
-  </section>
-
-  <section id="privacy">
-    <div class="wrap privacy">
-      <div class="head"><h2 data-t="pv_h"></h2></div>
-      <p data-t="pv_p1"></p>
-      <p data-t="pv_p2"></p>
-      <p><a id="privacy-link" href="https://encrypster.github.io/quiet-privacy/uz/" data-t="pv_link"></a></p>
+      <div class="plans">
+        <div class="plan rv"><h3 data-t="free_t">Bepul</h3><p class="label" data-t="free_s">Doimiy</p><ul>
+          <li data-t="fr1">Matnli bosh ekran va qidiruv</li><li data-t="fr2">Ikkita qoida: pauza, limit yoki blok</li><li data-t="fr3">Bitta fokus profili</li><li data-t="fr4">Bildirishnomalar filtri</li><li data-t="fr5">So‘nggi 7 kunlik ekran vaqti</li><li data-t="fr6">Jadval va kulrang ekran</li>
+        </ul></div>
+        <div class="plan pro rv"><h3>Pro</h3><p class="label" data-t="pro_s">Yillik obuna</p><ul>
+          <li data-t="p1">Bepuldagi hammasi</li><li data-t="p2">Cheksiz qoida va fokus profillari</li><li data-t="p3">Shorts va Reelsni yopish</li><li data-t="p4">Qat’iy rejim</li><li data-t="p5">8 haftalik ekran vaqti</li><li data-t="p6">Ota-ona qulfi va kontent tekshiruvi</li><li data-t="p7">Telefondagi AI rasm tekshiruvi</li><li data-t="p8">Ota-onaga Telegram orqali xabar</li>
+        </ul></div>
+      </div>
+      <p class="note rv" data-t="pr_note">Narx ilova chiqqanda Google Play’da ko‘rsatiladi.</p>
     </div>
   </section>
 
   <section id="faq">
     <div class="wrap">
-      <div class="head"><h2 data-t="q_h"></h2></div>
-      <div class="faq" id="faq-list"></div>
+      <div class="shead rv"><div><p class="label" data-t="faq_k">07 — Savollar</p><h2 style="margin-top:18px" data-t="faq_h">Ko‘p beriladigan savollar</h2></div></div>
+      <div class="faq rv">
+        <details><summary data-t="q1">Avvalgi bosh ekranimga qaytsam bo‘ladimi?</summary><p data-t="a1q">Ha. Telefon sozlamalaridagi «Standart ilovalar» bo‘limida istalgan payt avvalgi bosh ekranni tanlaysiz.</p></details>
+        <details><summary data-t="q2">Muhim qo‘ng‘iroqni o‘tkazib yubormaymanmi?</summary><p data-t="a2q">Qo‘ng‘iroqlar va budilnik hech qachon to‘silmaydi. Bildirishnomalar faqat o‘zingiz tanlagan ilovalar uchun ushlab turiladi.</p></details>
+        <details><summary data-t="q3">Qaysi telefonlarda ishlaydi?</summary><p data-t="a3q">Android 8.0 va undan yangi telefonlarda. Samsung Galaxy’da alohida sinab ko‘rilgan. Rasm tekshiruvi uchun Android 11 kerak.</p></details>
+        <details><summary data-t="q4">Nega maxsus imkoniyatlar ruxsati so‘raladi?</summary><p data-t="a4q">Android hozir qaysi ilova ochiqligini boshqa yo‘l bilan bildirmaydi. Quiet bu ruxsatdan ilovalarni cheklash va, siz yoqsangiz, kattalar uchun sahifalarni yopish uchun foydalanadi. Yozayotgan matningizni va parollaringizni o‘qimaydi.</p></details>
+        <details><summary data-t="q5">Bola Quietni o‘chirib tashlay oladimi?</summary><p data-t="a5q">Qulf yopiq paytda yo‘q: o‘chirish oynasi, ilova sozlamalari, sana va vaqt sahifalari yopiq turadi. Xavfsiz rejim va zavod sozlamalarini yopish uchun telefonni kompyuter orqali bir marta sozlash kerak.</p></details>
+        <details><summary data-t="q6">Pro obunasini bekor qilsam nima bo‘ladi?</summary><p data-t="a6q">Sozlab qo‘ygan qoidalaringiz ishlayveradi. Faqat Pro’ga kiradigan yangi narsalarni qo‘sha olmaysiz.</p></details>
+      </div>
     </div>
   </section>
 
-  <section id="end">
+  <section class="end" id="end">
     <div class="wrap">
-      <div class="end-box">
-        <h2 data-t="end_h"></h2>
-        <p><span data-t="end_p"></span> <a href="mailto:test@example.com">test@example.com</a></p>
-        <span class="pill"><i></i><span data-t="status"></span></span>
-      </div>
+      <div class="ring rv" aria-hidden="true"></div>
+      <h2 class="rv" data-t="end_h">Telefonni qo‘yish osonroq bo‘lsin.</h2>
+      <p class="rv"><span data-t="end_p">Quiet tez orada Google Play’da chiqadi; havola shu sahifada paydo bo‘ladi. Savolingiz bo‘lsa, yozing:</span> <a href="mailto:test@example.com">test@example.com</a></p>
+      <span class="status rv"><i></i><span data-t="status">Tez orada Google Play’da</span></span>
     </div>
   </section>
 </main>
 
 <footer>
   <div class="wrap">
-    <span>© 2026 Quiet</span>
-    <span class="made sp"><svg class="spark" viewBox="0 0 24 24"><path fill="url(#sg)" d="M12 2l2.1 6.2a3 3 0 0 0 1.7 1.7L22 12l-6.2 2.1a3 3 0 0 0-1.7 1.7L12 22l-2.1-6.2a3 3 0 0 0-1.7-1.7L2 12l6.2-2.1a3 3 0 0 0 1.7-1.7z"/></svg><span data-t="foot_ai"></span></span>
-    <a id="privacy-link-foot" href="https://encrypster.github.io/quiet-privacy/uz/" data-t="foot_privacy"></a>
-    <a href="mailto:test@example.com" data-t="foot_contact"></a>
+    <span class="sp">© 2026 Quiet</span>
+    <a id="privacy-link-foot" href="https://encrypster.github.io/quiet-privacy/uz/" data-t="foot_privacy">Maxfiylik siyosati</a>
+    <a href="mailto:test@example.com" data-t="foot_contact">Aloqa</a>
   </div>
 </footer>
 
 <script>
-const T = {
-uz: {
-  title: "Quiet — Android uchun sokin bosh ekran",
-  nav_how: "Qanday ishlaydi", nav_parents: "Ota-onalar uchun", nav_pricing: "Narxlar", nav_faq: "Savollar",
-  kicker: "Android uchun bosh ekran",
-  h1: "Telefonni ochasiz, ishingizni qilasiz, qo‘yasiz.",
-  lead: "Quiet bosh ekranni oddiy matnli ro‘yxatga aylantiradi va vaqtingizni oladigan ilovalar oldiga kichik to‘siq qo‘yadi. Nimani cheklashni o‘zingiz hal qilasiz.",
-  status: "Tez orada Google Play’da", more: "Qanday ishlashini ko‘rish",
-  fact1: "Android 8 va undan yangi", fact2: "O‘zbek, rus va ingliz tillarida", fact3: "Ro‘yxatdan o‘tish shart emas",
-  m_date: "Payshanba, 19-noyabr", m_today: "Bugun telefonda 38 daqiqa",
-  m_a1: "Telefon", m_a2: "Xabarlar", m_a3: "Kamera", m_a4: "Xarita", m_a5: "Taqvim",
-  m_open: "Instagram ochilmoqda", m_wait: "8 soniya kuting.", m_used: "Bugun 3 marta, 24 daqiqa.", m_why: "Nima uchun ochyapsiz?",
-  m_home: "Uyga qaytish", m_c5: "5 daqiqaga davom etish", m_c10: "10 daqiqaga davom etish", m_c20: "20 daqiqaga davom etish",
-  m_focus: "Ish · 25 daqiqa qoldi", m_f1: "Pochta", m_f2: "Taqvim", m_f3: "Hujjatlar",
-  m_toast: "Quiet yopdi: kattalar uchun kontent.",
-  how_h: "O‘rnatganingizdan keyin uch narsa o‘zgaradi",
-  how_p: "Quiet hech narsani o‘zicha bloklamaydi. Qaysi ilovani cheklashni o‘zingiz tanlaysiz, xohlagan payt o‘zgartirasiz.",
-  r1_h: "Bosh ekranda sakkizta nom qoladi",
-  r1_p: "Belgilar, qizil nuqtalar va vidjetlar o‘rnida soat, sana va o‘zingiz tanlagan sakkiztagacha ilova turadi. Qolganlari bir surishda ochiladi yoki nomining ikki-uch harfi bilan topiladi.",
-  r2_h: "Odat bo‘lib qolgan ilovalar darhol ochilmaydi",
-  r2_p: "Masalan, Instagramni bosdingiz. Quiet o‘n soniya kuttiradi va nima uchun ochayotganingizni so‘raydi. Davom etsangiz, 5, 10 yoki 20 daqiqani tanlaysiz; vaqt tugagach, ilova yopiladi. Kunlik limit qo‘yish ham mumkin.",
-  r3_h: "Ish paytida ekranda faqat ish turadi",
-  r3_p: "Fokus seansini boshlaganingizda bosh ekranda shu ish uchun tanlagan ilovalaringiz qoladi, qolganlari seans tugaguncha ochilmaydi. Bildirishnomalar yig‘ilib turadi, qo‘ng‘iroqlar esa har doim o‘tadi.",
-  also_h: "Yana nimalar bor",
-  d1_h: "Shorts va Reels", d1_p: "YouTube va Instagramning o‘zi ishlayveradi. Qisqa videolar tasmasi ochilsa, Quiet orqaga qaytaradi. Kerak bo‘lgan kuni uni bir muddatga ochib qo‘yish mumkin.",
-  d2_h: "Bildirishnomalar", d2_p: "Tanlangan ilovalarning bildirishnomalari sizni chalg‘itmay yig‘ilib turadi. Ularni o‘zingizga qulay paytda bitta ro‘yxatda o‘qiysiz.",
-  d3_h: "Ekran vaqti", d3_p: "Bugun, oxirgi yetti kun va sakkiz hafta bo‘yicha: qaysi ilovaga qancha vaqt ketgani va telefonni necha marta ochganingiz.",
-  d4_h: "Jadval", d4_p: "Ilovalarni kunning maʼlum soatlarida yopib qo‘yish mumkin. Masalan, ijtimoiy tarmoqlar 23:00 dan 07:00 gacha ochilmaydi.",
-  d5_h: "Qatʼiy rejim", d5_p: "O‘zingizga ishonmagan kunlar uchun. Seansni muddatidan oldin tugatib ham, qoidalarni yumshatib ham bo‘lmaydi.",
-  d6_h: "Kulrang ekran", d6_p: "Rangsiz ekran o‘ziga kamroq tortadi. Buni yoqish uchun telefonni bir marta kompyuterga ulash kerak bo‘ladi.",
-  par_h: "Farzandingizning telefoni uchun",
-  par_p: "Quietni bolaning telefoniga o‘rnatib, sozlamalarni PIN-kod bilan yopib qo‘yish mumkin. Bu qism dastlab o‘z oilamiz uchun yozilgan, shuning uchun nimani uddalashini ham, nimani uddalay olmasligini ham ochiq aytamiz.",
-  can_h: "Nima qiladi",
-  can1_h: "Qoidalarni PIN-kod bilan yopadi", can1_p: "Qulf yopiq paytda limitlarni yumshatib ham, Quietni o‘chirib ham bo‘lmaydi.",
-  can2_h: "Kattalar uchun sahifalarni yopadi", can2_p: "Telegram, brauzer va ijtimoiy tarmoqlarda ekrandagi so‘zlarni, yoqilgan bo‘lsa rasmlarni ham tekshiradi. Tekshiruv telefonning o‘zida o‘tadi.",
-  can3_h: "Begona Telegram botlarini ochtirmaydi", can3_p: "Faqat o‘zingiz ro‘yxatga qo‘shgan botlar ochiladi.",
-  can4_h: "Sizga xabar beradi", can4_p: "Xohlasangiz, biror sahifa yopilganda Telegramingizga yozadi: qaysi ilova, soat nechada va nima sababdan.",
-  cant_h: "Nima qilmaydi",
-  cant1_h: "Hamma narsani ushlay olmaydi", cant1_p: "Buni hech bir filtr uddalamaydi. Family Link kabi vositalarni o‘chirmang, Quiet ular bilan birga ishlaydi.",
-  cant2_h: "Yozishmalarni o‘qimaydi", cant2_p: "Sizga ekrandagi matn ham, rasm ham yuborilmaydi. Faqat ilova nomi, vaqt va sabab.",
-  cant3_h: "Yashirin ishlamaydi", cant3_p: "Xabar yuborish yoqilgan bo‘lsa, bolaning telefonida bu haqda doimiy bildirishnoma turadi.",
-  cant4_h: "Xavfsiz rejimni o‘zi to‘sa olmaydi", cant4_p: "Telefon Xavfsiz rejimda yoqilsa, Quiet ishlamaydi. Buni yopish uchun telefonni kompyuter orqali bir marta alohida sozlash kerak.",
-  pr_h: "Bepul va Pro",
-  pr_p: "Kundalik foydalanishga bepul qismi yetadi. Pro muddati tugasa ham, sozlab qo‘ygan narsalaringiz ishlashda davom etadi.",
-  t_what: "Imkoniyat", t_free: "Bepul",
-  t1: "Matnli bosh ekran va qidiruv", t2: "Qoidalar: kutish, limit, blok", t3: "Fokus profillari", t4: "Ekran vaqti tarixi", t5: "Bildirishnomalar filtri",
-  t6: "Shorts va Reelsni yopish", t7: "Qatʼiy rejim", t8: "Ota-ona qulfi va kontent tekshiruvi", t9: "Ota-onaga Telegram orqali xabar",
-  v_yes: "Bor", v_two: "2 ta", v_one: "1 ta", v_unl: "Cheksiz", v_7d: "7 kun", v_8w: "8 hafta",
-  pr_note: "Pro yillik obuna yoki bir martalik to‘lov bilan olinadi. Narxlar ilova chiqqanda Google Play’da ko‘rsatiladi.",
-  pv_h: "Maʼlumotlar telefonda qoladi",
-  pv_p1: "Quietda akkaunt, reklama va analitika yo‘q, serverimiz ham yo‘q. Sozlamalaringiz va foydalanish tarixi faqat telefoningizda saqlanadi; ilovani o‘chirsangiz, ular ham o‘chadi.",
-  pv_p2: "Bitta istisno bor: ota-ona o‘z Telegram botini ulasa, yopilgan ilovaning nomi va vaqti shu botga yuboriladi. Ilovalarni cheklash uchun Quiet Androidning maxsus imkoniyatlar xizmatidan foydalanadi; u nimani o‘qishi o‘rnatish paytida ko‘rsatiladi.",
-  pv_link: "Maxfiylik siyosatini to‘liq o‘qish",
-  q_h: "Savollar",
-  q1: "Avvalgi bosh ekranimga qaytsam bo‘ladimi?",
-  a1: "Ha. Telefon sozlamalaridagi “Standart ilovalar” bo‘limida istalgan payt avvalgi bosh ekranni tanlaysiz. Quietni o‘chirsangiz, hammasi o‘z holiga qaytadi.",
-  q2: "Muhim qo‘ng‘iroq yoki xabarni o‘tkazib yubormaymanmi?",
-  a2: "Qo‘ng‘iroqlar va budilnik hech qachon to‘silmaydi. Bildirishnomalar faqat o‘zingiz tanlagan ilovalar uchun ushlab turiladi.",
-  q3: "Qaysi telefonlarda ishlaydi?",
-  a3: "Android 8.0 va undan yangi telefonlarda. Samsung Galaxy’da alohida sinab ko‘rilgan. Rasm tekshiruvi uchun Android 11 kerak.",
-  q4: "Nega maxsus imkoniyatlar ruxsati so‘raladi?",
-  a4: "Android ilovaga hozir qaysi ilova ochiqligini boshqa yo‘l bilan bildirmaydi. Quiet bu ruxsatdan ilovalarni cheklash va, siz yoqsangiz, kattalar uchun sahifalarni yopish uchun foydalanadi. Yozayotgan matningizni va parollaringizni o‘qimaydi.",
-  q5: "Bola Quietni o‘chirib tashlay oladimi?",
-  a5: "Qulf yopiq paytda yo‘q: o‘chirish oynasi, ilova sozlamalari, sana va vaqt sahifalari yopiq turadi. Xavfsiz rejim va zavod sozlamalariga qaytarishni ham yopish uchun telefonni kompyuter orqali bir marta sozlash kerak.",
-  q6: "Pro obunasini bekor qilsam nima bo‘ladi?",
-  a6: "Sozlab qo‘ygan qoidalaringiz ishlayveradi. Faqat Pro’ga kiradigan yangi narsalarni qo‘sha olmaysiz.",
-  end_h: "Quiet tez orada Google Play’da chiqadi",
-  end_p: "Chiqqan kuni havola shu sahifada paydo bo‘ladi. Savolingiz bo‘lsa, yozing:",
-  foot_privacy: "Maxfiylik siyosati", foot_contact: "Aloqa"
-},
-ru: {
+/* The Uzbek words are in the page itself; they are read from it once, so the page reads well without scripts. */
+const T = { uz: {}, ru: {
   title: "Quiet — спокойный домашний экран для Android",
-  nav_how: "Как это работает", nav_parents: "Родителям", nav_pricing: "Цены", nav_faq: "Вопросы",
+  nav_how: "Как это работает", nav_family: "Для семьи", nav_price: "Цена", nav_faq: "Вопросы",
   kicker: "Домашний экран для Android",
-  h1: "Взяли телефон, сделали дело, отложили.",
-  lead: "Quiet превращает домашний экран в простой текстовый список и ставит небольшую преграду перед приложениями, которые съедают время. Что ограничивать, решаете вы.",
+  h1: "Сделайте нужное. Остальное время — ваше.",
+  lead: "Quiet превращает домашний экран в простой текстовый список и ставит небольшую паузу перед приложениями, которые съедают время. Что ограничивать, решаете вы.",
   status: "Скоро в Google Play", more: "Посмотреть, как это работает",
-  fact1: "Android 8 и новее", fact2: "На узбекском, русском и английском", fact3: "Регистрация не нужна",
-  m_date: "Четверг, 19 ноября", m_today: "Сегодня в телефоне 38 минут",
-  m_a1: "Телефон", m_a2: "Сообщения", m_a3: "Камера", m_a4: "Карты", m_a5: "Календарь",
-  m_open: "Открывается Instagram", m_wait: "Подождите 8 секунд.", m_used: "Сегодня 3 раза, 24 минуты.", m_why: "Зачем вы его открываете?",
-  m_home: "На главный экран", m_c5: "Продолжить на 5 минут", m_c10: "Продолжить на 10 минут", m_c20: "Продолжить на 20 минут",
-  m_focus: "Работа · осталось 25 мин", m_f1: "Почта", m_f2: "Календарь", m_f3: "Документы",
-  m_toast: "Закрыто Quiet: контент для взрослых.",
-  how_h: "После установки меняются три вещи",
-  how_p: "Сам Quiet ничего не блокирует. Вы выбираете, какие приложения ограничить, и в любой момент можете это изменить.",
-  r1_h: "На главном экране остаётся восемь названий",
-  r1_p: "Вместо иконок, красных точек и виджетов — время, дата и до восьми приложений, которые вы выбрали сами. Остальные открываются одним свайпом или находятся по двум-трём буквам названия.",
-  r2_h: "Привычные приложения открываются не сразу",
-  r2_p: "Допустим, вы нажали на Instagram. Quiet просит подождать десять секунд и спрашивает, зачем вы его открываете. Если продолжаете, выбираете 5, 10 или 20 минут; когда время выйдет, приложение закроется. Можно задать и дневной лимит.",
-  r3_h: "Во время работы на экране только работа",
-  r3_p: "Когда вы запускаете сеанс фокуса, на главном экране остаются приложения, выбранные для этого дела, а остальные не открываются до конца сеанса. Уведомления копятся в стороне, звонки проходят всегда.",
-  also_h: "Что ещё есть",
-  d1_h: "Shorts и Reels", d1_p: "Сами YouTube и Instagram работают как обычно. Если открывается лента коротких видео, Quiet возвращает назад. В день, когда она нужна, её можно открыть на время.",
-  d2_h: "Уведомления", d2_p: "Уведомления выбранных приложений не отвлекают, а собираются в один список. Читаете их, когда удобно вам.",
-  d3_h: "Экранное время", d3_p: "За сегодня, за семь дней и за восемь недель: сколько времени ушло на каждое приложение и сколько раз вы разблокировали телефон.",
-  d4_h: "Расписание", d4_p: "Приложения можно закрывать в определённые часы. Например, соцсети не открываются с 23:00 до 07:00.",
-  d5_h: "Строгий режим", d5_p: "Для дней, когда себе не доверяешь. Сеанс нельзя закончить раньше времени, правила нельзя ослабить.",
-  d6_h: "Серый экран", d6_p: "Экран без цвета меньше притягивает. Чтобы его включить, телефон нужно один раз подключить к компьютеру.",
-  par_h: "Для телефона ребёнка",
-  par_p: "Quiet можно установить на телефон ребёнка и закрыть настройки PIN-кодом. Эту часть мы сначала писали для своей семьи, поэтому прямо говорим и о том, что она умеет, и о том, чего не умеет.",
-  can_h: "Что делает",
+  fact1: "Android 8 и новее", fact2: "На узбекском, русском и английском", fact3: "Аккаунт не нужен",
+  today: "Сегодня в телефоне 38 минут", search: "Поиск", hero_cap: "Часы показывают ваше текущее время",
+  a1: "Телефон", a2: "Сообщения", a3: "Камера", a4: "Карты", a5: "Telegram", a6: "Календарь",
+  how_k: "01 — Как это работает", how_h: "После установки меняются три вещи",
+  how_p: "Quiet ничего не блокирует сам. Какие приложения ограничивать, выбираете вы и меняете, когда захотите.",
+  s1_h: "На домашнем экране остаётся восемь названий", s1_p: "Вместо значков, красных точек и виджетов — часы, дата и до восьми приложений, которые вы выбрали сами. Остальные открываются одним свайпом или находятся по двум-трём буквам названия.",
+  before: "Обычный экран", after: "Quiet",
+  s2_h: "Привычные приложения открываются не сразу", s2_p: "Когда вы нажимаете на выбранное приложение, Quiet просит подождать десять секунд и спрашивает, зачем вы его открываете. Если продолжаете, выбираете 5, 10 или 20 минут; когда время выйдет, приложение закроется. Можно поставить и дневной лимит.",
+  w_note: "Пауза рядом настоящая: подождите десять секунд.",
+  w_open: "Открывается Instagram", w_why: "Зачем вы его открываете?", w_home: "Вернуться домой",
+  s3_h: "Во время работы на экране только работа", s3_p: "Во время фокус-сессии на домашнем экране остаются приложения, выбранные для этого дела, остальные не откроются до её конца. Уведомления копятся, а звонки проходят всегда.",
+  f_tag: "Работа · осталось 25 мин", f1: "Почта", f2: "Календарь", f3: "Документы", f_note: "Звонки проходят · 14 уведомлений ждут",
+  more_k: "02 — Ещё", more_h: "Что ещё помогает откладывать телефон",
+  c1_h: "Shorts и Reels", c1_p: "YouTube и Instagram работают, а лента коротких видео закрывается. В день, когда она нужна, её можно открыть на время.",
+  c2_h: "Уведомления", c2_p: "Уведомления выбранных приложений тихо копятся и читаются одним списком, когда вам удобно.",
+  c3_h: "Экранное время", c3_p: "Сегодня, последние семь дней и восемь недель: сколько времени ушло на каждое приложение и сколько раз вы брали телефон.",
+  c4_h: "Расписание", c4_p: "Приложения можно закрывать в определённые часы. Например, соцсети не открываются с 23:00 до 07:00.",
+  c5_h: "Строгий режим", c5_p: "Для дней, когда себе не доверяешь: сессию нельзя закончить раньше срока, а правила — ослабить.",
+  c6_h: "Серый экран", c6_p: "Экран без цвета меньше затягивает. Чтобы включить его, телефон нужно один раз подключить к компьютеру.",
+  fam_k: "03 — Для семьи", fam_h: "Для телефона вашего ребёнка",
+  fam_p: "Quiet можно установить на телефон ребёнка и закрыть настройки PIN-кодом. Мы прямо говорим и о том, что он умеет, и о том, чего не умеет.",
+  can_h: "Что делает", cant_h: "Чего не делает",
   can1_h: "Закрывает правила PIN-кодом", can1_p: "Пока замок закрыт, нельзя ни ослабить лимиты, ни удалить Quiet.",
-  can2_h: "Закрывает страницы для взрослых", can2_p: "В Telegram, браузере и соцсетях проверяет слова на экране, а если включено, и изображения. Проверка идёт на самом телефоне.",
-  can3_h: "Не открывает посторонних Telegram-ботов", can3_p: "Открываются только боты, которых вы сами добавили в список.",
-  can4_h: "Сообщает вам", can4_p: "Если хотите, пишет в ваш Telegram, когда что-то закрыто: какое приложение, во сколько и по какой причине.",
-  cant_h: "Чего не делает",
-  cant1_h: "Не ловит всё подряд", cant1_p: "Этого не умеет ни один фильтр. Не отключайте Family Link и похожие средства: Quiet работает вместе с ними.",
-  cant2_h: "Не читает переписку", cant2_p: "Вам не отправляются ни текст, ни изображения с экрана. Только название приложения, время и причина.",
-  cant3_h: "Не работает скрытно", cant3_p: "Если отправка сообщений включена, на телефоне ребёнка постоянно висит уведомление об этом.",
-  cant4_h: "Сам не закрывает безопасный режим", cant4_p: "В безопасном режиме Quiet не работает. Чтобы закрыть и этот путь, телефон нужно один раз настроить с компьютера.",
-  pr_h: "Бесплатно и Pro",
-  pr_p: "Для повседневного использования хватает бесплатной части. Когда Pro закончится, всё, что вы настроили, продолжит работать.",
-  t_what: "Возможность", t_free: "Бесплатно",
-  t1: "Текстовый домашний экран и поиск", t2: "Правила: ожидание, лимит, блокировка", t3: "Профили фокуса", t4: "История экранного времени", t5: "Фильтр уведомлений",
-  t6: "Закрытие Shorts и Reels", t7: "Строгий режим", t8: "Родительский замок и проверка контента", t9: "Сообщения родителю в Telegram",
-  v_yes: "Есть", v_two: "2", v_one: "1", v_unl: "Без лимита", v_7d: "7 дней", v_8w: "8 недель",
-  pr_note: "Pro можно оформить как годовую подписку или купить один раз. Цены появятся в Google Play вместе с приложением.",
-  pv_h: "Данные остаются в телефоне",
-  pv_p1: "В Quiet нет аккаунта, рекламы и аналитики, и сервера у нас тоже нет. Настройки и история использования хранятся только на вашем телефоне; удалите приложение, и они исчезнут вместе с ним.",
-  pv_p2: "Исключение одно: если родитель подключает своего Telegram-бота, этому боту отправляются название закрытого приложения и время. Чтобы ограничивать приложения, Quiet использует службу специальных возможностей Android; что именно она читает, показано при установке.",
-  pv_link: "Прочитать политику конфиденциальности целиком",
-  q_h: "Вопросы",
-  q1: "Можно ли вернуть прежний домашний экран?",
-  a1: "Да. В настройках телефона, в разделе «Приложения по умолчанию», в любой момент выбирается прежний экран. Если удалить Quiet, всё вернётся как было.",
-  q2: "Я не пропущу важный звонок или сообщение?",
-  a2: "Звонки и будильник не блокируются никогда. Уведомления откладываются только у тех приложений, которые вы сами выбрали.",
-  q3: "На каких телефонах работает?",
-  a3: "На телефонах с Android 8.0 и новее. Отдельно проверено на Samsung Galaxy. Для проверки изображений нужен Android 11.",
-  q4: "Зачем нужен доступ к специальным возможностям?",
-  a4: "Иначе Android не сообщает приложению, какое приложение сейчас открыто. Quiet использует этот доступ, чтобы ограничивать приложения и, если вы включите, закрывать страницы для взрослых. То, что вы печатаете, и пароли он не читает.",
-  q5: "Может ли ребёнок удалить Quiet?",
-  a5: "Пока замок закрыт, нет: окно удаления, настройки приложения, страницы даты и времени остаются закрытыми. Чтобы закрыть ещё и безопасный режим со сбросом настроек, телефон нужно один раз настроить с компьютера.",
-  q6: "Что будет, если отменить Pro?",
-  a6: "Настроенные правила продолжат работать. Нельзя будет только добавлять новое из того, что входит в Pro.",
-  end_h: "Quiet скоро выйдет в Google Play",
-  end_p: "В день выхода ссылка появится на этой странице. Если есть вопрос, напишите:",
-  foot_privacy: "Политика конфиденциальности", foot_contact: "Контакты"
-},
-en: {
+  can2_h: "Закрывает страницы для взрослых", can2_p: "В Telegram, браузерах и соцсетях проверяет слова на экране, а если включено, то и изображения.",
+  can3_h: "Не открывает посторонних Telegram-ботов", can3_p: "Открываются только боты, которых вы добавили в список.",
+  can4_h: "Сообщает вам", can4_p: "Если хотите, при закрытии страницы пишет вам в Telegram: какое приложение, во сколько и по какой причине.",
+  cant1_h: "Не ловит всё подряд", cant1_p: "Этого не умеет ни один фильтр. Не отключайте Family Link и похожие средства — Quiet работает вместе с ними.",
+  cant2_h: "Не читает переписку", cant2_p: "Вам не отправляется ни текст с экрана, ни изображения. Только название приложения, время и причина.",
+  cant3_h: "Не работает скрытно", cant3_p: "Если отправка сообщений включена, на телефоне ребёнка об этом постоянно висит уведомление.",
+  cant4_h: "Не закрывает безопасный режим сам", cant4_p: "Для этого телефон нужно один раз отдельно настроить через компьютер.",
+  ai_k: "04 — ИИ в телефоне", ai_h: "Изображение проверяет сам телефон, а не облако",
+  ai_p: "Внутри Quiet есть небольшая нейросеть, распознающая изображения. Если проверка изображений включена, она оценивает картинку на экране прямо в телефоне и закрывает страницу, если видит контент для взрослых.",
+  ai1_k: "Вход", ai1_b: "Изображение на экране", ai1_s: "Пока открыт Telegram, браузер или соцсеть",
+  ai2_k: "В телефоне", ai2_b: "Нейросеть оценивает", ai2_s: "Снимок сразу удаляется и нигде не хранится",
+  ai3_k: "Результат", ai3_b: "Страница закрывается", ai3_s: "Если хотите, родителю уходит короткое сообщение",
+  ai_f1: "Работает без интернета", ai_f2: "Android 11 и новее", ai_f3: "Входит в Pro",
+  pv_k: "05 — Приватность", pv1: "Нет аккаунта.", pv2: "Нет рекламы.", pv3: "Нет сервера.",
+  pv_p: "Настройки и история использования хранятся только в вашем телефоне; удалите приложение — удалятся и они. Одно исключение: если родитель подключит своего Telegram-бота, этому боту отправляются название приложения и время закрытой страницы.",
+  pv_link: "Прочитать политику конфиденциальности →",
+  pr_k: "06 — Цена", pr_h: "Бесплатно и Pro", pr_p: "Для повседневного использования хватает бесплатной части. Когда Pro заканчивается, всё, что вы уже настроили, продолжает работать.",
+  free_t: "Бесплатно", free_s: "Всегда", pro_s: "Годовая подписка",
+  fr1: "Текстовый домашний экран и поиск", fr2: "Два правила: пауза, лимит или блок", fr3: "Один профиль фокуса", fr4: "Фильтр уведомлений", fr5: "Экранное время за 7 дней", fr6: "Расписание и серый экран",
+  p1: "Всё из бесплатной версии", p2: "Без ограничений на правила и профили", p3: "Закрытие Shorts и Reels", p4: "Строгий режим", p5: "Экранное время за 8 недель", p6: "Родительский замок и проверка контента", p7: "Проверка изображений ИИ в телефоне", p8: "Сообщения родителю в Telegram",
+  pr_note: "Цена появится в Google Play, когда приложение выйдет.",
+  faq_k: "07 — Вопросы", faq_h: "Частые вопросы",
+  q1: "Можно вернуть прежний домашний экран?", a1q: "Да. В настройках телефона, в разделе «Приложения по умолчанию», в любой момент выбираете прежний домашний экран.",
+  q2: "Не пропущу ли я важный звонок?", a2q: "Звонки и будильник не блокируются никогда. Уведомления задерживаются только для приложений, которые вы выбрали сами.",
+  q3: "На каких телефонах работает?", a3q: "На Android 8.0 и новее. Отдельно проверено на Samsung Galaxy. Для проверки изображений нужен Android 11.",
+  q4: "Зачем нужно разрешение специальных возможностей?", a4q: "Android не сообщает приложению иным способом, какое приложение сейчас открыто. Quiet использует это разрешение, чтобы ограничивать приложения и, если вы включите, закрывать страницы для взрослых. Ваш набираемый текст и пароли он не читает.",
+  q5: "Может ли ребёнок удалить Quiet?", a5q: "Пока замок закрыт — нет: окно удаления, настройки приложения, страницы даты и времени закрыты. Чтобы закрыть безопасный режим и сброс к заводским настройкам, телефон нужно один раз настроить через компьютер.",
+  q6: "Что будет, если я отменю подписку Pro?", a6q: "Настроенные правила продолжат работать. Вы лишь не сможете добавлять новое, что входит в Pro.",
+  end_h: "Пусть телефон будет проще отложить.", end_p: "Quiet скоро выйдет в Google Play; ссылка появится на этой странице. Если есть вопрос, напишите:",
+  foot_privacy: "Политика конфиденциальности", foot_contact: "Связаться"
+}, en: {
   title: "Quiet — a calm home screen for Android",
-  nav_how: "How it works", nav_parents: "For parents", nav_pricing: "Pricing", nav_faq: "Questions",
+  nav_how: "How it works", nav_family: "For families", nav_price: "Price", nav_faq: "Questions",
   kicker: "A home screen for Android",
-  h1: "Pick up the phone, do the thing, put it down.",
-  lead: "Quiet turns your home screen into a plain list of words and puts a small obstacle in front of the apps that eat your time. What gets limited is up to you.",
+  h1: "Do what you came for. The rest of the time is yours.",
+  lead: "Quiet turns your home screen into a plain list of words and puts a short pause in front of the apps that eat your time. You decide what to limit.",
   status: "Coming soon to Google Play", more: "See how it works",
-  fact1: "Android 8 and newer", fact2: "In Uzbek, Russian and English", fact3: "No sign-up",
-  m_date: "Thursday, 19 November", m_today: "38 minutes on the phone today",
-  m_a1: "Phone", m_a2: "Messages", m_a3: "Camera", m_a4: "Maps", m_a5: "Calendar",
-  m_open: "Opening Instagram", m_wait: "Wait 8 seconds.", m_used: "3 times today, 24 minutes.", m_why: "What are you opening this for?",
-  m_home: "Go home", m_c5: "Continue for 5 minutes", m_c10: "Continue for 10 minutes", m_c20: "Continue for 20 minutes",
-  m_focus: "Work · 25 min left", m_f1: "Mail", m_f2: "Calendar", m_f3: "Docs",
-  m_toast: "Closed by Quiet: adult content.",
-  how_h: "Three things change once it is installed",
-  how_p: "Quiet blocks nothing on its own. You choose which apps to limit, and you can change your mind whenever you like.",
-  r1_h: "Eight names are left on the home screen",
-  r1_p: "Where the icons, red dots and widgets were, there is the time, the date and up to eight apps you picked yourself. Everything else is one swipe away, or two or three letters of its name.",
-  r2_h: "The apps you open out of habit stop opening at once",
-  r2_p: "Say you tap Instagram. Quiet makes you wait ten seconds and asks what you are opening it for. If you carry on, you pick 5, 10 or 20 minutes, and the app closes when the time is up. You can set a daily limit as well.",
-  r3_h: "While you work, only work is on the screen",
-  r3_p: "Start a focus session and the home screen keeps the apps you chose for that job; the rest will not open until the session ends. Notifications wait in a list, and calls always come through.",
-  also_h: "What else is in it",
-  d1_h: "Shorts and Reels", d1_p: "YouTube and Instagram themselves keep working. When the feed of short videos opens, Quiet steps back out of it. On a day you need it, you can open it for a while.",
-  d2_h: "Notifications", d2_p: "Notifications from the apps you choose collect in one list instead of interrupting you. You read them when it suits you.",
-  d3_h: "Screen time", d3_p: "For today, the last seven days and eight weeks: how long each app took and how many times you unlocked the phone.",
-  d4_h: "Schedules", d4_p: "Apps can be closed at set hours. Social apps that will not open between 23:00 and 07:00, for instance.",
-  d5_h: "Strict mode", d5_p: "For the days you do not trust yourself. A session cannot be ended early and the rules cannot be loosened.",
-  d6_h: "Grayscale", d6_p: "A screen without colour pulls at you less. Switching it on takes one connection to a computer.",
-  par_h: "For your child's phone",
-  par_p: "You can install Quiet on a child's phone and close its settings with a PIN. We wrote this part for our own family first, so we would rather be plain about what it does and what it does not.",
-  can_h: "What it does",
-  can1_h: "Closes the rules with a PIN", can1_p: "While it is locked, the limits cannot be loosened and Quiet cannot be removed.",
-  can2_h: "Closes pages meant for adults", can2_p: "In Telegram, the browser and social apps it checks the words on screen and, if you turn that on, the pictures. The checking happens on the phone.",
-  can3_h: "Keeps unknown Telegram bots shut", can3_p: "Only the bots you put on the list will open.",
-  can4_h: "Lets you know", can4_p: "If you want, it writes to your Telegram when something is closed: which app, at what time and why.",
-  cant_h: "What it does not do",
-  cant1_h: "It does not catch everything", cant1_p: "No filter does. Keep Family Link and similar tools on: Quiet works alongside them.",
-  cant2_h: "It does not read conversations", cant2_p: "No text or picture from the screen is sent to you. Only the app's name, the time and the reason.",
-  cant3_h: "It does not hide", cant3_p: "While messages to you are on, the child's phone shows a notification that says so.",
-  cant4_h: "It cannot stop Safe Mode by itself", cant4_p: "Quiet does not run in Safe Mode. Closing that way out takes a one-time setup from a computer.",
-  pr_h: "Free and Pro",
-  pr_p: "The free part is enough for everyday use. When Pro ends, whatever you set up keeps working.",
-  t_what: "Feature", t_free: "Free",
-  t1: "Text home screen and search", t2: "Rules: wait, limit, block", t3: "Focus profiles", t4: "Screen-time history", t5: "Notification filter",
-  t6: "Closing Shorts and Reels", t7: "Strict mode", t8: "Parent lock and content checks", t9: "Messages to the parent in Telegram",
-  v_yes: "Yes", v_two: "2", v_one: "1", v_unl: "Unlimited", v_7d: "7 days", v_8w: "8 weeks",
-  pr_note: "Pro is a yearly subscription or a one-time purchase. Prices will be shown on Google Play when the app is out.",
-  pv_h: "Your data stays on the phone",
-  pv_p1: "Quiet has no account, no ads and no analytics, and we run no server. Your settings and usage history are kept on your phone only; uninstall the app and they go with it.",
-  pv_p2: "There is one exception: when a parent connects their own Telegram bot, the name of a closed app and the time are sent to that bot. To limit apps, Quiet uses Android's accessibility service; what it reads is shown during setup.",
-  pv_link: "Read the full privacy policy",
-  q_h: "Questions",
-  q1: "Can I go back to my old home screen?",
-  a1: "Yes. Under “Default apps” in the phone's settings you can pick the old one at any time. Uninstall Quiet and everything is as it was.",
-  q2: "Will I miss an important call or message?",
-  a2: "Calls and alarms are never blocked. Notifications are held only for the apps you chose.",
-  q3: "Which phones does it run on?",
-  a3: "Phones with Android 8.0 or newer. It has been tested separately on Samsung Galaxy. The picture check needs Android 11.",
-  q4: "Why does it ask for accessibility access?",
-  a4: "Android gives an app no other way to know which app is open. Quiet uses the access to limit apps and, if you turn it on, to close pages meant for adults. It does not read what you type or your passwords.",
-  q5: "Can a child uninstall Quiet?",
-  a5: "Not while it is locked: the uninstall dialog, the app's settings and the date and time pages stay closed. Closing Safe Mode and factory reset as well takes a one-time setup from a computer.",
-  q6: "What happens if I cancel Pro?",
-  a6: "The rules you set up keep working. You just cannot add new things that belong to Pro.",
-  end_h: "Quiet is coming to Google Play soon",
-  end_p: "The link will appear on this page the day it is out. If you have a question, write to",
+  fact1: "Android 8 and newer", fact2: "In Uzbek, Russian and English", fact3: "No account needed",
+  today: "38 minutes on the phone today", search: "Search", hero_cap: "The clock shows your own time",
+  a1: "Phone", a2: "Messages", a3: "Camera", a4: "Maps", a5: "Telegram", a6: "Calendar",
+  how_k: "01 — How it works", how_h: "Three things change once it is installed",
+  how_p: "Quiet blocks nothing on its own. You choose which apps to limit and change it whenever you like.",
+  s1_h: "Eight names on the home screen", s1_p: "Instead of icons, red dots and widgets: the time, the date and up to eight apps you picked yourself. Everything else is one swipe away, or two or three letters of its name.",
+  before: "A usual screen", after: "Quiet",
+  s2_h: "Habit apps no longer open at once", s2_p: "When you tap an app you chose, Quiet asks you to wait ten seconds and asks why you are opening it. If you go on, you pick 5, 10 or 20 minutes; when the time is up, the app closes. A daily limit is there too.",
+  w_note: "The pause next to this is real: wait ten seconds.",
+  w_open: "Opening Instagram", w_why: "Why are you opening it?", w_home: "Go back home",
+  s3_h: "At work, only work is on the screen", s3_p: "During a focus session the home screen keeps the apps you chose for that work; the rest stay closed until it ends. Notifications wait, and calls always get through.",
+  f_tag: "Work · 25 min left", f1: "Mail", f2: "Calendar", f3: "Docs", f_note: "Calls get through · 14 notifications waiting",
+  more_k: "02 — More", more_h: "Other things that help you put the phone down",
+  c1_h: "Shorts and Reels", c1_p: "YouTube and Instagram keep working; the short video feed is closed. On a day you need it, you can open it for a while.",
+  c2_h: "Notifications", c2_p: "Notifications from the apps you choose wait quietly and are read as one list when it suits you.",
+  c3_h: "Screen time", c3_p: "Today, the last seven days and eight weeks: how much time each app took and how many times you picked up the phone.",
+  c4_h: "Schedule", c4_p: "Apps can be closed at certain hours. Social apps, say, do not open from 23:00 to 07:00.",
+  c5_h: "Strict mode", c5_p: "For the days you do not trust yourself: a session cannot be ended early and rules cannot be loosened.",
+  c6_h: "Grayscale", c6_p: "A screen without colour pulls less. Turning it on takes connecting the phone to a computer once.",
+  fam_k: "03 — For families", fam_h: "For your child’s phone",
+  fam_p: "Quiet can be installed on a child’s phone with its settings locked by a PIN. We say plainly what it can do, and what it cannot.",
+  can_h: "What it does", cant_h: "What it does not do",
+  can1_h: "Locks the rules with a PIN", can1_p: "While the lock is on, limits cannot be loosened and Quiet cannot be removed.",
+  can2_h: "Closes pages meant for adults", can2_p: "In Telegram, browsers and social apps it checks the words on screen, and pictures too when that is on.",
+  can3_h: "Keeps unknown Telegram bots closed", can3_p: "Only the bots you put on the list open.",
+  can4_h: "Lets you know", can4_p: "If you want, it messages your Telegram when a page is closed: which app, at what time and why.",
+  cant1_h: "It does not catch everything", cant1_p: "No filter does. Keep Family Link and the like switched on — Quiet works alongside them.",
+  cant2_h: "It does not read messages", cant2_p: "No text or pictures from the screen are sent to you. Only the app’s name, the time and the reason.",
+  cant3_h: "It does not hide", cant3_p: "When messages to the parent are on, the child’s phone shows a notification about it the whole time.",
+  cant4_h: "It cannot block safe mode on its own", cant4_p: "That takes setting the phone up once from a computer.",
+  ai_k: "04 — AI on the phone", ai_h: "Pictures are checked by the phone, not the cloud",
+  ai_p: "Quiet carries a small neural network that recognises images. With the picture check on, it judges the picture on screen right on the phone and closes the page when it sees adult content.",
+  ai1_k: "In", ai1_b: "The picture on screen", ai1_s: "While Telegram, a browser or a social app is open",
+  ai2_k: "On the phone", ai2_b: "A neural network judges it", ai2_s: "The picture is thrown away at once and never stored",
+  ai3_k: "Out", ai3_b: "The page is closed", ai3_s: "If you want, a short message goes to the parent",
+  ai_f1: "Works without internet", ai_f2: "Android 11 and newer", ai_f3: "Part of Pro",
+  pv_k: "05 — Privacy", pv1: "No account.", pv2: "No ads.", pv3: "No server.",
+  pv_p: "Your settings and history stay on your phone only; delete the app and they go with it. One exception: if a parent connects their own Telegram bot, the app name and time of a closed page are sent to that bot.",
+  pv_link: "Read the privacy policy →",
+  pr_k: "06 — Price", pr_h: "Free and Pro", pr_p: "The free part is enough for everyday use. When Pro ends, whatever you set up keeps working.",
+  free_t: "Free", free_s: "Always", pro_s: "Yearly subscription",
+  fr1: "Text home screen and search", fr2: "Two rules: pause, limit or block", fr3: "One focus profile", fr4: "Notification filter", fr5: "Screen time for 7 days", fr6: "Schedules and grayscale",
+  p1: "Everything in Free", p2: "Unlimited rules and focus profiles", p3: "Closing Shorts and Reels", p4: "Strict mode", p5: "Screen time for 8 weeks", p6: "Parent lock and content check", p7: "On-device AI picture check", p8: "Messages to the parent in Telegram",
+  pr_note: "The price will be shown on Google Play when the app is out.",
+  faq_k: "07 — Questions", faq_h: "Common questions",
+  q1: "Can I go back to my old home screen?", a1q: "Yes. In your phone’s settings, under Default apps, you can pick your old home screen at any time.",
+  q2: "Will I miss an important call?", a2q: "Calls and alarms are never blocked. Notifications are held only for the apps you chose yourself.",
+  q3: "Which phones does it work on?", a3q: "Android 8.0 and newer. It has been tested on Samsung Galaxy in particular. The picture check needs Android 11.",
+  q4: "Why does it ask for the accessibility permission?", a4q: "Android gives an app no other way to know which app is open. Quiet uses it to limit apps and, if you turn it on, to close pages meant for adults. It does not read what you type or your passwords.",
+  q5: "Can a child remove Quiet?", a5q: "Not while the lock is on: the uninstall dialog, the app’s settings and the date and time pages stay closed. Blocking safe mode and factory reset takes setting the phone up once from a computer.",
+  q6: "What happens if I cancel Pro?", a6q: "The rules you set up keep working. You just cannot add new things that are part of Pro.",
+  end_h: "Make the phone easier to put down.", end_p: "Quiet is coming to Google Play soon; the link will appear on this page. If you have a question, write to",
   foot_privacy: "Privacy policy", foot_contact: "Contact"
-}
+} };
+// What the scripts write themselves.
+const D = {
+  uz: { days: ["Yakshanba", "Dushanba", "Seshanba", "Chorshanba", "Payshanba", "Juma", "Shanba"], months: ["yanvar", "fevral", "mart", "aprel", "may", "iyun", "iyul", "avgust", "sentabr", "oktabr", "noyabr", "dekabr"],
+        q: "te", wait: "{n} soniya kuting", ready: "Endi tanlashingiz mumkin", min: "{n} daqiqa", home: "Yaxshi tanlov. Instagram yopiq qoldi.", go: "{n} daqiqadan keyin Instagram yopiladi." },
+  ru: { locale: "ru-RU", q: "ка", wait: "Подождите {n} с", ready: "Теперь можно выбрать", min: "{n} минут", home: "Хороший выбор. Instagram остался закрыт.", go: "Через {n} минут Instagram закроется." },
+  en: { locale: "en-GB", q: "ca", wait: "Wait {n} seconds", ready: "You can choose now", min: "{n} minutes", home: "Good call. Instagram stayed closed.", go: "Instagram closes in {n} minutes." }
 };
-
-
 let LANG = "uz";
+const $ = id => document.getElementById(id);
+const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const fill = (s, n) => s.replace("{n}", n);
+document.querySelectorAll("[data-t]").forEach(el => { if (!(el.dataset.t in T.uz)) T.uz[el.dataset.t] = el.textContent; });
+T.uz.title = document.title;
 
-// Short names for the four parts of the walkthrough.
-T.uz.tabs = ["Bosh ekran", "Kutish", "Fokus", "Himoya"];
-T.ru.tabs = ["Экран", "Пауза", "Фокус", "Защита"];
-T.en.tabs = ["Home", "Pause", "Focus", "Guard"];
+/* The time and date, as Quiet would show them. */
+function clock() {
+  const now = new Date(), d = D[LANG];
+  const hm = now.getHours() + ":" + String(now.getMinutes()).padStart(2, "0");
+  document.querySelectorAll("[data-clock]").forEach(el => { el.textContent = hm; });
+  let date;
+  if (LANG === "uz") date = d.days[now.getDay()] + ", " + now.getDate() + "-" + d.months[now.getMonth()];
+  else { const wd = now.toLocaleDateString(d.locale, { weekday: "long" }), dm = now.toLocaleDateString(d.locale, { day: "numeric", month: "long" }); date = wd.charAt(0).toUpperCase() + wd.slice(1) + ", " + dm; }
+  document.querySelectorAll("[data-date]").forEach(el => { el.textContent = date; });
+}
 
-// The AI part: what runs on the phone, and how the app was made.
-Object.assign(T.uz, {
-  nav_ai: "AI", ai_badge: "AI bilan yaratilgan · AI telefonda ishlaydi", ai_eyebrow: "Sun’iy intellekt",
-  ai_h: "AI bulutda emas, telefonning o‘zida ishlaydi",
-  ai_p: "Quiet ichida rasmlarni taniydigan neyron tarmoq bor. U ekrandagi rasmni telefonning o‘zida baholaydi va kattalar uchun kontentni ko‘rsa, sahifani yopadi.",
-  ai1_h: "Neyron tarmoq rasmga qaraydi", ai1_p: "So‘zlar yetarli bo‘lmagan joyda model rasmning o‘zini tekshiradi: kanal, bot yoki sayt nomi beozor bo‘lsa ham.",
-  ai2_h: "Internet kerak emas", ai2_p: "Model ilova ichida keladi va oflayn ishlaydi. Rasm ham, natija ham telefondan chiqmaydi.",
-  ai3_h: "AI bilan birga yozilgan", ai3_p: "Quiet kodi Claude AI bilan birga yozilgan va haqiqiy telefonda sinab ko‘rilgan. Buni yashirmaymiz.",
-  ai_note: "Rasm tekshiruvi Pro tarkibida, Android 11 va undan yangi telefonlarda ishlaydi.",
-  ai_scan: "AI tekshirmoqda…", ai_ok: "Xavfsiz", ai_hit: "18+ · 97%", ai_local: "Telefonda · oflayn", ai_close: "Sahifa yopiladi",
-  foot_ai: "Claude AI bilan yaratilgan"
-});
-Object.assign(T.ru, {
-  nav_ai: "ИИ", ai_badge: "Создано с ИИ · ИИ работает на телефоне", ai_eyebrow: "Искусственный интеллект",
-  ai_h: "ИИ работает не в облаке, а в самом телефоне",
-  ai_p: "Внутри Quiet есть нейросеть, которая распознаёт изображения. Она оценивает картинку на экране прямо в телефоне и закрывает страницу, если видит контент для взрослых.",
-  ai1_h: "Нейросеть смотрит на изображение", ai1_p: "Там, где слов недостаточно, модель проверяет саму картинку — даже если у канала, бота или сайта безобидное название.",
-  ai2_h: "Интернет не нужен", ai2_p: "Модель встроена в приложение и работает офлайн. Ни картинка, ни результат не покидают телефон.",
-  ai3_h: "Написано вместе с ИИ", ai3_p: "Код Quiet написан вместе с Claude AI и проверен на настоящем телефоне. Мы этого не скрываем.",
-  ai_note: "Проверка изображений входит в Pro и работает на Android 11 и новее.",
-  ai_scan: "ИИ проверяет…", ai_ok: "Безопасно", ai_hit: "18+ · 97%", ai_local: "На телефоне · офлайн", ai_close: "Страница закрывается",
-  foot_ai: "Создано с Claude AI"
-});
-Object.assign(T.en, {
-  nav_ai: "AI", ai_badge: "Built with AI · AI runs on the phone", ai_eyebrow: "Artificial intelligence",
-  ai_h: "The AI runs on the phone, not in the cloud",
-  ai_p: "Quiet carries a neural network that recognises images. It scores what is on the screen right on the phone and closes the page when it sees adult content.",
-  ai1_h: "A neural network looks at the picture", ai1_p: "Where words are not enough, the model checks the image itself, even when the channel, bot or site has a harmless name.",
-  ai2_h: "No internet needed", ai2_p: "The model ships inside the app and works offline. Neither the image nor the verdict leaves the phone.",
-  ai3_h: "Written together with AI", ai3_p: "Quiet’s code was written together with Claude AI and tested on a real phone. We do not hide that.",
-  ai_note: "The image check is part of Pro and needs Android 11 or newer.",
-  ai_scan: "AI is checking…", ai_ok: "Safe", ai_hit: "18+ · 97%", ai_local: "On device · offline", ai_close: "The page is closed",
-  foot_ai: "Built with Claude AI"
-});
-Object.assign(T.uz, { ai_s1: "model hajmi", ai_s2: "serverga so‘rov", ai_s3: "oflayn ishlaydi" });
-Object.assign(T.ru, { ai_s1: "размер модели", ai_s2: "запросов на сервер", ai_s3: "работает офлайн" });
-Object.assign(T.en, { ai_s1: "model size", ai_s2: "server requests", ai_s3: "works offline" });
-T.uz.tabs[3] = "AI himoya"; T.ru.tabs[3] = "ИИ-защита"; T.en.tabs[3] = "AI guard";
-
-/* ---- The phone's screens. One set of templates serves the walkthrough and the stills. ---- */
-const SCREENS = {
-  home:
-    '<div class="sc home"><div class="clock">9:41</div><div class="date" data-t="m_date"></div><div class="today" data-t="m_today"></div>' +
-    '<ul class="apps"><li data-t="m_a1"></li><li data-t="m_a2"></li><li data-t="m_a3"></li><li data-t="m_a4"></li>' +
-    '<li class="tapme">Instagram<span class="dot"></span></li><li>YouTube</li></ul></div>',
-  wait:
-    '<div class="sc wait"><b data-t="m_open"></b><div class="bar"><i></i></div><div class="dim" data-t="m_wait"></div><div class="dim" data-t="m_used"></div>' +
-    '<div class="why" data-t="m_why"></div><div class="btns"><span class="main"><span data-t="m_home"></span><span class="dot"></span></span>' +
-    '<span data-t="m_c5"></span><span data-t="m_c10"></span></div></div>',
-  focus:
-    '<div class="sc focus"><span class="tag" data-t="m_focus"></span><div class="clock">9:41</div><div class="date" data-t="m_date"></div>' +
-    '<ul class="apps"><li data-t="m_f1"></li><li data-t="m_f2"></li><li data-t="m_f3"></li><li class="off">Instagram</li><li class="off">YouTube</li></ul></div>',
-  guard:
-    '<div class="sc guard"><div class="chat-top"><i></i>Telegram</div><div class="g-body"><span class="aichip"><i></i><span data-t="ai_scan"></span></span>' +
-    '<div class="chat"><i></i><i></i></div><div class="pic"><b class="c1"></b><b class="c2"></b><b class="c3"></b><b class="c4"></b><em class="gbeam"></em><em class="verdict">18+ · 97%</em></div>' +
-    '<div class="toast" data-t="m_toast"></div></div></div>'
-};
-
-/* ---- The walkthrough: the phone shows itself, nobody has to work out what to press. ---- */
-const Player = (() => {
-  const order = ["home", "wait", "focus", "guard"];
-  const caps = ["r1_h", "r2_h", "r3_h", "can2_h"];
-  const dur = [5200, 5600, 4600, 5200];
-  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  let root, scs, tabs, i = 0, timer = 0, sub = 0, seen = true;
-
-  function label() {
-    document.getElementById("p-cap").textContent = T[LANG][caps[i]];
-    tabs.forEach((b, j) => { b.lastChild.textContent = T[LANG].tabs[j]; });
+/* The hero's search: two letters, and the list narrows, the way it does on the phone. */
+const Search = (() => {
+  let timer = 0, live = false;
+  const box = $("search"), q = $("q"), items = () => [...$("apps").children];
+  function show(text) {
+    q.textContent = text;
+    box.classList.toggle("typing", text.length > 0);
+    const s = text.toLowerCase();
+    items().forEach(li => li.classList.toggle("dim", s.length > 0 && !li.textContent.toLowerCase().split(/\s+/).some(w => w.startsWith(s))));
   }
-  function show(n, byHand) {
-    i = n;
-    clearTimeout(timer); clearTimeout(sub);
-    root.classList.remove("tap");
-    root.style.setProperty("--d", dur[n] + "ms");
-    scs.forEach((el, j) => el.classList.toggle("on", j === n));
-    tabs.forEach((b, j) => { b.setAttribute("aria-selected", String(j === n)); b.classList.remove("run"); });
-    label();
-    if (still || !seen) { if (n !== 0) root.classList.add("tap"); return; }
-    void root.offsetWidth;
-    tabs[n].classList.add("run");
-    sub = setTimeout(() => root.classList.add("tap"), dur[n] * .58);
-    timer = setTimeout(() => show((n + 1) % order.length), dur[n]);
+  function run() {
+    clearTimeout(timer);
+    if (!live || calm) { show(""); return; }
+    const word = D[LANG].q, seq = [];
+    for (let i = 1; i <= word.length; i++) seq.push([word.slice(0, i), 420]);
+    seq.push([word, 2600]);
+    for (let i = word.length - 1; i >= 0; i--) seq.push([word.slice(0, i), 160]);
+    let i = 0;
+    const next = () => { if (!live) return; if (i < seq.length) { show(seq[i][0]); timer = setTimeout(next, seq[i++][1]); } else { show(""); timer = setTimeout(run, 3200); } };
+    timer = setTimeout(next, 1800);
   }
-  function init() {
-    root = document.getElementById("player");
-    root.classList.toggle("auto", !still);
-    document.getElementById("p-screen").innerHTML = order.map(k => SCREENS[k]).join("");
-    scs = [...root.querySelectorAll(".sc")];
-    document.getElementById("p-segs").innerHTML = order.map((_, j) => '<button type="button" role="tab" data-seg="' + j + '"><i></i><span></span></button>').join("");
-    tabs = [...root.querySelectorAll("[data-seg]")];
-    tabs.forEach(b => b.addEventListener("click", () => show(Number(b.dataset.seg), true)));
-    // The stills further down the page.
-    document.querySelectorAll("[data-shot]").forEach(el => { el.innerHTML = SCREENS[el.dataset.shot]; el.classList.add("still"); });
-    if ("IntersectionObserver" in window && !still) {
-      new IntersectionObserver(es => {
-        const now = es[0].isIntersecting;
-        if (now === seen) return;
-        seen = now;
-        show(i);
-      }, { threshold: .2 }).observe(root);
-    }
-  }
-  return { init, show, label };
+  function visible(v) { if (v === live) return; live = v; run(); }
+  return { visible, run };
 })();
 
-/* ---- The lists that repeat: built once, filled by the same data-t pass as the rest. ---- */
-function build() {
-  const ok = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16.2 9.5"/></svg>';
-  const no = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" opacity=".55"><circle cx="12" cy="12" r="9"/><path d="M8.5 12h7"/></svg>';
-  const item = (k, icon) => "<li>" + icon + '<div><h4 data-t="' + k + '_h"></h4><p data-t="' + k + '_p"></p></div></li>';
-  document.getElementById("can").innerHTML = [1, 2, 3, 4].map(n => item("can" + n, ok)).join("");
-  document.getElementById("cant").innerHTML = [1, 2, 3, 4].map(n => item("cant" + n, no)).join("");
+/* The pause: ten real seconds, then the choice. */
+const Wait = (() => {
+  let n = 10, timer = 0, state = "idle", live = false;
+  const box = $("wait"), prog = $("w-prog"), num = $("w-n"), msg = $("w-state"), btns = [...box.querySelectorAll("[data-w]")];
+  function paint() {
+    num.textContent = n;
+    prog.style.strokeDashoffset = (339.3 * n / 10).toFixed(1);
+    btns.forEach(b => { b.disabled = b.dataset.w !== "0" && state !== "ready"; });
+    box.classList.toggle("ready", state === "ready");
+    if (state === "count" || state === "idle") msg.textContent = fill(D[LANG].wait, n);
+    else if (state === "ready") msg.textContent = D[LANG].ready;
+  }
+  function start() {
+    clearInterval(timer); n = 10; state = "count"; paint();
+    if (calm) { n = 0; state = "ready"; paint(); return; }
+    timer = setInterval(() => { n--; if (n <= 0) { n = 0; state = "ready"; clearInterval(timer); } paint(); }, 1000);
+  }
+  function choose(m) {
+    state = "done"; paint();
+    msg.textContent = m === 0 ? D[LANG].home : fill(D[LANG].go, m);
+    clearTimeout(box._t);
+    box._t = setTimeout(() => { if (live) start(); }, 3200);
+  }
+  btns.forEach(b => b.addEventListener("click", () => { const m = Number(b.dataset.w); if (state === "ready" || (m === 0 && state === "count")) { clearInterval(timer); choose(m); } }));
+  function labels() { btns.forEach(b => { const m = Number(b.dataset.w); if (m) b.textContent = fill(D[LANG].min, m); }); paint(); }
+  function visible(v) {
+    if (v === live) return;
+    live = v;
+    if (v && state !== "ready") start();
+    if (!v) { clearInterval(timer); if (state !== "ready") { state = "idle"; n = 10; paint(); } }
+  }
+  return { visible, labels };
+})();
 
-  const free = ["v_yes", "v_two", "v_one", "v_7d", "v_yes", "", "", "", ""];
-  const pro = ["v_yes", "v_unl", "v_unl", "v_8w", "v_yes", "v_yes", "v_yes", "v_yes", "v_yes"];
-  const cell = k => k ? '<span data-t="' + k + '"></span>' : "<span>—</span>";
-  document.getElementById("table").innerHTML =
-    '<div class="tr th"><span data-t="t_what"></span><span data-t="t_free"></span><span>Pro</span></div>' +
-    free.map((f, n) => '<div class="tr"><span data-t="t' + (n + 1) + '"></span>' + cell(f) + cell(pro[n]) + "</div>").join("");
+/* The usual screen: a grid of icons, some with the red dots. */
+$("icons").innerHTML = Array.from({ length: 20 }, (_, i) => "<i" + ([1, 4, 6, 11, 13, 18].includes(i) ? ' class="r"' : "") + "></i>").join("");
 
-  document.getElementById("faq-list").innerHTML = [1, 2, 3, 4, 5, 6].map(n =>
-    '<details><summary data-t="q' + n + '"></summary><p data-t="a' + n + '"></p></details>').join("");
+function apply(lang) {
+  LANG = T[lang] ? lang : "uz";
+  const t = T[LANG];
+  document.documentElement.lang = LANG;
+  document.title = t.title || T.uz.title;
+  document.querySelectorAll("[data-t]").forEach(el => { const v = t[el.dataset.t]; if (v !== undefined) el.textContent = v; });
+  document.querySelectorAll(".langs button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === LANG)));
+  const policy = "https://encrypster.github.io/quiet-privacy/" + (LANG === "en" ? "" : LANG + "/");
+  $("privacy-link").href = policy; $("privacy-link-foot").href = policy;
+  try { localStorage.setItem("quiet-lang", LANG); } catch (e) {}
+  clock(); Wait.labels(); Search.run();
 }
-
 function pickLang() {
-  try { const saved = localStorage.getItem("quiet-lang"); if (saved && T[saved]) return saved; } catch (e) {}
+  try { const s = localStorage.getItem("quiet-lang"); if (s && T[s]) return s; } catch (e) {}
   const nav = (navigator.language || "uz").slice(0, 2).toLowerCase();
   return T[nav] ? nav : "uz";
 }
-
-function apply(lang) {
-  const t = T[lang];
-  LANG = lang;
-  document.documentElement.lang = lang;
-  document.title = t.title;
-  // The policy in the same language as the page.
-  const policy = "https://encrypster.github.io/quiet-privacy/" + (lang === "en" ? "" : lang + "/");
-  document.getElementById("privacy-link").href = policy;
-  document.getElementById("privacy-link-foot").href = policy;
-  document.querySelectorAll("[data-t]").forEach(el => {
-    const v = t[el.dataset.t];
-    if (v !== undefined) el.textContent = v;
-  });
-  const h1 = document.querySelector("h1"), cut = t.h1.lastIndexOf(", ");
-  if (cut > 0) { h1.textContent = t.h1.slice(0, cut + 2); const g = document.createElement("span"); g.className = "gt"; g.textContent = t.h1.slice(cut + 2); h1.appendChild(g); }
-  document.querySelectorAll(".langs button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
-  try { localStorage.setItem("quiet-lang", lang); } catch (e) {}
-  Player.label();
-  Extra.lang();
-  Story.lang();
-  Noise.lang();
-}
-
-/* ---- Light or dark: the system's choice until the visitor makes their own. ---- */
-function theme(set) {
-  const root = document.documentElement;
-  if (set) { root.dataset.theme = set; try { localStorage.setItem("quiet-theme", set); } catch (e) {} }
-  const dark = root.dataset.theme !== "light";
-  document.querySelector('meta[name="theme-color"]').content = dark ? "#07070a" : "#ffffff";
-  return dark;
-}
-try { const saved = localStorage.getItem("quiet-theme"); if (saved === "dark" || saved === "light") document.documentElement.dataset.theme = saved; } catch (e) {}
-theme();
-document.getElementById("theme").addEventListener("click", () => theme(theme() ? "light" : "dark"));
-
-// Words for the noise.
-Object.assign(T.uz, {
-  sw_off: "Quiet’ni yoqing", sw_on: "Quiet yoqildi. Sokinlik.", sw_hint: "Yoki pastga suring: Quiet o‘rnatilgani sari shovqin kamayadi.",
-  nz_l: "SHOVQIN", nz_0: "SOKIN",
-  nz_apps: ["Ijtimoiy tarmoq", "Video", "O‘yin", "Do‘kon", "Chat", "Yangiliklar"],
-  nz_msgs: ["12 ta yangi yoqtirish", "Siz uchun yangi video", "Sovg‘angiz kutmoqda!", "Chegirma 2 soatda tugaydi", "Sizni guruhga qo‘shishdi", "SHOSHILINCH: buni ko‘ring", "Yana bitta qism?", "Do‘stingiz onlayn"]
-});
-Object.assign(T.ru, {
-  sw_off: "Включите Quiet", sw_on: "Quiet включён. Тишина.", sw_hint: "Или листайте вниз: чем дальше установка Quiet, тем тише.",
-  nz_l: "ШУМ", nz_0: "ТИХО",
-  nz_apps: ["Соцсеть", "Видео", "Игра", "Магазин", "Чат", "Новости"],
-  nz_msgs: ["12 новых лайков", "Новое видео для вас", "Ваш подарок ждёт!", "Скидка закончится через 2 часа", "Вас добавили в группу", "СРОЧНО: посмотрите это", "Ещё одну серию?", "Ваш друг в сети"]
-});
-Object.assign(T.en, {
-  sw_off: "Turn Quiet on", sw_on: "Quiet is on. Calm.", sw_hint: "Or scroll down: the further Quiet gets installed, the quieter it is.",
-  nz_l: "NOISE", nz_0: "CALM",
-  nz_apps: ["Social", "Video", "Game", "Shop", "Chat", "News"],
-  nz_msgs: ["12 new likes", "A new video for you", "Your gift is waiting!", "Sale ends in 2 hours", "You were added to a group", "BREAKING: see this", "One more episode?", "Your friend is online"]
-});
-
-/* ---- Noise: the page starts loud and goes quiet as Quiet is installed, by scrolling or by the switch. ---- */
-const Noise = (() => {
-  const $ = id => document.getElementById(id);
-  const root = document.documentElement;
-  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const HUES = [4, 28, 135, 211, 280, 340];
-  let nz = 1, forced = false, anim = 0, tm = 0, live = 0, counts = [], marked = [], tick = 0;
-
-  function fromScroll() {
-    const st = $("story"), y = scrollY, a = st.offsetTop - 60, span = st.offsetHeight - $("st-pin").offsetHeight;
-    if (y <= 0) return 1;
-    if (y < a) return 1 - .12 * (y / a);
-    const k = (y - a) / (span / 3);
-    if (k < 1) return .88 - .73 * (k * k * (3 - 2 * k));
-    return .15 * (1 - Math.min(1, (y - a - span / 3) / (span * 2 / 3)));
-  }
-  function label() {
-    const t = T[LANG], pct = Math.round(nz * 100);
-    $("nzm-l").textContent = pct > 0 ? t.nz_l + " " + pct + "%" : t.nz_0;
-    $("qsw-l").textContent = forced ? t.sw_on : t.sw_off;
-  }
-  function set(v) {
-    nz = Math.max(0, Math.min(1, v));
-    root.style.setProperty("--nz", nz.toFixed(3));
-    document.body.classList.toggle("nz-on", nz > .03);
-    label();
-    if (nz > .06 && !tm) loop();
-    if (nz <= .3 && document.title !== T[LANG].title) document.title = T[LANG].title;
-  }
-  function glide(to, ms) {
-    cancelAnimationFrame(anim);
-    const from = nz, t0 = performance.now();
-    const step = now => { const k = Math.min(1, (now - t0) / ms), e = 1 - Math.pow(1 - k, 3); set(from + (to - from) * e); if (k < 1) anim = requestAnimationFrame(step); };
-    anim = requestAnimationFrame(step);
-    // Should the frames stall, the page still ends where it was told to.
-    setTimeout(() => { if (Math.abs(nz - to) > .01 && (forced ? to === 0 : true)) { cancelAnimationFrame(anim); set(forced ? 0 : fromScroll()); } }, ms + 400);
-  }
-  function toggle() {
-    forced = !forced;
-    $("qsw").setAttribute("aria-checked", String(forced));
-    $("nzm").setAttribute("aria-pressed", String(forced));
-    document.body.classList.toggle("quiet-on", forced);
-    glide(forced ? 0 : fromScroll(), forced ? 1500 : 600);
-    label();
-  }
-
-  // The interruptions.
-  function spawn() {
-    if (live >= 4) return;
-    const t = T[LANG], W = innerWidth, H = innerHeight, tw = Math.min(250, W * .72), r = Math.random(), hue = HUES[Math.random() * HUES.length | 0];
-    const top = r < .42 ? 68 + Math.random() * 70 : r < .84 ? H - 160 + Math.random() * 70 : 170 + Math.random() * Math.max(40, H - 400);
-    const el = document.createElement("div");
-    el.className = "nzt";
-    el.style.cssText = "left:" + Math.round(8 + Math.random() * Math.max(0, W - tw - 16)) + "px;top:" + Math.round(top) + "px;width:" + Math.round(tw) + "px;--r:" + ((Math.random() - .5) * 6).toFixed(1) + "deg";
-    const ic = document.createElement("i"), box = document.createElement("span"), a = document.createElement("b"), m = document.createElement("span");
-    ic.style.background = "linear-gradient(145deg,hsl(" + hue + " 90% 60%),hsl(" + (hue + 30) + " 85% 45%))";
-    a.textContent = t.nz_apps[Math.random() * t.nz_apps.length | 0];
-    m.textContent = t.nz_msgs[Math.random() * t.nz_msgs.length | 0];
-    box.append(a, m); el.append(ic, box);
-    $("nz-toasts").appendChild(el); live++;
-    setTimeout(() => el.classList.add("out"), 2300);
-    setTimeout(() => { el.remove(); live--; }, 2700);
-  }
-  function loop() {
-    clearTimeout(tm); tm = 0;
-    if (nz <= .06 || still) return;
-    if (!document.hidden) {
-      spawn();
-      // The badges keep counting, and so does the tab.
-      if (++tick % 2 === 0) {
-        const i = Math.random() * marked.length | 0;
-        counts[i] += 1 + (Math.random() * 4 | 0);
-        marked[i].dataset.bz = counts[i] > 99 ? "99+" : counts[i];
-        if (nz > .3) { const sum = counts.reduce((x, y) => x + y, 0); document.title = "(" + (sum > 99 ? "99+" : sum) + ") " + T[LANG].title; }
-      }
-    }
-    tm = setTimeout(loop, (480 + Math.random() * 520) / Math.max(.14, nz));
-  }
-
-  function init() {
-    marked = [".logo", "#theme", ".langs", ".hero .badge", ".cta .pill", "header nav a:nth-child(2)", "header nav a:nth-child(4)"].map(s => document.querySelector(s)).filter(Boolean);
-    counts = marked.map(() => 1 + (Math.random() * 14 | 0));
-    marked.forEach((el, i) => { el.dataset.bz = counts[i]; });
-    // The phone in the first screen is as loud as the page.
-    $("p-screen").insertAdjacentHTML("beforeend", '<div class="noisy pz">' + $("noisy").innerHTML + "</div>");
-    $("qsw").addEventListener("click", toggle);
-    $("nzm").addEventListener("click", toggle);
-    addEventListener("scroll", () => { if (!forced) set(fromScroll()); }, { passive: true });
-    document.addEventListener("visibilitychange", () => { if (!document.hidden && nz > .06 && !tm) loop(); });
-    set(fromScroll());
-  }
-  return { init, lang: label, level: () => nz, set };
-})();
-
-// Words for the story.
-Object.assign(T.uz, {
-  st: ["Bildirishnoma. Qizil belgi. «Yana bir daqiqa».", "Quiet shovqinni bir joyga yig‘adi.", "Bosh ekranda faqat kerakli nomlar qoladi.", "Qolganini telefondagi AI kuzatadi."],
-  st_l: ["SHOVQIN", "SOKINLIK", "BOSH EKRAN", "AI"], st_hint: "Pastga suring"
-});
-Object.assign(T.ru, {
-  st: ["Уведомление. Красный значок. «Ещё минутку».", "Quiet собирает шум в одну точку.", "На экране остаются только нужные названия.", "За остальным следит ИИ в самом телефоне."],
-  st_l: ["ШУМ", "ТИШИНА", "ЭКРАН", "ИИ"], st_hint: "Листайте вниз"
-});
-Object.assign(T.en, {
-  st: ["A notification. A red badge. One more minute.", "Quiet gathers the noise into one place.", "Only the names you need stay on the screen.", "The AI on the phone watches the rest."],
-  st_l: ["NOISE", "CALM", "HOME", "AI"], st_hint: "Scroll down"
-});
-
-/* ---- The story: one field of dots that takes four shapes as the page is scrolled. Nothing to press. ---- */
-const Story = (() => {
-  const $ = id => document.getElementById(id);
-  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const CHAOS = [[255, 69, 58], [255, 159, 10], [48, 209, 88], [10, 132, 255], [191, 90, 242], [255, 55, 95]];
-  const CALM_D = [[150, 125, 255], [96, 165, 250], [103, 232, 249], [240, 240, 255], [240, 240, 255], [150, 125, 255]];
-  const CALM_L = [[92, 64, 230], [37, 99, 235], [8, 145, 178], [20, 20, 26], [20, 20, 26], [92, 64, 230]];
-  const S = 4;
-  let sec, pin, cv, ctx, caps = [];
-  let W = 0, H = 0, N = 0, X, Y, VX, VY, BX, BY, SD, shapes = [];
-  let f = 0, cm = 0, idx = -1, t = 0, last = 0, raf = 0, on = false, mx = -1e4, my = -1e4, bg = "7,7,10", dark = true;
-
-  function theme() {
-    dark = document.documentElement.dataset.theme !== "light";
-    const m = getComputedStyle(document.body).backgroundColor.match(/\d+/g);
-    if (m) bg = m.slice(0, 3).join(",");
-  }
-  function rr(c, x, y, w, h, r) { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
-  // A shape is drawn once, off screen, and the dots take their places from its pixels.
-  function sample(draw) {
-    const g = W < 640 ? 4 : 5, oc = document.createElement("canvas");
-    oc.width = W; oc.height = H;
-    const c = oc.getContext("2d", { willReadFrequently: true });
-    c.fillStyle = c.strokeStyle = "#000"; draw(c);
-    const d = c.getImageData(0, 0, W, H).data, pts = [];
-    for (let y = 0; y < H; y += g) for (let x = 0; x < W; x += g) if (d[(y * W + x) * 4 + 3] > 120) pts.push(x, y);
-    const out = new Float32Array(N * 2), n = pts.length / 2;
-    for (let i = 0; i < N; i++) {
-      const q = n ? ((i * 7919) % n) * 2 : 0;
-      out[i * 2] = (n ? pts[q] : W / 2) + (SD[i] - .5) * g;
-      out[i * 2 + 1] = (n ? pts[q + 1] : H / 2) + (SD[(i * 3 + 1) % N] - .5) * g;
-    }
-    return out;
-  }
-  function build() {
-    const cx = W / 2, cy = H * .42, s = Math.min(W * .66, H * .44), font = "px Inter, system-ui, sans-serif";
-    shapes = [null,
-      // The ring.
-      sample(c => { c.lineWidth = s * .17; c.beginPath(); c.arc(cx, cy, s * .4, 0, 6.2832); c.stroke(); }),
-      // The home screen: a phone, the time, five names.
-      sample(c => {
-        const w = s * .64, h = s * 1.18, x = cx - w / 2, y = cy - h / 2;
-        c.lineWidth = Math.max(3, s * .024); rr(c, x, y, w, h, w * .17); c.stroke();
-        c.font = "600 " + Math.round(w * .3) + font; c.textBaseline = "top"; c.fillText("9:41", x + w * .13, y + h * .1);
-        [.5, .64, .44, .58, .7].forEach((k, i) => { rr(c, x + w * .13, y + h * .47 + i * h * .095, w * k, h * .042, h * .021); c.fill(); });
-      }),
-      // AI, inside a thin circle.
-      sample(c => {
-        c.font = "600 " + Math.round(s * .6) + font; c.textAlign = "center"; c.textBaseline = "middle"; c.fillText("AI", cx, cy + s * .03);
-        c.lineWidth = Math.max(2.5, s * .02); c.beginPath(); c.arc(cx, cy, s * .6, 0, 6.2832); c.stroke();
-      })
-    ];
-  }
-  function size() {
-    const dpr = Math.min(2, devicePixelRatio || 1);
-    W = pin.clientWidth; H = pin.clientHeight;
-    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    const n = W < 640 ? 1500 : 3000, fresh = n !== N;
-    if (fresh) {
-      N = n;
-      [X, Y, VX, VY, BX, BY, SD] = Array.from({ length: 7 }, () => new Float32Array(N));
-      for (let i = 0; i < N; i++) SD[i] = Math.random();
-    }
-    for (let i = 0; i < N; i++) { BX[i] = Math.random() * W; BY[i] = Math.random() * H; if (fresh) { X[i] = BX[i]; Y[i] = BY[i]; } }
-    build(); theme();
-  }
-  function step(dt, snap) {
-    const k = dt * 60, fi = Math.min(S - 1 - 1e-3, Math.max(0, f)), i0 = fi | 0, fr = fi - i0;
-    let b = Math.min(1, Math.max(0, (fr - .18) / .64)); b = b * b * (3 - 2 * b);
-    const A = shapes[i0], B = shapes[i0 + 1], w = A ? 1 : b, damp = Math.pow(.86, k);
-    cm += ((i0 >= 1 ? 1 : b) - cm) * (snap ? 1 : Math.min(1, dt * 5));
-    for (let i = 0; i < N; i++) {
-      const s = SD[i], j = i * 2;
-      const wx = BX[i] + Math.sin(t * .55 + s * 40) * 28, wy = BY[i] + Math.cos(t * .45 + s * 29) * 28;
-      const ax = A ? A[j] : wx, ay = A ? A[j + 1] : wy;
-      const tx = ax + (B[j] - ax) * b + Math.sin(t * 1.7 + s * 60) * 1.1 * w, ty = ay + (B[j + 1] - ay) * b + Math.cos(t * 1.5 + s * 47) * 1.1 * w;
-      if (snap) { X[i] = tx; Y[i] = ty; continue; }
-      const sp = (.004 + .07 * w) * (.5 + s);
-      let vx = VX[i] + (tx - X[i]) * sp * k, vy = VY[i] + (ty - Y[i]) * sp * k;
-      const dx = X[i] - mx, dy = Y[i] - my, d2 = dx * dx + dy * dy;
-      if (d2 < 8100 && d2 > 1) { const q = (1 - d2 / 8100) * 2.6 * k / Math.sqrt(d2); vx += dx * q; vy += dy * q; }
-      VX[i] = vx * damp; VY[i] = vy * damp; X[i] += VX[i] * k; Y[i] += VY[i] * k;
-    }
-  }
-  function draw(clean) {
-    ctx.globalCompositeOperation = "source-over";
-    ctx.fillStyle = "rgba(" + bg + "," + (clean ? 1 : .32) + ")";
-    ctx.fillRect(0, 0, W, H);
-    if (dark) ctx.globalCompositeOperation = "lighter";
-    const calm = dark ? CALM_D : CALM_L, m = cm * cm * (3 - 2 * cm), z = W < 640 ? 1.8 : 2;
-    for (let g = 0; g < 6; g++) {
-      const a = CHAOS[g], b = calm[g];
-      ctx.fillStyle = "rgb(" + Math.round(a[0] + (b[0] - a[0]) * m) + "," + Math.round(a[1] + (b[1] - a[1]) * m) + "," + Math.round(a[2] + (b[2] - a[2]) * m) + ")";
-      // The red ones are the badges: larger while it is noisy.
-      const s = g === 0 ? z * (2 - m) : z, h = s / 2;
-      for (let i = g; i < N; i += 6) ctx.fillRect(X[i] - h, Y[i] - h, s, s);
-    }
-  }
-  function frame(now) {
-    raf = 0;
-    const dt = Math.min(.05, (now - last) / 1000 || .016); last = now; t += dt;
-    step(dt); draw();
-    if (on) raf = requestAnimationFrame(frame);
-  }
-  function show(n) {
-    idx = n;
-    caps.forEach((el, i) => el.classList.toggle("on", i === n));
-    $("st-n").textContent = "0" + (n + 1);
-    $("st-l").textContent = T[LANG].st_l[n];
-    [...$("st-ticks").children].forEach((el, i) => el.classList.toggle("on", i <= n));
-    pin.classList.toggle("started", n > 0);
-  }
-  function onScroll() {
-    const r = sec.getBoundingClientRect(), top = parseFloat(getComputedStyle(pin).top) || 0, span = r.height - pin.offsetHeight;
-    f = span > 0 ? Math.min(1, Math.max(0, (top - r.top) / span)) * (S - 1) : 0;
-    const n = Math.round(f);
-    if (n !== idx) show(n);
-    const vis = r.bottom > 0 && r.top < innerHeight && !document.hidden;
-    if (still) { if (vis) { step(0, true); draw(true); } return; }
-    if (vis && !on) { on = true; if (!raf) { last = performance.now(); raf = requestAnimationFrame(frame); } }
-    else if (!vis) on = false;
-  }
-  function lang() {
-    const tt = T[LANG];
-    caps.forEach((el, i) => { el.textContent = tt.st[i]; });
-    $("st-hint").textContent = tt.st_hint;
-    if (idx >= 0) $("st-l").textContent = tt.st_l[idx];
-  }
-  function init() {
-    sec = $("story"); pin = $("st-pin"); cv = $("scv");
-    ctx = cv.getContext && cv.getContext("2d");
-    $("st-caps").innerHTML = "<p></p>".repeat(S);
-    caps = [...$("st-caps").children];
-    $("st-ticks").innerHTML = "<i></i>".repeat(S);
-    // The ghost numbers behind the sections.
-    let n = 2;
-    document.querySelectorAll("main > section").forEach(s => { if (!/^(story|time|end)$/.test(s.id) && !s.classList.contains("hero")) s.dataset.n = String(n++).padStart(2, "0"); });
-    if (!ctx) return;
-    size();
-    pin.addEventListener("pointermove", e => { const r = pin.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; });
-    ["pointerleave", "pointercancel", "pointerup"].forEach(nm => pin.addEventListener(nm, e => { if (nm !== "pointerup" || e.pointerType !== "mouse") mx = my = -1e4; }));
-    // A tap sends the dots flying from under the finger; they find their way back.
-    pin.addEventListener("pointerdown", e => {
-      const r = pin.getBoundingClientRect(), px = e.clientX - r.left, py = e.clientY - r.top;
-      for (let i = 0; i < N; i++) { const dx = X[i] - px, dy = Y[i] - py, d2 = dx * dx + dy * dy; if (d2 < 22500) { const d = Math.sqrt(d2) || 1, v = (1 - d / 150) * 16; VX[i] += dx / d * v; VY[i] += dy / d * v; } }
-    });
-    addEventListener("resize", () => { if (pin.clientWidth !== W || Math.abs(pin.clientHeight - H) > 80) { size(); onScroll(); } });
-    addEventListener("scroll", onScroll, { passive: true });
-    document.addEventListener("visibilitychange", onScroll);
-    $("theme").addEventListener("click", () => setTimeout(() => { theme(); if (still) draw(true); }, 0));
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { build(); if (still) onScroll(); });
-    onScroll();
-  }
-  return { init: init, lang: lang };
-})();
-
-// Words for the parts that respond.
-Object.assign(T.uz, {
-  sh_h: "Bir xil telefon. Ikki xil bosh ekran.", sh_p: "Chiziqni chapga-o‘ngga suring: chapda Quiet, o‘ngda odatiy ekran.", sh_a: "Oldin", sh_b: "Quiet bilan",
-  tm_h: "Telefon yiliga necha kuningizni oladi?", tm_unit: "kun / yil", tm_l: "Kuniga telefonda", tm_fmt: "{h} soat", tm_pct: "Bu yilning {p} foizi.",
-  tm_note: "Bu va’da emas, oddiy arifmetika: soat × 365 ÷ 24.",
-  ck_h: "O‘zingiz tekshirib ko‘ring", ck_p: "Kanal yoki chat nomini yozing. Tekshiruv shu sahifaning o‘zida, ilovadagi so‘z ro‘yxati bilan ishlaydi; hech narsa yuborilmaydi.",
-  ck_ph: "Masalan: Tungi kinolar", ck_ex: ["Sinfdoshlar 7-A", "Tungi kinolar 🔞", "Kino 18+", "Kinolar yashirin"], ck_empty: "Nom yozing yoki misollardan birini bosing.",
-  ck_bad: ["Yopiladi.", "Nomida kattalar uchun kontentni bildiruvchi so‘z yoki belgi bor."],
-  ck_ok: ["So‘z tekshiruvidan o‘tadi.", "Shuning uchun rasm tekshiruvi va botlarni yopish ham bor: nomi beozor bo‘lsa-da, ichidagisi tekshiriladi."],
-  cmp_h: "Uchta ilova o‘rniga bitta",
-  cmp_p: "Odatda buning uchun uchta alohida ilova kerak: minimalist launcher, bloklovchi va ota-ona nazorati. Quiet uchalasini birlashtiradi va ustiga telefonning o‘zida ishlaydigan AI qo‘shadi.",
-  cmp_f: "Imkoniyat", cmp_c: ["Launcher", "Bloker", "Nazorat"],
-  cmp_r: ["Sokin bosh ekran", "Ilova limitlari", "Fokus rejimi", "Ota-ona qulfi", "Telefondagi AI"],
-  cmp_note: "Toifalarning odatiy imkoniyatlari ko‘rsatilgan; ayrim ilovalar farq qilishi mumkin."
-});
-Object.assign(T.ru, {
-  sh_h: "Один телефон. Два домашних экрана.", sh_p: "Двигайте линию влево и вправо: слева Quiet, справа обычный экран.", sh_a: "До", sh_b: "С Quiet",
-  tm_h: "Сколько дней в году забирает телефон?", tm_unit: "дней в год", tm_l: "В день в телефоне", tm_fmt: "{h} ч", tm_pct: "Это {p}% года.",
-  tm_note: "Это не обещание, а арифметика: часы × 365 ÷ 24.",
-  ck_h: "Проверьте сами", ck_p: "Введите название канала или чата. Проверка идёт прямо на этой странице, по списку слов из приложения; ничего не отправляется.",
-  ck_ph: "Например: Ночное кино", ck_ex: ["Одноклассники 7-А", "Ночное кино 🔞", "Кино 18+", "Скрытые фильмы"], ck_empty: "Введите название или нажмите на пример.",
-  ck_bad: ["Закроется.", "В названии есть слово или знак, указывающий на контент для взрослых."],
-  ck_ok: ["Проверку слов проходит.", "Поэтому есть ещё проверка изображений и блокировка ботов: при безобидном названии проверяется содержимое."],
-  cmp_h: "Одно приложение вместо трёх",
-  cmp_p: "Обычно для этого нужны три разных приложения: минималистичный лаунчер, блокировщик и родительский контроль. Quiet объединяет все три и добавляет ИИ, который работает прямо на телефоне.",
-  cmp_f: "Возможность", cmp_c: ["Лаунчер", "Блокер", "Контроль"],
-  cmp_r: ["Спокойный экран", "Лимиты приложений", "Режим фокуса", "Родительский замок", "ИИ на телефоне"],
-  cmp_note: "Показаны типичные возможности категорий; отдельные приложения могут отличаться."
-});
-Object.assign(T.en, {
-  sh_h: "Same phone. Two home screens.", sh_p: "Drag the line left and right: Quiet on the left, the usual screen on the right.", sh_a: "Before", sh_b: "With Quiet",
-  tm_h: "How many days a year does your phone take?", tm_unit: "days a year", tm_l: "On the phone each day", tm_fmt: "{h} h", tm_pct: "That is {p}% of the year.",
-  tm_note: "Not a promise, just arithmetic: hours × 365 ÷ 24.",
-  ck_h: "Check it yourself", ck_p: "Type the name of a channel or chat. The check runs on this page, with the word list from the app; nothing is sent anywhere.",
-  ck_ph: "For example: Late night movies", ck_ex: ["Class 7-A", "Late night movies 🔞", "Movies 18+", "Hidden films"], ck_empty: "Type a name or tap one of the examples.",
-  ck_bad: ["It gets closed.", "The name has a word or sign that points to adult content."],
-  ck_ok: ["It passes the word check.", "That is why there is also the image check and bot blocking: a harmless name does not hide what is inside."],
-  cmp_h: "One app instead of three",
-  cmp_p: "This usually takes three separate apps: a minimalist launcher, a blocker and parental controls. Quiet combines all three and adds AI that runs on the phone itself.",
-  cmp_f: "Feature", cmp_c: ["Launcher", "Blocker", "Parental"],
-  cmp_r: ["Calm home screen", "App limits", "Focus mode", "Parental lock", "On-device AI"],
-  cmp_note: "Typical features of each category; individual apps may differ."
-});
-
-/* ---- The parts of the page that respond: the network, the slider, the year, the checker. ---- */
-const Extra = (() => {
-  const $ = id => document.getElementById(id);
-  const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  // What a name is made of, the way the app looks at it.
-  const PARTS = ["porn", "порн", "xvideos", "xnxx", "xhamster", "onlyfans", "hentai", "хентай", "nsfw", "erotic", "erotik", "эротик", "секс", "интим", "18+", "+18", "🔞", "sekis", "секис", "seksual"];
-  const WORDS = ["sex", "sexy", "seks", "seksi", "xxx", "nude", "anal"];
-  function verdict() {
-    const raw = $("ck-in").value.trim(), text = raw.toLowerCase(), out = $("ck-out");
-    if (!raw) { out.className = "ck-out"; out.firstChild.textContent = ""; out.lastChild.textContent = T[LANG].ck_empty; return; }
-    const bad = PARTS.some(p => text.includes(p)) || text.split(/[^\p{L}\p{N}+]+/u).some(x => WORDS.includes(x));
-    const v = bad ? T[LANG].ck_bad : T[LANG].ck_ok;
-    out.className = "ck-out " + (bad ? "bad" : "ok");
-    out.firstChild.textContent = v[0]; out.lastChild.textContent = v[1];
-  }
-
-  // The year: hours a day, turned into days.
-  let shownDays = -1;
-  function time(jump) {
-    const h = Number($("tm-in").value), d = Math.round(h * 365 / 24);
-    if (jump !== false) { $("tm-days").textContent = d; shownDays = d; }
-    $("tm-out").textContent = T[LANG].tm_fmt.replace("{h}", String(h).replace(".", LANG === "en" ? "." : ","));
-    $("tm-fill").style.transform = "scaleX(" + (h / 24).toFixed(3) + ")";
-    $("tm-pct").textContent = T[LANG].tm_pct.replace("{p}", Math.round(h / 24 * 100));
-    return d;
-  }
-  function countUp() {
-    const to = time(false), el = $("tm-days"), t0 = performance.now();
-    const step = now => { const k = Math.min(1, (now - t0) / 1100), e = 1 - Math.pow(1 - k, 3); el.textContent = Math.round(to * e); if (k < 1) requestAnimationFrame(step); };
-    el.textContent = 0; requestAnimationFrame(step);
-    setTimeout(() => time(), 1400);
-  }
-
-  // The comparison.
-  const MARKS = [[1, 0, 0], [0, 1, 1], [0, 1, 0], [0, 0, 1], [0, 0, 0]];
-  const tick = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12.5l4 4 8-9"/></svg>';
-  function compare() {
-    const t = T[LANG];
-    $("cmp").innerHTML = '<div class="cr th"><span>' + t.cmp_f + "</span><span>Quiet</span>" + t.cmp_c.map(c => "<span>" + c + "</span>").join("") + "</div>" +
-      t.cmp_r.map((r, i) => '<div class="cr"><span>' + r + '</span><span><i class="yes">' + tick + "</i></span>" +
-        MARKS[i].map(m => "<span>" + (m ? '<i class="yes dim">' + tick + "</i>" : '<i class="no"></i>') + "</span>").join("") + "</div>").join("");
-  }
-
-  // Before and after: one line between the usual screen and Quiet.
-  let touched = false;
-  function slider() {
-    const hues = [12, 205, 140, 48, 280, 330, 190, 95, 25, 260, 170, 350, 220, 60, 300, 110];
-    const badge = { 1: "3", 2: "12", 5: "99+", 7: "7", 10: "1", 12: "24" };
-    const icon = (hu, n) => '<i style="background:linear-gradient(145deg,hsl(' + hu + " 85% 62%),hsl(" + (hu + 30) + ' 80% 45%))"' + (n ? ' data-n="' + n + '"' : "") + "></i>";
-    $("noisy").innerHTML = '<div class="nz-ban">' + icon(330) + "<u></u></div>" + '<div class="nz-ban">' + icon(205) + "<u></u></div>" +
-      '<div class="nz-grid">' + hues.map((hu, i) => icon(hu, badge[i])).join("") + "</div>" +
-      '<div class="nz-dock">' + [140, 205, 48, 0].map(hu => icon(hu)).join("") + "</div>";
-    const ba = $("ba"), scr = ba.querySelector(".screen");
-    const set = v => ba.style.setProperty("--x", (Math.max(.05, Math.min(.95, v)) * 100).toFixed(1) + "%");
-    const at = e => { const r = scr.getBoundingClientRect(); set((e.clientX - r.left) / r.width); };
-    let drag = false;
-    ba.addEventListener("pointerdown", e => { drag = true; touched = true; try { ba.setPointerCapture(e.pointerId); } catch (x) {} at(e); });
-    ba.addEventListener("pointermove", e => { if (drag) at(e); });
-    ["pointerup", "pointercancel"].forEach(n => ba.addEventListener(n, () => { drag = false; }));
-    return set;
-  }
-  function sweep(set) {
-    const t0 = performance.now();
-    const step = now => {
-      if (touched) return;
-      const k = Math.min(1, (now - t0) / 2600);
-      // Out to the right, across to the left, back to the middle.
-      set(k < .25 ? .55 - k * 1.6 : k < .7 ? .15 + (k - .25) / .45 * .75 : .9 - (k - .7) / .3 * .35);
-      if (k < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }
-
-  // The network behind the headline: points that find each other, and signals passing between them.
-  function net() {
-    const c = $("net"), hero = c.parentElement, ctx = c.getContext && c.getContext("2d");
-    if (!ctx) return () => {};
-    let w = 0, h = 0, nodes = [], pulses = [], px = -1e4, py = -1e4, raf = 0, last = 0;
-    function size() {
-      const dpr = Math.min(2, devicePixelRatio || 1);
-      w = hero.clientWidth; h = hero.clientHeight;
-      c.width = Math.round(w * dpr); c.height = Math.round(h * dpr);
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const n = Math.max(24, Math.min(64, Math.round(w * h / 15000)));
-      nodes = Array.from({ length: n }, () => ({ x: Math.random() * w, y: Math.random() * h, vx: (Math.random() - .5) * .3, vy: (Math.random() - .5) * .3, r: 1 + Math.random() * 1.5 }));
-      pulses = [];
-    }
-    function frame(now) {
-      raf = 0;
-      const dt = Math.min(3, (now - last) / 16 || 1); last = now;
-      const light = document.documentElement.dataset.theme === "light";
-      const ink = light ? "88,72,214" : "160,150,255", hot = light ? "14,150,190" : "70,225,245";
-      const R = Math.max(96, Math.min(150, w * .28)), R2 = R * R, links = [];
-      const nzv = typeof Noise !== "undefined" ? Noise.level() : 0, fast = 1 + nzv * 6;
-      ctx.clearRect(0, 0, w, h);
-      for (const p of nodes) {
-        const dx = px - p.x, dy = py - p.y, d2 = dx * dx + dy * dy;
-        if (d2 < 26000 && d2 > 400) { p.x += dx * .004 * dt; p.y += dy * .004 * dt; }
-        p.x += p.vx * dt * fast + (Math.random() - .5) * nzv * 2.6; p.y += p.vy * dt * fast + (Math.random() - .5) * nzv * 2.6;
-        if (p.x < 0 || p.x > w) p.vx = -p.vx;
-        if (p.y < 0 || p.y > h) p.vy = -p.vy;
-      }
-      ctx.lineWidth = 1;
-      for (let i = 0; i < nodes.length; i++) for (let k = i + 1; k < nodes.length; k++) {
-        const a = nodes[i], b = nodes[k], dx = a.x - b.x, dy = a.y - b.y, d2 = dx * dx + dy * dy;
-        if (d2 > R2) continue;
-        ctx.strokeStyle = "rgba(" + ink + "," + ((1 - d2 / R2) * .42 * (1 - nzv * .85)).toFixed(3) + ")";
-        ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-        links.push(i, k);
-      }
-      ctx.fillStyle = "rgba(" + ink + ",.85)";
-      for (let q = 0; q < nodes.length; q++) {
-        const p = nodes[q];
-        if (nzv > .04) { const z = q % 5 ? 3.2 : 5.4; ctx.globalAlpha = nzv; ctx.fillStyle = ["#ff453a", "#ff9f0a", "#30d158", "#0a84ff", "#bf5af2"][q % 5]; ctx.fillRect(p.x - z / 2, p.y - z / 2, z, z); ctx.globalAlpha = 1 - nzv; ctx.fillStyle = "rgba(" + ink + ",.85)"; }
-        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.2832); ctx.fill();
-      }
-      ctx.globalAlpha = 1;
-      if (pulses.length < 9 && links.length && Math.random() < .09 * dt * (1 - nzv)) { const q = (Math.random() * links.length / 2 | 0) * 2; pulses.push({ a: links[q], b: links[q + 1], t: 0 }); }
-      pulses = pulses.filter(s => {
-        s.t += .018 * dt;
-        const a = nodes[s.a], b = nodes[s.b], x = a.x + (b.x - a.x) * s.t, y = a.y + (b.y - a.y) * s.t;
-        ctx.fillStyle = "rgba(" + hot + ",.22)"; ctx.beginPath(); ctx.arc(x, y, 6, 0, 6.2832); ctx.fill();
-        ctx.fillStyle = "rgba(" + hot + ",1)"; ctx.beginPath(); ctx.arc(x, y, 2.1, 0, 6.2832); ctx.fill();
-        return s.t < 1;
-      });
-      if (!calm) run();
-    }
-    function run() { if (!raf && !document.hidden && hero.getBoundingClientRect().bottom > 0) raf = requestAnimationFrame(frame); }
-    hero.addEventListener("pointermove", e => { const r = hero.getBoundingClientRect(); px = e.clientX - r.left; py = e.clientY - r.top; });
-    hero.addEventListener("pointerleave", () => { px = py = -1e4; });
-    addEventListener("resize", () => { if (hero.clientWidth !== w) { size(); run(); } });
-    document.addEventListener("visibilitychange", run);
-    size();
-    requestAnimationFrame(frame);
-    return run;
-  }
-
-  function init() {
-    const set = slider();
-    $("tm-in").addEventListener("input", () => time());
-    $("ck-in").addEventListener("input", () => { $("ck-in").dataset.auto = "0"; verdict(); });
-    $("ck-ex").addEventListener("click", e => { const b = e.target.closest("button"); if (b) { $("ck-in").value = b.textContent; $("ck-in").dataset.auto = "0"; verdict(); } });
-    const run = net();
-
-    // The phone leans a little as the page moves; a pointer leans it sideways.
-    const stage = $("player"), ph = stage.querySelector(".phone");
-    let swept = false, counted = false;
-    function onScroll() {
-      run();
-      if (calm) return;
-      const r = stage.getBoundingClientRect();
-      if (r.bottom > 0 && r.top < innerHeight) ph.style.setProperty("--rx", (Math.max(-1, Math.min(1, (r.top + r.height / 2 - innerHeight / 2) / innerHeight)) * 9).toFixed(2) + "deg");
-      if (!swept && $("ba").getBoundingClientRect().top < innerHeight * .6) { swept = true; sweep(set); }
-      if (!counted && $("tm-days").getBoundingClientRect().top < innerHeight * .85) { counted = true; countUp(); }
-    }
-    stage.addEventListener("pointermove", e => { if (e.pointerType !== "mouse") return; const r = stage.getBoundingClientRect(); ph.style.setProperty("--ry", (((e.clientX - r.left) / r.width - .5) * 14).toFixed(2) + "deg"); });
-    stage.addEventListener("pointerleave", () => ph.style.setProperty("--ry", "0deg"));
-    addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-  }
-  function lang() {
-    const t = T[LANG];
-    $("ck-in").placeholder = t.ck_ph;
-    $("ck-ex").innerHTML = t.ck_ex.map(x => '<button type="button"></button>').join("");
-    [...$("ck-ex").children].forEach((b, i) => { b.textContent = t.ck_ex[i]; });
-    if (!$("ck-in").value || $("ck-in").dataset.auto === "1") { $("ck-in").value = t.ck_ex[1]; $("ck-in").dataset.auto = "1"; }
-    verdict(); time(); compare();
-  }
-  return { init, lang };
-})();
-
 document.querySelectorAll(".langs button").forEach(b => b.addEventListener("click", () => apply(b.dataset.lang)));
-build();
-Player.init();
-Extra.init();
-Story.init();
-Noise.init();
-apply(pickLang());
-Player.show(0);
 
-/* ---- Things rise into place as they come into view. Checked by position, so nothing stays hidden. ---- */
+/* Light or dark: the system decides until the visitor does. */
+$("theme").addEventListener("click", () => {
+  const root = document.documentElement, dark = root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  root.dataset.theme = dark ? "light" : "dark";
+  try { localStorage.setItem("quiet-theme", root.dataset.theme); } catch (e) {}
+});
+
+/* Scrolling: the header's line, things rising into place, the demos running only while seen. */
 (() => {
-  const bar = document.getElementById("bar");
-  const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const els = calm ? [] : [...document.querySelectorAll(".head, .step, .card, .col, .table, .ai-box, .faq, .end-box, .ba-wrap, .time, .cmp")];
-  els.forEach(el => el.classList.add("rv"));
-  let left = els.slice();
+  const bar = $("top-bar"), rv = [...document.querySelectorAll(".rv")];
+  let left = rv;
+  function inView(el, k) { const r = el.getBoundingClientRect(); return r.top < innerHeight * k && r.bottom > 0; }
   function check() {
-    const max = document.documentElement.scrollHeight - innerHeight;
-    bar.style.transform = "scaleX(" + (max > 0 ? Math.min(1, scrollY / max) : 0) + ")";
-    if (!left.length) return;
-    const edge = innerHeight * .92;
-    left = left.filter(el => { if (el.getBoundingClientRect().top < edge) { el.classList.add("in"); return false; } return true; });
+    bar.classList.toggle("scrolled", scrollY > 8);
+    if (left.length) left = left.filter(el => { if (inView(el, .94)) { el.classList.add("in"); return false; } return true; });
+    Search.visible(inView($("home"), 1) && !document.hidden);
+    Wait.visible(inView($("wait"), .85) && !document.hidden);
   }
   addEventListener("scroll", check, { passive: true });
   addEventListener("resize", check);
+  document.addEventListener("visibilitychange", check);
+  apply(pickLang());
   check();
+  setInterval(clock, 15000);
 })();
 </script>
 </body>
