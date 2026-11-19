@@ -383,6 +383,58 @@
   section[data-n] > .wrap { position: relative; }
   @media (min-width: 720px) { .st-meta { left: 32px; top: 28px; } }
 
+  /* Pass 7: the page is loud at the top and quiet by the time Quiet is in. --nz runs from 1 to 0. */
+  :root { --nz: 1; }
+  .hero::before { background: radial-gradient(circle, color-mix(in srgb, #ff453a calc(var(--nz) * 100%), var(--a1)), transparent 62%); }
+  .hero::after { background: radial-gradient(circle, color-mix(in srgb, #ff9f0a calc(var(--nz) * 100%), var(--a3)), transparent 62%); }
+  [data-bz] { position: relative; }
+  [data-bz]::after { content: attr(data-bz); position: absolute; right: -8px; top: -8px; min-width: 19px; height: 19px; padding: 0 5px; border-radius: 10px; background: #ff3b30; color: #fff; font: 600 11px/19px Inter, system-ui, sans-serif; letter-spacing: 0; text-align: center; text-transform: none; box-shadow: 0 0 0 2px var(--bg); opacity: var(--nz); scale: calc(.3 + var(--nz) * .7); pointer-events: none; z-index: 2; }
+  .nz-on [data-bz]::after { animation: wob .9s ease-in-out infinite alternate; }
+  [data-bz]:nth-of-type(2n)::after { animation-delay: -.4s; }
+  @keyframes wob { from { rotate: -9deg; translate: 0 0; } to { rotate: 9deg; translate: 0 -2px; } }
+
+  #nz-toasts { position: fixed; inset: 0; z-index: 15; pointer-events: none; overflow: hidden; }
+  .nzt { position: absolute; display: flex; gap: 10px; align-items: center; padding: 10px 12px; border-radius: 16px; background: rgba(250,250,252,.96); color: #111; box-shadow: 0 10px 34px rgba(0,0,0,.35); rotate: var(--r, 0deg); opacity: calc(.3 + var(--nz) * .7); animation: nzin .28s cubic-bezier(.2, 1.3, .4, 1) backwards; transition: opacity .35s, translate .35s; }
+  .nzt.out { opacity: 0; translate: 0 -10px; }
+  .nzt i { width: 34px; height: 34px; border-radius: 10px; flex: none; display: block; }
+  .nzt span { display: block; font-size: 13px; line-height: 1.3; color: #444; overflow: hidden; }
+  .nzt b { display: block; font-size: 13px; font-weight: 600; color: #111; }
+  .nzt span span { white-space: nowrap; text-overflow: ellipsis; }
+  @keyframes nzin { from { scale: .7; translate: 0 14px; } }
+
+  .tape { display: grid; }
+  .tape > div { grid-area: 1 / 1; }
+  .tape .tech { opacity: calc(1 - var(--nz)); }
+  .tape .loud { opacity: var(--nz); animation-duration: 14s; }
+  .tape .loud span { font-weight: 600; color: #ff453a; }
+  .tape .loud span:nth-child(3n) { color: #ff9f0a; }
+  .tape .loud span:nth-child(3n + 1) { color: #0a84ff; }
+  .tape .loud span::after { content: "•"; background: none; color: var(--muted); }
+
+  .pz { z-index: 3; opacity: calc((var(--nz) - .3) * 2.5); pointer-events: none; }
+
+  /* The switch */
+  .qsw { position: relative; display: inline-flex; align-items: center; gap: 14px; margin-top: 28px; padding: 8px 22px 8px 8px; border-radius: 999px; border: 1px solid transparent; background: linear-gradient(var(--card), var(--card)) padding-box, var(--grad) border-box; font-weight: 600; font-size: 17px; line-height: 1.2; text-align: left; box-shadow: 0 10px 34px color-mix(in srgb, var(--a1) 40%, transparent); }
+  .qsw .trk { position: relative; width: 58px; height: 34px; border-radius: 999px; background: color-mix(in srgb, var(--fg) 22%, transparent); transition: background .35s; flex: none; }
+  .qsw .trk::after { content: ""; position: absolute; left: 3px; top: 3px; width: 28px; height: 28px; border-radius: 50%; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,.4); transition: translate .35s cubic-bezier(.3, 1.4, .5, 1); }
+  .qsw[aria-checked="true"] .trk { background: var(--grad); }
+  .qsw[aria-checked="true"] .trk::after { translate: 24px 0; }
+  .qsw[aria-checked="false"]::before { content: ""; position: absolute; inset: -1px; border-radius: 999px; border: 2px solid var(--a2); animation: ping 2s ease-out infinite; pointer-events: none; }
+  @keyframes ping { from { scale: 1; opacity: .8; } to { scale: 1.12 1.5; opacity: 0; } }
+  .sw-hint { font: 500 12px/1.5 var(--mono); letter-spacing: .02em; color: var(--muted); margin-top: 14px; max-width: 44ch; opacity: calc(var(--nz) * 4); }
+  .hero .cta { margin-top: 22px; }
+  .cta .pill { box-shadow: none; background: transparent; color: var(--fg); border: 1px solid var(--line); }
+
+  /* The meter */
+  .nzm { position: fixed; left: 50%; bottom: 14px; translate: -50% 0; z-index: 25; display: flex; align-items: center; gap: 10px; padding: 10px 15px 10px 13px; border-radius: 999px; background: color-mix(in srgb, var(--bg) 84%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border: 1px solid var(--line); font: 500 11.5px/1 var(--mono); letter-spacing: .12em; color: var(--fg); box-shadow: var(--shadow); white-space: nowrap; transition: opacity .5s; }
+  body:not(.nz-on) .nzm { opacity: .55; }
+  .eq { display: flex; align-items: flex-end; gap: 2px; height: 14px; }
+  .eq i { width: 3px; height: calc(3px + 11px * var(--nz)); border-radius: 2px; background: color-mix(in srgb, #ff453a calc(var(--nz) * 100%), var(--a3)); transform-origin: bottom; }
+  .nz-on .eq i { animation: eq .42s ease-in-out infinite alternate; }
+  .eq i:nth-child(2) { animation-delay: -.3s; } .eq i:nth-child(3) { animation-delay: -.12s; } .eq i:nth-child(4) { animation-delay: -.36s; } .eq i:nth-child(5) { animation-delay: -.2s; }
+  @keyframes eq { from { transform: scaleY(.35); } to { transform: scaleY(1); } }
+  footer { padding-bottom: 76px; }
+
   @media (min-width: 720px) {
     .wrap { padding: 0 32px; }
     section { padding: 96px 0; }
@@ -416,6 +468,8 @@
 </head>
 <body>
 <div id="bar" aria-hidden="true"></div>
+<div id="nz-toasts" aria-hidden="true"></div>
+<button type="button" class="nzm" id="nzm" aria-pressed="false"><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><span id="nzm-l"></span></button>
 
 <header>
   <div class="wrap">
@@ -449,6 +503,8 @@
         <p class="eyebrow" data-t="kicker"></p>
         <h1 data-t="h1"></h1>
         <p class="lead" data-t="lead"></p>
+        <button type="button" class="qsw" id="qsw" role="switch" aria-checked="false"><span class="trk"></span><span id="qsw-l"></span></button>
+        <p class="sw-hint" data-t="sw_hint"></p>
         <div class="cta">
           <span class="pill"><i></i><span data-t="status"></span></span>
           <a class="more" href="#how" data-t="more"></a>
@@ -467,7 +523,7 @@
     </div>
   </section>
 
-  <div class="tape" aria-hidden="true"><div><span>ON-DEVICE AI</span><span>TENSORFLOW LITE</span><span>KOTLIN</span><span>0 SERVERS</span><span>OFFLINE</span><span>ANDROID 8+</span><span>NO ACCOUNT</span><span>ON-DEVICE AI</span><span>TENSORFLOW LITE</span><span>KOTLIN</span><span>0 SERVERS</span><span>OFFLINE</span><span>ANDROID 8+</span><span>NO ACCOUNT</span><span>ON-DEVICE AI</span><span>TENSORFLOW LITE</span><span>KOTLIN</span><span>0 SERVERS</span><span>OFFLINE</span><span>ANDROID 8+</span><span>NO ACCOUNT</span><span>ON-DEVICE AI</span><span>TENSORFLOW LITE</span><span>KOTLIN</span><span>0 SERVERS</span><span>OFFLINE</span><span>ANDROID 8+</span><span>NO ACCOUNT</span></div></div>
+  <div class="tape" aria-hidden="true"><div class="loud"><span>99+</span><span>LIVE</span><span>NEW</span><span>SALE −70%</span><span>🔥 HOT</span><span>🔔 12</span><span>▶ SHORTS</span><span>❤ 1.2K</span><span>!!!</span><span>99+</span><span>LIVE</span><span>NEW</span><span>SALE −70%</span><span>🔥 HOT</span><span>🔔 12</span><span>▶ SHORTS</span><span>❤ 1.2K</span><span>!!!</span><span>99+</span><span>LIVE</span><span>NEW</span><span>SALE −70%</span><span>🔥 HOT</span><span>🔔 12</span><span>▶ SHORTS</span><span>❤ 1.2K</span><span>!!!</span><span>99+</span><span>LIVE</span><span>NEW</span><span>SALE −70%</span><span>🔥 HOT</span><span>🔔 12</span><span>▶ SHORTS</span><span>❤ 1.2K</span><span>!!!</span></div><div class="tech"><span>ON-DEVICE AI</span><span>TENSORFLOW LITE</span><span>KOTLIN</span><span>0 SERVERS</span><span>OFFLINE</span><span>ANDROID 8+</span><span>NO ACCOUNT</span><span>ON-DEVICE AI</span><span>TENSORFLOW LITE</span><span>KOTLIN</span><span>0 SERVERS</span><span>OFFLINE</span><span>ANDROID 8+</span><span>NO ACCOUNT</span><span>ON-DEVICE AI</span><span>TENSORFLOW LITE</span><span>KOTLIN</span><span>0 SERVERS</span><span>OFFLINE</span><span>ANDROID 8+</span><span>NO ACCOUNT</span><span>ON-DEVICE AI</span><span>TENSORFLOW LITE</span><span>KOTLIN</span><span>0 SERVERS</span><span>OFFLINE</span><span>ANDROID 8+</span><span>NO ACCOUNT</span></div></div>
 
   <section id="story" class="story">
     <div class="st-pin" id="st-pin">
@@ -1031,6 +1087,7 @@ function apply(lang) {
   Player.label();
   Extra.lang();
   Story.lang();
+  Noise.lang();
 }
 
 /* ---- Light or dark: the system's choice until the visitor makes their own. ---- */
@@ -1044,6 +1101,120 @@ function theme(set) {
 try { const saved = localStorage.getItem("quiet-theme"); if (saved === "dark" || saved === "light") document.documentElement.dataset.theme = saved; } catch (e) {}
 theme();
 document.getElementById("theme").addEventListener("click", () => theme(theme() ? "light" : "dark"));
+
+// Words for the noise.
+Object.assign(T.uz, {
+  sw_off: "Quiet’ni yoqing", sw_on: "Quiet yoqildi. Sokinlik.", sw_hint: "Yoki pastga suring: Quiet o‘rnatilgani sari shovqin kamayadi.",
+  nz_l: "SHOVQIN", nz_0: "SOKIN",
+  nz_apps: ["Ijtimoiy tarmoq", "Video", "O‘yin", "Do‘kon", "Chat", "Yangiliklar"],
+  nz_msgs: ["12 ta yangi yoqtirish", "Siz uchun yangi video", "Sovg‘angiz kutmoqda!", "Chegirma 2 soatda tugaydi", "Sizni guruhga qo‘shishdi", "SHOSHILINCH: buni ko‘ring", "Yana bitta qism?", "Do‘stingiz onlayn"]
+});
+Object.assign(T.ru, {
+  sw_off: "Включите Quiet", sw_on: "Quiet включён. Тишина.", sw_hint: "Или листайте вниз: чем дальше установка Quiet, тем тише.",
+  nz_l: "ШУМ", nz_0: "ТИХО",
+  nz_apps: ["Соцсеть", "Видео", "Игра", "Магазин", "Чат", "Новости"],
+  nz_msgs: ["12 новых лайков", "Новое видео для вас", "Ваш подарок ждёт!", "Скидка закончится через 2 часа", "Вас добавили в группу", "СРОЧНО: посмотрите это", "Ещё одну серию?", "Ваш друг в сети"]
+});
+Object.assign(T.en, {
+  sw_off: "Turn Quiet on", sw_on: "Quiet is on. Calm.", sw_hint: "Or scroll down: the further Quiet gets installed, the quieter it is.",
+  nz_l: "NOISE", nz_0: "CALM",
+  nz_apps: ["Social", "Video", "Game", "Shop", "Chat", "News"],
+  nz_msgs: ["12 new likes", "A new video for you", "Your gift is waiting!", "Sale ends in 2 hours", "You were added to a group", "BREAKING: see this", "One more episode?", "Your friend is online"]
+});
+
+/* ---- Noise: the page starts loud and goes quiet as Quiet is installed, by scrolling or by the switch. ---- */
+const Noise = (() => {
+  const $ = id => document.getElementById(id);
+  const root = document.documentElement;
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const HUES = [4, 28, 135, 211, 280, 340];
+  let nz = 1, forced = false, anim = 0, tm = 0, live = 0, counts = [], marked = [], tick = 0;
+
+  function fromScroll() {
+    const st = $("story"), y = scrollY, a = st.offsetTop - 60, span = st.offsetHeight - $("st-pin").offsetHeight;
+    if (y <= 0) return 1;
+    if (y < a) return 1 - .12 * (y / a);
+    const k = (y - a) / (span / 3);
+    if (k < 1) return .88 - .73 * (k * k * (3 - 2 * k));
+    return .15 * (1 - Math.min(1, (y - a - span / 3) / (span * 2 / 3)));
+  }
+  function label() {
+    const t = T[LANG], pct = Math.round(nz * 100);
+    $("nzm-l").textContent = pct > 0 ? t.nz_l + " " + pct + "%" : t.nz_0;
+    $("qsw-l").textContent = forced ? t.sw_on : t.sw_off;
+  }
+  function set(v) {
+    nz = Math.max(0, Math.min(1, v));
+    root.style.setProperty("--nz", nz.toFixed(3));
+    document.body.classList.toggle("nz-on", nz > .03);
+    label();
+    if (nz > .06 && !tm) loop();
+    if (nz <= .3 && document.title !== T[LANG].title) document.title = T[LANG].title;
+  }
+  function glide(to, ms) {
+    cancelAnimationFrame(anim);
+    const from = nz, t0 = performance.now();
+    const step = now => { const k = Math.min(1, (now - t0) / ms), e = 1 - Math.pow(1 - k, 3); set(from + (to - from) * e); if (k < 1) anim = requestAnimationFrame(step); };
+    anim = requestAnimationFrame(step);
+    // Should the frames stall, the page still ends where it was told to.
+    setTimeout(() => { if (Math.abs(nz - to) > .01 && (forced ? to === 0 : true)) { cancelAnimationFrame(anim); set(forced ? 0 : fromScroll()); } }, ms + 400);
+  }
+  function toggle() {
+    forced = !forced;
+    $("qsw").setAttribute("aria-checked", String(forced));
+    $("nzm").setAttribute("aria-pressed", String(forced));
+    document.body.classList.toggle("quiet-on", forced);
+    glide(forced ? 0 : fromScroll(), forced ? 1500 : 600);
+    label();
+  }
+
+  // The interruptions.
+  function spawn() {
+    if (live >= 4) return;
+    const t = T[LANG], W = innerWidth, H = innerHeight, tw = Math.min(250, W * .72), r = Math.random(), hue = HUES[Math.random() * HUES.length | 0];
+    const top = r < .42 ? 68 + Math.random() * 70 : r < .84 ? H - 160 + Math.random() * 70 : 170 + Math.random() * Math.max(40, H - 400);
+    const el = document.createElement("div");
+    el.className = "nzt";
+    el.style.cssText = "left:" + Math.round(8 + Math.random() * Math.max(0, W - tw - 16)) + "px;top:" + Math.round(top) + "px;width:" + Math.round(tw) + "px;--r:" + ((Math.random() - .5) * 6).toFixed(1) + "deg";
+    const ic = document.createElement("i"), box = document.createElement("span"), a = document.createElement("b"), m = document.createElement("span");
+    ic.style.background = "linear-gradient(145deg,hsl(" + hue + " 90% 60%),hsl(" + (hue + 30) + " 85% 45%))";
+    a.textContent = t.nz_apps[Math.random() * t.nz_apps.length | 0];
+    m.textContent = t.nz_msgs[Math.random() * t.nz_msgs.length | 0];
+    box.append(a, m); el.append(ic, box);
+    $("nz-toasts").appendChild(el); live++;
+    setTimeout(() => el.classList.add("out"), 2300);
+    setTimeout(() => { el.remove(); live--; }, 2700);
+  }
+  function loop() {
+    clearTimeout(tm); tm = 0;
+    if (nz <= .06 || still) return;
+    if (!document.hidden) {
+      spawn();
+      // The badges keep counting, and so does the tab.
+      if (++tick % 2 === 0) {
+        const i = Math.random() * marked.length | 0;
+        counts[i] += 1 + (Math.random() * 4 | 0);
+        marked[i].dataset.bz = counts[i] > 99 ? "99+" : counts[i];
+        if (nz > .3) { const sum = counts.reduce((x, y) => x + y, 0); document.title = "(" + (sum > 99 ? "99+" : sum) + ") " + T[LANG].title; }
+      }
+    }
+    tm = setTimeout(loop, (480 + Math.random() * 520) / Math.max(.14, nz));
+  }
+
+  function init() {
+    marked = [".logo", "#theme", ".langs", ".hero .badge", ".cta .pill", "header nav a:nth-child(2)", "header nav a:nth-child(4)"].map(s => document.querySelector(s)).filter(Boolean);
+    counts = marked.map(() => 1 + (Math.random() * 14 | 0));
+    marked.forEach((el, i) => { el.dataset.bz = counts[i]; });
+    // The phone in the first screen is as loud as the page.
+    $("p-screen").insertAdjacentHTML("beforeend", '<div class="noisy pz">' + $("noisy").innerHTML + "</div>");
+    $("qsw").addEventListener("click", toggle);
+    $("nzm").addEventListener("click", toggle);
+    addEventListener("scroll", () => { if (!forced) set(fromScroll()); }, { passive: true });
+    document.addEventListener("visibilitychange", () => { if (!document.hidden && nz > .06 && !tm) loop(); });
+    set(fromScroll());
+  }
+  return { init, lang: label, level: () => nz, set };
+})();
 
 // Words for the story.
 Object.assign(T.uz, {
@@ -1354,11 +1525,12 @@ const Extra = (() => {
       const light = document.documentElement.dataset.theme === "light";
       const ink = light ? "88,72,214" : "160,150,255", hot = light ? "14,150,190" : "70,225,245";
       const R = Math.max(96, Math.min(150, w * .28)), R2 = R * R, links = [];
+      const nzv = typeof Noise !== "undefined" ? Noise.level() : 0, fast = 1 + nzv * 6;
       ctx.clearRect(0, 0, w, h);
       for (const p of nodes) {
         const dx = px - p.x, dy = py - p.y, d2 = dx * dx + dy * dy;
         if (d2 < 26000 && d2 > 400) { p.x += dx * .004 * dt; p.y += dy * .004 * dt; }
-        p.x += p.vx * dt; p.y += p.vy * dt;
+        p.x += p.vx * dt * fast + (Math.random() - .5) * nzv * 2.6; p.y += p.vy * dt * fast + (Math.random() - .5) * nzv * 2.6;
         if (p.x < 0 || p.x > w) p.vx = -p.vx;
         if (p.y < 0 || p.y > h) p.vy = -p.vy;
       }
@@ -1366,13 +1538,18 @@ const Extra = (() => {
       for (let i = 0; i < nodes.length; i++) for (let k = i + 1; k < nodes.length; k++) {
         const a = nodes[i], b = nodes[k], dx = a.x - b.x, dy = a.y - b.y, d2 = dx * dx + dy * dy;
         if (d2 > R2) continue;
-        ctx.strokeStyle = "rgba(" + ink + "," + ((1 - d2 / R2) * .42).toFixed(3) + ")";
+        ctx.strokeStyle = "rgba(" + ink + "," + ((1 - d2 / R2) * .42 * (1 - nzv * .85)).toFixed(3) + ")";
         ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
         links.push(i, k);
       }
       ctx.fillStyle = "rgba(" + ink + ",.85)";
-      for (const p of nodes) { ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.2832); ctx.fill(); }
-      if (pulses.length < 9 && links.length && Math.random() < .09 * dt) { const q = (Math.random() * links.length / 2 | 0) * 2; pulses.push({ a: links[q], b: links[q + 1], t: 0 }); }
+      for (let q = 0; q < nodes.length; q++) {
+        const p = nodes[q];
+        if (nzv > .04) { const z = q % 5 ? 3.2 : 5.4; ctx.globalAlpha = nzv; ctx.fillStyle = ["#ff453a", "#ff9f0a", "#30d158", "#0a84ff", "#bf5af2"][q % 5]; ctx.fillRect(p.x - z / 2, p.y - z / 2, z, z); ctx.globalAlpha = 1 - nzv; ctx.fillStyle = "rgba(" + ink + ",.85)"; }
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.2832); ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      if (pulses.length < 9 && links.length && Math.random() < .09 * dt * (1 - nzv)) { const q = (Math.random() * links.length / 2 | 0) * 2; pulses.push({ a: links[q], b: links[q + 1], t: 0 }); }
       pulses = pulses.filter(s => {
         s.t += .018 * dt;
         const a = nodes[s.a], b = nodes[s.b], x = a.x + (b.x - a.x) * s.t, y = a.y + (b.y - a.y) * s.t;
@@ -1431,6 +1608,7 @@ build();
 Player.init();
 Extra.init();
 Story.init();
+Noise.init();
 apply(pickLang());
 Player.show(0);
 
