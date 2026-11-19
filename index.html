@@ -3,141 +3,185 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Quiet</title>
-<meta name="description" content="Quiet — Android uchun matnli uy ekrani: ilova limitlari, fokus, ekran vaqti va ota-ona qulfi. Akkauntsiz, reklamasiz.">
-<meta property="og:title" content="Quiet — telefonni qo'yib qo'yish osonroq">
-<meta property="og:description" content="Android uchun matnli uy ekrani: limitlar, fokus, ekran vaqti va ota-ona qulfi.">
+<title>Quiet — Android uchun sokin bosh ekran</title>
+<meta name="description" content="Quiet bosh ekranni oddiy matnli roʻyxatga aylantiradi va vaqtingizni oladigan ilovalar oldiga kichik toʻsiq qoʻyadi. Android 8 va undan yangi.">
+<meta property="og:title" content="Quiet — Android uchun sokin bosh ekran">
+<meta property="og:description" content="Matnli bosh ekran, ilova limitlari, fokus va ota-ona qulfi. Roʻyxatdan oʻtish shart emas.">
+<meta property="og:type" content="website">
 <meta name="theme-color" content="#000000">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23000'/%3E%3Ccircle cx='32' cy='32' r='13' fill='none' stroke='%23fff' stroke-width='5'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #000; --fg: #fff; --muted: #9a9a9a; --line: #262626; --card: #0e0e0e;
-    --max: 1080px;
+    --bg: #000; --fg: #fff; --muted: #a0a0a0; --line: #262626; --soft: #0d0d0d;
+    --max: 1120px; --gut: 24px;
   }
   @media (prefers-color-scheme: light) {
-    :root:not([data-theme="dark"]) { --bg: #fff; --fg: #000; --muted: #5f5f5f; --line: #e2e2e2; --card: #f6f6f6; }
+    :root { --bg: #fff; --fg: #0a0a0a; --muted: #5c5c5c; --line: #e4e4e4; --soft: #f5f5f5; }
   }
-  :root[data-theme="light"] { --bg: #fff; --fg: #000; --muted: #5f5f5f; --line: #e2e2e2; --card: #f6f6f6; }
+  /* A band in the opposite colours, for rhythm. */
+  .invert { --bg: #fff; --fg: #0a0a0a; --muted: #5c5c5c; --line: #dcdcdc; --soft: #f1f1f1; }
+  @media (prefers-color-scheme: light) {
+    .invert { --bg: #0a0a0a; --fg: #fff; --muted: #a0a0a0; --line: #2a2a2a; --soft: #151515; }
+  }
+
   * { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
   body {
     margin: 0; background: var(--bg); color: var(--fg);
-    font: 400 17px/1.55 Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    -webkit-font-smoothing: antialiased;
+    font: 400 17px/1.6 Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
   }
-  a { color: inherit; }
-  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 20px; }
+  a { color: inherit; text-underline-offset: 3px; }
+  a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--fg); outline-offset: 3px; border-radius: 4px; }
+  .wrap { max-width: var(--max); margin: 0 auto; padding-left: var(--gut); padding-right: var(--gut); }
+  h1, h2, h3 { font-weight: 600; letter-spacing: -.022em; margin: 0; text-wrap: balance; }
+  p { margin: 0; text-wrap: pretty; }
 
-  header { position: sticky; top: 0; background: var(--bg); border-bottom: 1px solid var(--line); z-index: 5; }
-  .bar { display: flex; align-items: center; justify-content: space-between; height: 60px; gap: 12px; }
-  .logo { font-weight: 500; font-size: 19px; letter-spacing: .02em; text-decoration: none; display: flex; align-items: center; gap: 10px; }
-  .logo i { width: 14px; height: 14px; border: 2px solid var(--fg); border-radius: 50%; display: inline-block; }
-  nav { display: flex; align-items: center; gap: 22px; font-size: 15px; }
-  nav a.link { text-decoration: none; color: var(--muted); }
-  nav a.link:hover { color: var(--fg); }
-  .langs { display: flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
-  .langs button {
-    background: none; border: 0; color: var(--muted); font: inherit; font-size: 13px;
-    padding: 5px 10px; cursor: pointer;
-  }
+  /* Header */
+  header { position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--line); }
+  .bar { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 16px; }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 19px; text-decoration: none; letter-spacing: -.01em; }
+  .logo i { width: 15px; height: 15px; border: 2.5px solid var(--fg); border-radius: 50%; }
+  nav { display: flex; align-items: center; gap: 28px; font-size: 15px; }
+  nav a { text-decoration: none; color: var(--muted); }
+  nav a:hover { color: var(--fg); }
+  .langs { display: flex; gap: 2px; padding: 3px; border: 1px solid var(--line); border-radius: 999px; }
+  .langs button { background: none; border: 0; color: var(--muted); font: 500 12.5px/1 Inter, system-ui, sans-serif; padding: 7px 10px; border-radius: 999px; cursor: pointer; letter-spacing: .04em; }
   .langs button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
-  @media (max-width: 720px) { nav a.link { display: none; } }
+  @media (max-width: 820px) { nav a { display: none; } }
 
-  .hero { padding-top: 88px; padding-bottom: 72px; display: grid; grid-template-columns: 1.1fr .9fr; gap: 48px; align-items: center; }
-  .eyebrow { color: var(--muted); font-size: 15px; margin: 0 0 18px; }
-  h1 { font-weight: 500; font-size: clamp(38px, 6vw, 64px); line-height: 1.05; letter-spacing: -.02em; margin: 0 0 22px; }
-  .lead { font-size: 20px; color: var(--muted); max-width: 34ch; margin: 0 0 34px; }
-  .actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
-  .btn {
-    display: inline-flex; align-items: center; justify-content: center; min-height: 50px;
-    padding: 0 26px; border-radius: 999px; font-weight: 500; font-size: 16px; text-decoration: none;
-    border: 1.5px solid var(--fg);
+  /* Hero */
+  .hero { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); gap: 56px; align-items: center; padding-top: 96px; padding-bottom: 88px; }
+  .kicker { color: var(--muted); font-size: 15px; margin-bottom: 20px; }
+  h1 { font-size: clamp(40px, 6.2vw, 72px); line-height: 1.02; letter-spacing: -.035em; margin-bottom: 26px; }
+  .lead { font-size: clamp(18px, 2vw, 21px); line-height: 1.5; color: var(--muted); max-width: 36em; margin-bottom: 36px; }
+  .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; }
+  .status { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 20px; border: 1px solid var(--line); border-radius: 999px; font-weight: 500; font-size: 15.5px; }
+  .status i { width: 8px; height: 8px; border-radius: 50%; background: var(--fg); }
+  .more { font-weight: 500; font-size: 15.5px; }
+  .hero-phone { display: flex; justify-content: center; }
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; gap: 48px; padding-top: 56px; padding-bottom: 56px; }
   }
-  .btn.primary { background: var(--fg); color: var(--bg); }
-  .btn[aria-disabled="true"] { cursor: default; }
-  .note { color: var(--muted); font-size: 14px; margin-top: 14px; }
-  @media (max-width: 860px) { .hero { grid-template-columns: 1fr; padding-top: 56px; padding-bottom: 40px; } }
 
-  /* Phones drawn in the app's own look: text only, black and white. */
-  .phones { display: flex; justify-content: center; gap: 18px; }
+  .facts { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .facts ul { list-style: none; margin: 0; padding: 18px 0; display: flex; flex-wrap: wrap; gap: 8px 40px; color: var(--muted); font-size: 15px; }
+  .facts li { display: flex; align-items: center; gap: 10px; }
+  .facts li::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--muted); }
+
+  /* The app's screens, drawn the way the app draws them: black, white, text. */
   .phone {
-    width: 230px; aspect-ratio: 9 / 19.5; border: 1.5px solid var(--line); border-radius: 34px;
-    padding: 30px 20px 22px; background: #000; color: #fff; position: relative; flex: none;
-    display: flex; flex-direction: column; font-size: 13px;
+    width: 264px; aspect-ratio: 9 / 19; flex: none; position: relative; overflow: hidden;
+    background: #000; color: #fff; border: 1px solid #2c2c2c; border-radius: 38px;
+    box-shadow: 0 0 0 6px #0b0b0b, 0 0 0 7px #2c2c2c;
+    padding: 46px 24px 26px; display: flex; flex-direction: column; font-size: 13px; line-height: 1.4;
   }
-  .phone::before { content: ""; position: absolute; top: 12px; left: 50%; width: 52px; height: 6px; margin-left: -26px; border-radius: 6px; background: #1c1c1c; }
-  .phone.back { transform: translateY(36px); }
-  .p-time { font-size: 46px; font-weight: 400; letter-spacing: -.03em; line-height: 1; margin-top: 18px; }
-  .p-sub { color: #8d8d8d; margin-top: 6px; }
-  .p-list { margin-top: auto; display: grid; gap: 13px; font-size: 19px; }
-  .p-dim { color: #8d8d8d; font-size: 12px; margin-top: 18px; }
-  .p-title { font-size: 22px; font-weight: 500; margin-top: auto; }
-  .p-q { margin-top: 14px; }
-  .p-btn { border: 1px solid #fff; border-radius: 12px; text-align: center; padding: 9px 0; margin-top: 8px; }
-  .p-btn.fill { background: #fff; color: #000; }
-  .p-btn.off { border-color: #333; color: #555; }
-  .p-space { flex: 1; }
-  @media (max-width: 560px) { .phone.back { display: none; } .phone { width: 220px; } }
+  .phone .sb { position: absolute; top: 16px; left: 26px; right: 26px; display: flex; justify-content: space-between; font-size: 11px; font-weight: 500; }
+  .phone .sb span:last-child { display: flex; gap: 4px; align-items: center; }
+  .phone .sb b { width: 16px; height: 8px; border-radius: 3px; background: #fff; display: block; }
+  .phone .sb em { width: 9px; height: 8px; border-radius: 2px; background: #fff; display: block; }
+  .ph-time { font-size: 52px; font-weight: 400; letter-spacing: -.035em; line-height: 1; margin-top: 22px; }
+  .ph-dim { color: #8e8e8e; }
+  .ph-date { margin-top: 10px; }
+  .ph-pill { align-self: flex-start; margin-top: 16px; border: 1px solid #5a5a5a; border-radius: 12px; padding: 7px 12px; font-weight: 500; }
+  .ph-apps { margin-top: auto; display: grid; gap: 15px; font-size: 20px; padding-bottom: 34px; }
+  .ph-title { font-size: 23px; font-weight: 600; letter-spacing: -.02em; margin-top: auto; }
+  .ph-btns { display: grid; gap: 9px; margin-top: 22px; padding-bottom: 34px; }
+  .ph-btn { border: 1px solid #3a3a3a; color: #777; border-radius: 13px; text-align: center; padding: 10px 6px; font-weight: 500; }
+  .ph-btn.on { background: #fff; color: #000; border-color: #fff; }
+  .ph-chat { display: grid; gap: 16px; margin-top: 10px; }
+  .ph-chat div { display: grid; grid-template-columns: 30px 1fr; gap: 10px; align-items: center; }
+  .ph-chat i { width: 30px; height: 30px; border-radius: 50%; background: #1d1d1d; }
+  .ph-chat u { display: block; height: 8px; border-radius: 4px; background: #1d1d1d; margin: 4px 0; text-decoration: none; }
+  .ph-toast { margin-top: auto; margin-bottom: 20px; border: 1px solid #4a4a4a; background: #0c0c0c; border-radius: 14px; padding: 12px 14px; font-weight: 500; }
+  .ph-home { position: absolute; bottom: 10px; left: 50%; width: 84px; height: 4px; margin-left: -42px; border-radius: 4px; background: #fff; opacity: .9; }
 
-  section { padding: 76px 0; border-top: 1px solid var(--line); }
-  h2 { font-weight: 500; font-size: clamp(28px, 4vw, 40px); letter-spacing: -.015em; margin: 0 0 14px; line-height: 1.15; }
-  .intro { color: var(--muted); max-width: 60ch; margin: 0 0 44px; font-size: 18px; }
+  /* Sections */
+  section { padding: 104px 0; }
+  .sec-head { max-width: 46em; margin-bottom: 64px; }
+  .num { font: 500 13px/1 Inter, system-ui, sans-serif; letter-spacing: .08em; color: var(--muted); margin-bottom: 18px; font-variant-numeric: tabular-nums; }
+  h2 { font-size: clamp(30px, 4.4vw, 48px); line-height: 1.08; letter-spacing: -.03em; }
+  .sec-head p { color: var(--muted); font-size: 19px; line-height: 1.55; margin-top: 20px; }
+  @media (max-width: 700px) { section { padding: 72px 0; } .sec-head { margin-bottom: 44px; } }
 
-  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-  @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 24px; }
-  .card h3 { font-weight: 500; font-size: 19px; margin: 0 0 8px; display: flex; gap: 10px; align-items: center; }
-  .card h3 i { width: 9px; height: 9px; border-radius: 50%; background: var(--fg); flex: none; }
-  .card p { margin: 0; color: var(--muted); font-size: 16px; }
+  .rows { display: grid; gap: 96px; }
+  .row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 64px; align-items: center; }
+  .row .shot { display: flex; justify-content: center; background: var(--soft); border: 1px solid var(--line); border-radius: 28px; padding: 44px 20px; }
+  .row:nth-child(even) .shot { order: 2; }
+  .row h3 { font-size: clamp(23px, 2.6vw, 30px); line-height: 1.18; margin-bottom: 16px; }
+  .row p { color: var(--muted); font-size: 18px; max-width: 30em; }
+  @media (max-width: 860px) {
+    .rows { gap: 64px; }
+    .row { grid-template-columns: 1fr; gap: 28px; }
+    .row:nth-child(even) .shot { order: 0; }
+  }
 
-  .parent { display: grid; grid-template-columns: .9fr 1.1fr; gap: 48px; align-items: start; }
-  @media (max-width: 860px) { .parent { grid-template-columns: 1fr; } }
-  .steps { list-style: none; padding: 0; margin: 0; display: grid; gap: 0; }
-  .steps li { display: grid; grid-template-columns: 40px 1fr; gap: 14px; padding: 18px 0; border-bottom: 1px solid var(--line); }
-  .steps li:first-child { border-top: 1px solid var(--line); }
-  .steps b { font-weight: 500; display: block; margin-bottom: 4px; }
-  .steps span.n { width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid var(--fg); display: grid; place-items: center; font-size: 14px; }
-  .steps p { margin: 0; color: var(--muted); font-size: 16px; }
-  .honest { margin-top: 26px; padding: 20px 22px; border: 1px solid var(--line); border-radius: 18px; color: var(--muted); font-size: 15px; }
-  .honest b { color: var(--fg); font-weight: 500; }
+  .also { border-top: 1px solid var(--line); }
+  .also dl { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 64px; }
+  .also .item { padding: 26px 0; border-bottom: 1px solid var(--line); }
+  .also dt { font-weight: 600; font-size: 18px; margin-bottom: 6px; letter-spacing: -.01em; }
+  .also dd { margin: 0; color: var(--muted); font-size: 16.5px; }
+  @media (max-width: 760px) { .also dl { grid-template-columns: 1fr; } }
 
-  .plans { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  @media (max-width: 700px) { .plans { grid-template-columns: 1fr; } }
-  .plan { border: 1px solid var(--line); border-radius: 22px; padding: 28px; }
-  .plan.pro { background: var(--fg); color: var(--bg); border-color: var(--fg); }
-  .plan h3 { font-weight: 500; font-size: 24px; margin: 0 0 4px; }
-  .plan .price { color: var(--muted); margin: 0 0 22px; font-size: 15px; }
-  .plan.pro .price { color: inherit; opacity: .65; }
-  .plan ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
-  .plan li { display: grid; grid-template-columns: 18px 1fr; gap: 10px; font-size: 16px; }
-  .plan li::before { content: ""; width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid currentColor; margin-top: 8px; }
-  .plan.pro li::before { background: currentColor; }
+  /* Parents */
+  .parents { background: var(--bg); color: var(--fg); }
+  .parents-top { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: 56px; align-items: center; margin-bottom: 72px; }
+  .parents-top .sec-head { margin-bottom: 0; }
+  .parents-top .shot { display: flex; justify-content: center; }
+  .cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px; }
+  .cols h3 { font-size: 15px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding-bottom: 16px; border-bottom: 1.5px solid var(--fg); }
+  .cols ul { list-style: none; margin: 0; padding: 0; }
+  .cols li { padding: 20px 0; border-bottom: 1px solid var(--line); font-size: 17px; }
+  .cols li b { display: block; font-weight: 600; margin-bottom: 4px; }
+  .cols li span { color: var(--muted); }
+  @media (max-width: 860px) {
+    .parents-top { grid-template-columns: 1fr; gap: 40px; margin-bottom: 48px; }
+    .cols { grid-template-columns: 1fr; gap: 40px; }
+  }
 
-  .privacy { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-  @media (max-width: 860px) { .privacy { grid-template-columns: repeat(2, 1fr); } }
-  .fact { border-top: 1.5px solid var(--fg); padding-top: 16px; }
-  .fact b { display: block; font-weight: 500; font-size: 20px; margin-bottom: 6px; }
-  .fact p { margin: 0; color: var(--muted); font-size: 15px; }
+  /* Pricing */
+  table { width: 100%; border-collapse: collapse; font-size: 17px; }
+  th, td { text-align: left; padding: 18px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  thead th { font-weight: 600; font-size: 15px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); border-bottom: 1.5px solid var(--fg); padding-bottom: 14px; }
+  th:nth-child(n+2), td:nth-child(n+2) { width: 150px; padding-left: 16px; }
+  td:nth-child(3) { font-weight: 500; }
+  td.no { color: var(--muted); }
+  .price-note { color: var(--muted); font-size: 16px; margin-top: 26px; max-width: 46em; }
+  @media (max-width: 600px) {
+    table { font-size: 15.5px; }
+    th:nth-child(n+2), td:nth-child(n+2) { width: 84px; padding-left: 10px; }
+  }
 
-  details { border-bottom: 1px solid var(--line); padding: 18px 0; }
+  /* Privacy */
+  .privacy { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 64px; }
+  .privacy .body p { font-size: 19px; line-height: 1.6; color: var(--muted); }
+  .privacy .body p + p { margin-top: 18px; }
+  .privacy .body a { color: var(--fg); font-weight: 500; }
+  @media (max-width: 860px) { .privacy { grid-template-columns: 1fr; gap: 28px; } }
+
+  /* FAQ */
+  .faq { max-width: 800px; }
+  details { border-bottom: 1px solid var(--line); }
   details:first-of-type { border-top: 1px solid var(--line); }
-  summary { cursor: pointer; font-weight: 500; font-size: 18px; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+  summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: baseline; gap: 20px; padding: 22px 0; font-weight: 600; font-size: 18px; letter-spacing: -.01em; }
   summary::-webkit-details-marker { display: none; }
-  summary::after { content: "+"; color: var(--muted); font-weight: 400; }
-  details[open] summary::after { content: "–"; }
-  details p { color: var(--muted); margin: 10px 0 0; max-width: 70ch; }
+  summary::after { content: "+"; font-weight: 400; font-size: 22px; line-height: 1; color: var(--muted); flex: none; }
+  details[open] summary::after { content: "−"; }
+  details p { color: var(--muted); padding: 0 40px 24px 0; max-width: 44em; }
 
-  .cta { text-align: center; }
-  .cta h2 { margin-bottom: 18px; }
-  .cta .actions { justify-content: center; }
-
-  footer { border-top: 1px solid var(--line); padding: 34px 0 48px; color: var(--muted); font-size: 14px; }
-  footer .wrap { display: flex; flex-wrap: wrap; gap: 14px 28px; justify-content: space-between; }
-  footer a { color: var(--muted); }
+  /* Closing and footer */
+  .closing { border-top: 1px solid var(--line); text-align: left; }
+  .closing h2 { margin-bottom: 18px; }
+  .closing p { color: var(--muted); font-size: 19px; max-width: 34em; }
+  .closing a { color: var(--fg); font-weight: 500; }
+  footer { border-top: 1px solid var(--line); padding: 30px 0 44px; color: var(--muted); font-size: 14.5px; }
+  footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 32px; }
+  footer nav { gap: 24px; font-size: 14.5px; }
+  footer nav a { display: inline; }
 </style>
 </head>
 <body>
@@ -145,11 +189,11 @@
 <header>
   <div class="wrap bar">
     <a class="logo" href="#top"><i></i>Quiet</a>
-    <nav>
-      <a class="link" href="#features" data-t="nav_features"></a>
-      <a class="link" href="#parents" data-t="nav_parents"></a>
-      <a class="link" href="#pro" data-t="nav_pro"></a>
-      <a class="link" href="#faq" data-t="nav_faq"></a>
+    <nav aria-label="Main">
+      <a href="#how" data-t="nav_how"></a>
+      <a href="#parents" data-t="nav_parents"></a>
+      <a href="#pricing" data-t="nav_pricing"></a>
+      <a href="#faq" data-t="nav_faq"></a>
       <div class="langs" role="group" aria-label="Language">
         <button type="button" data-lang="uz">UZ</button>
         <button type="button" data-lang="ru">RU</button>
@@ -162,310 +206,440 @@
 <main id="top">
   <div class="wrap hero">
     <div>
-      <p class="eyebrow" data-t="eyebrow"></p>
+      <p class="kicker" data-t="kicker"></p>
       <h1 data-t="h1"></h1>
       <p class="lead" data-t="lead"></p>
-      <div class="actions">
-        <a class="btn primary" aria-disabled="true" data-t="cta_play"></a>
-        <a class="btn" href="#features" data-t="cta_more"></a>
+      <div class="hero-actions">
+        <span class="status"><i></i><span data-t="status"></span></span>
+        <a class="more" href="#how" data-t="more"></a>
       </div>
-      <p class="note" data-t="cta_note"></p>
     </div>
-    <div class="phones" aria-hidden="true">
+    <div class="hero-phone" aria-hidden="true">
       <div class="phone">
-        <div class="p-time">7:42</div>
-        <div class="p-sub" data-t="m_date"></div>
-        <div class="p-sub" data-t="m_today"></div>
-        <div class="p-list">
-          <div data-t="m_app1"></div><div data-t="m_app2"></div><div data-t="m_app3"></div><div data-t="m_app4"></div>
+        <div class="sb"><span>7:42</span><span><em></em><b></b></span></div>
+        <div class="ph-time">7:42</div>
+        <div class="ph-dim ph-date" data-t="m_date"></div>
+        <div class="ph-dim" data-t="m_today"></div>
+        <div class="ph-apps">
+          <div data-t="m_a1"></div><div data-t="m_a2"></div><div data-t="m_a3"></div><div data-t="m_a4"></div><div data-t="m_a5"></div>
         </div>
-        <div class="p-dim" data-t="m_swipe"></div>
-      </div>
-      <div class="phone back">
-        <div class="p-title" data-t="m_open"></div>
-        <div class="p-sub" data-t="m_wait"></div>
-        <div class="p-q" data-t="m_why"></div>
-        <div class="p-space"></div>
-        <div class="p-btn fill" data-t="m_home"></div>
-        <div class="p-btn off" data-t="m_cont"></div>
-        <div class="p-btn off" data-t="m_cont2"></div>
+        <div class="ph-home"></div>
       </div>
     </div>
   </div>
 
-  <section id="features">
+  <div class="facts">
+    <div class="wrap"><ul>
+      <li data-t="fact1"></li><li data-t="fact2"></li><li data-t="fact3"></li>
+    </ul></div>
+  </div>
+
+  <section id="how">
     <div class="wrap">
-      <h2 data-t="f_h"></h2>
-      <p class="intro" data-t="f_intro"></p>
-      <div class="grid">
-        <div class="card"><h3><i></i><span data-t="f1_h"></span></h3><p data-t="f1_p"></p></div>
-        <div class="card"><h3><i></i><span data-t="f2_h"></span></h3><p data-t="f2_p"></p></div>
-        <div class="card"><h3><i></i><span data-t="f3_h"></span></h3><p data-t="f3_p"></p></div>
-        <div class="card"><h3><i></i><span data-t="f4_h"></span></h3><p data-t="f4_p"></p></div>
-        <div class="card"><h3><i></i><span data-t="f5_h"></span></h3><p data-t="f5_p"></p></div>
-        <div class="card"><h3><i></i><span data-t="f6_h"></span></h3><p data-t="f6_p"></p></div>
+      <div class="sec-head">
+        <p class="num">01</p>
+        <h2 data-t="how_h"></h2>
+        <p data-t="how_p"></p>
+      </div>
+      <div class="rows">
+        <div class="row">
+          <div class="shot" aria-hidden="true">
+            <div class="phone">
+              <div class="sb"><span>7:42</span><span><em></em><b></b></span></div>
+              <div class="ph-time">7:42</div>
+              <div class="ph-dim ph-date" data-t="m_date"></div>
+              <div class="ph-dim" data-t="m_today"></div>
+              <div class="ph-apps">
+                <div data-t="m_a1"></div><div data-t="m_a2"></div><div data-t="m_a3"></div><div data-t="m_a4"></div><div data-t="m_a5"></div>
+              </div>
+              <div class="ph-home"></div>
+            </div>
+          </div>
+          <div><h3 data-t="r1_h"></h3><p data-t="r1_p"></p></div>
+        </div>
+        <div class="row">
+          <div class="shot" aria-hidden="true">
+            <div class="phone">
+              <div class="sb"><span>21:15</span><span><em></em><b></b></span></div>
+              <div class="ph-title" data-t="m_open"></div>
+              <div class="ph-dim" style="margin-top:8px" data-t="m_wait"></div>
+              <div class="ph-dim" data-t="m_used"></div>
+              <div style="margin-top:16px" data-t="m_why"></div>
+              <div class="ph-btns">
+                <div class="ph-btn on" data-t="m_home"></div>
+                <div class="ph-btn" data-t="m_c5"></div>
+                <div class="ph-btn" data-t="m_c10"></div>
+                <div class="ph-btn" data-t="m_c20"></div>
+              </div>
+              <div class="ph-home"></div>
+            </div>
+          </div>
+          <div><h3 data-t="r2_h"></h3><p data-t="r2_p"></p></div>
+        </div>
+        <div class="row">
+          <div class="shot" aria-hidden="true">
+            <div class="phone">
+              <div class="sb"><span>10:11</span><span><em></em><b></b></span></div>
+              <div class="ph-time">10:11</div>
+              <div class="ph-dim ph-date" data-t="m_date"></div>
+              <div class="ph-pill" data-t="m_focus"></div>
+              <div class="ph-apps">
+                <div data-t="m_f1"></div><div data-t="m_f2"></div><div data-t="m_f3"></div>
+              </div>
+              <div class="ph-home"></div>
+            </div>
+          </div>
+          <div><h3 data-t="r3_h"></h3><p data-t="r3_p"></p></div>
+        </div>
       </div>
     </div>
   </section>
 
-  <section id="parents">
-    <div class="wrap parent">
-      <div>
-        <h2 data-t="p_h"></h2>
-        <p class="intro" data-t="p_intro"></p>
-        <div class="phones" aria-hidden="true" style="justify-content:flex-start">
+  <section class="also">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="num">02</p>
+        <h2 data-t="also_h"></h2>
+      </div>
+      <dl>
+        <div class="item"><dt data-t="d1_h"></dt><dd data-t="d1_p"></dd></div>
+        <div class="item"><dt data-t="d2_h"></dt><dd data-t="d2_p"></dd></div>
+        <div class="item"><dt data-t="d3_h"></dt><dd data-t="d3_p"></dd></div>
+        <div class="item"><dt data-t="d4_h"></dt><dd data-t="d4_p"></dd></div>
+        <div class="item"><dt data-t="d5_h"></dt><dd data-t="d5_p"></dd></div>
+        <div class="item"><dt data-t="d6_h"></dt><dd data-t="d6_p"></dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section id="parents" class="parents invert">
+    <div class="wrap">
+      <div class="parents-top">
+        <div class="sec-head">
+          <p class="num">03</p>
+          <h2 data-t="par_h"></h2>
+          <p data-t="par_p"></p>
+        </div>
+        <div class="shot" aria-hidden="true">
           <div class="phone">
-            <div class="p-title" style="margin-top:8px" data-t="m_lock"></div>
-            <div class="p-sub" style="margin-top:14px" data-t="m_locked"></div>
-            <div class="p-btn" style="margin-top:18px;text-align:left;padding:10px 12px" data-t="m_words"></div>
-            <div class="p-btn" style="text-align:left;padding:10px 12px" data-t="m_pics"></div>
-            <div class="p-btn" style="text-align:left;padding:10px 12px" data-t="m_bots"></div>
-            <div class="p-space"></div>
-            <div class="p-dim" data-t="m_pin"></div>
+            <div class="sb"><span>16:30</span><span><em></em><b></b></span></div>
+            <div class="ph-chat">
+              <div><i></i><span><u style="width:62%"></u><u style="width:88%"></u></span></div>
+              <div><i></i><span><u style="width:48%"></u><u style="width:74%"></u></span></div>
+              <div><i></i><span><u style="width:70%"></u><u style="width:54%"></u></span></div>
+              <div><i></i><span><u style="width:40%"></u><u style="width:82%"></u></span></div>
+              <div><i></i><span><u style="width:58%"></u><u style="width:66%"></u></span></div>
+            </div>
+            <div class="ph-toast" data-t="m_toast"></div>
+            <div class="ph-home"></div>
           </div>
         </div>
       </div>
+      <div class="cols">
+        <div>
+          <h3 data-t="can_h"></h3>
+          <ul>
+            <li><b data-t="can1_h"></b><span data-t="can1_p"></span></li>
+            <li><b data-t="can2_h"></b><span data-t="can2_p"></span></li>
+            <li><b data-t="can3_h"></b><span data-t="can3_p"></span></li>
+            <li><b data-t="can4_h"></b><span data-t="can4_p"></span></li>
+          </ul>
+        </div>
+        <div>
+          <h3 data-t="cant_h"></h3>
+          <ul>
+            <li><b data-t="cant1_h"></b><span data-t="cant1_p"></span></li>
+            <li><b data-t="cant2_h"></b><span data-t="cant2_p"></span></li>
+            <li><b data-t="cant3_h"></b><span data-t="cant3_p"></span></li>
+            <li><b data-t="cant4_h"></b><span data-t="cant4_p"></span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pricing">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="num">04</p>
+        <h2 data-t="pr_h"></h2>
+        <p data-t="pr_p"></p>
+      </div>
+      <table>
+        <thead><tr><th scope="col" data-t="t_what"></th><th scope="col" data-t="t_free"></th><th scope="col">Pro</th></tr></thead>
+        <tbody>
+          <tr><td data-t="t1"></td><td data-t="v_yes"></td><td data-t="v_yes"></td></tr>
+          <tr><td data-t="t2"></td><td data-t="v_two"></td><td data-t="v_unl"></td></tr>
+          <tr><td data-t="t3"></td><td data-t="v_one"></td><td data-t="v_unl"></td></tr>
+          <tr><td data-t="t4"></td><td data-t="v_7d"></td><td data-t="v_8w"></td></tr>
+          <tr><td data-t="t5"></td><td data-t="v_yes"></td><td data-t="v_yes"></td></tr>
+          <tr><td data-t="t6"></td><td class="no">—</td><td data-t="v_yes"></td></tr>
+          <tr><td data-t="t7"></td><td class="no">—</td><td data-t="v_yes"></td></tr>
+          <tr><td data-t="t8"></td><td class="no">—</td><td data-t="v_yes"></td></tr>
+          <tr><td data-t="t9"></td><td class="no">—</td><td data-t="v_yes"></td></tr>
+        </tbody>
+      </table>
+      <p class="price-note" data-t="pr_note"></p>
+    </div>
+  </section>
+
+  <section id="privacy" class="also">
+    <div class="wrap privacy">
       <div>
-        <ol class="steps">
-          <li><span class="n">1</span><div><b data-t="s1_h"></b><p data-t="s1_p"></p></div></li>
-          <li><span class="n">2</span><div><b data-t="s2_h"></b><p data-t="s2_p"></p></div></li>
-          <li><span class="n">3</span><div><b data-t="s3_h"></b><p data-t="s3_p"></p></div></li>
-          <li><span class="n">4</span><div><b data-t="s4_h"></b><p data-t="s4_p"></p></div></li>
-          <li><span class="n">5</span><div><b data-t="s5_h"></b><p data-t="s5_p"></p></div></li>
-        </ol>
-        <div class="honest"><b data-t="hon_h"></b> <span data-t="hon_p"></span></div>
+        <p class="num">05</p>
+        <h2 data-t="pv_h"></h2>
+      </div>
+      <div class="body">
+        <p data-t="pv_p1"></p>
+        <p data-t="pv_p2"></p>
+        <p><a id="privacy-link" href="https://encrypster.github.io/quiet-privacy/uz/" data-t="pv_link"></a></p>
       </div>
     </div>
   </section>
 
-  <section id="pro">
+  <section id="faq" class="also">
     <div class="wrap">
-      <h2 data-t="pr_h"></h2>
-      <p class="intro" data-t="pr_intro"></p>
-      <div class="plans">
-        <div class="plan">
-          <h3 data-t="free_h"></h3>
-          <p class="price" data-t="free_price"></p>
-          <ul>
-            <li data-t="free1"></li><li data-t="free2"></li><li data-t="free3"></li><li data-t="free4"></li><li data-t="free5"></li>
-          </ul>
-        </div>
-        <div class="plan pro">
-          <h3>Quiet Pro</h3>
-          <p class="price" data-t="pro_price"></p>
-          <ul>
-            <li data-t="pro1"></li><li data-t="pro2"></li><li data-t="pro3"></li><li data-t="pro4"></li><li data-t="pro5"></li><li data-t="pro6"></li>
-          </ul>
-        </div>
+      <div class="sec-head">
+        <p class="num">06</p>
+        <h2 data-t="q_h"></h2>
+      </div>
+      <div class="faq">
+        <details><summary data-t="q1"></summary><p data-t="a1"></p></details>
+        <details><summary data-t="q2"></summary><p data-t="a2"></p></details>
+        <details><summary data-t="q3"></summary><p data-t="a3"></p></details>
+        <details><summary data-t="q4"></summary><p data-t="a4"></p></details>
+        <details><summary data-t="q5"></summary><p data-t="a5"></p></details>
+        <details><summary data-t="q6"></summary><p data-t="a6"></p></details>
       </div>
     </div>
   </section>
 
-  <section id="privacy">
-    <div class="wrap">
-      <h2 data-t="pv_h"></h2>
-      <p class="intro" data-t="pv_intro"></p>
-      <div class="privacy">
-        <div class="fact"><b data-t="pv1_h"></b><p data-t="pv1_p"></p></div>
-        <div class="fact"><b data-t="pv2_h"></b><p data-t="pv2_p"></p></div>
-        <div class="fact"><b data-t="pv3_h"></b><p data-t="pv3_p"></p></div>
-        <div class="fact"><b data-t="pv4_h"></b><p data-t="pv4_p"></p></div>
-      </div>
-    </div>
-  </section>
-
-  <section id="faq">
-    <div class="wrap">
-      <h2 data-t="q_h"></h2>
-      <details><summary data-t="q1"></summary><p data-t="a1"></p></details>
-      <details><summary data-t="q2"></summary><p data-t="a2"></p></details>
-      <details><summary data-t="q3"></summary><p data-t="a3"></p></details>
-      <details><summary data-t="q4"></summary><p data-t="a4"></p></details>
-      <details><summary data-t="q5"></summary><p data-t="a5"></p></details>
-      <details><summary data-t="q6"></summary><p data-t="a6"></p></details>
-    </div>
-  </section>
-
-  <section class="cta">
+  <section class="closing">
     <div class="wrap">
       <h2 data-t="end_h"></h2>
-      <p class="intro" style="margin-left:auto;margin-right:auto" data-t="end_p"></p>
-      <div class="actions"><a class="btn primary" aria-disabled="true" data-t="cta_play"></a></div>
+      <p><span data-t="end_p"></span> <a href="mailto:test@example.com">test@example.com</a></p>
     </div>
   </section>
 </main>
 
 <footer>
   <div class="wrap">
-    <span>Quiet · Android 8+</span>
-    <span><a id="privacy-link" href="https://encrypster.github.io/quiet-privacy/" data-t="foot_privacy"></a></span>
-    <span><a href="mailto:test@example.com">test@example.com</a></span>
+    <span>© 2026 Quiet</span>
+    <nav aria-label="Footer">
+      <a id="privacy-link-foot" href="https://encrypster.github.io/quiet-privacy/uz/" data-t="foot_privacy"></a>
+      <a href="mailto:test@example.com" data-t="foot_contact"></a>
+    </nav>
   </div>
 </footer>
 
 <script>
 const T = {
 uz: {
-  nav_features: "Imkoniyatlar", nav_parents: "Ota-onalar uchun", nav_pro: "Pro", nav_faq: "Savollar",
-  eyebrow: "Android uchun uy ekrani",
-  h1: "Telefon foydali vosita boʻlsin, vaqt oʻgʻrisi emas.",
-  lead: "Quiet — rangsiz, belgisiz, faqat matndan iborat uy ekrani. Kerakli ishni qilasiz va telefonni qoʻyasiz.",
-  cta_play: "Google Play’da tez orada", cta_more: "Batafsil",
-  cta_note: "Akkaunt yoʻq. Reklama yoʻq. Kuzatuv yoʻq.",
-  m_date: "Payshanba, 19-noyabr", m_today: "Bugun telefonda 38 daq",
-  m_app1: "Telefon", m_app2: "Xabarlar", m_app3: "Kamera", m_app4: "Xarita",
-  m_swipe: "Yuqoriga suring: barcha ilovalar",
-  m_open: "Instagram ochilmoqda", m_wait: "8 soniya kuting.", m_why: "Nima uchun ochyapsiz?",
-  m_home: "Uyga qaytish", m_cont: "5 daqiqaga davom etish", m_cont2: "10 daqiqaga davom etish",
-  m_lock: "Ota-ona qulfi", m_locked: "Qulflangan. Oʻzgartirish uchun PIN kiriting.",
-  m_words: "Kattalar soʻzlari  ●", m_pics: "Ekrandagi rasmlar  ●", m_bots: "Telegram botlari  ●",
-  m_pin: "PIN 10 daqiqaga ochadi",
-  f_h: "Kamroq chalgʻish. Koʻproq vaqt.",
-  f_intro: "Hech narsa siz sozlamaguningizcha bloklanmaydi. Quiet faqat oʻzingiz tanlagan joyda toʻxtatadi va har doim chiqish yoʻlini koʻrsatadi.",
-  f1_h: "Matnli uy ekrani", f1_p: "Ilova belgilari, rang va qizil nuqtalar yoʻq. Faqat soat, sana va eng kerakli ilovalaringiz nomlari.",
-  f2_h: "Kutish va limitlar", f2_p: "Ijtimoiy tarmoq ochilishidan oldin qisqa kutish va savol. Kunlik limit tugasa, ilova yopiladi.",
-  f3_h: "Fokus seanslari", f3_p: "Ish yoki dars uchun tanlangan ilovalargina ochiq qoladi. Qoʻngʻiroqlar har doim keladi.",
-  f4_h: "Shorts va Reels", f4_p: "YouTube va Instagram ishlayveradi, lekin cheksiz qisqa videolar ochilganda Quiet orqaga chiqaradi.",
-  f5_h: "Bildirishnomalar filtri", f5_p: "Tanlangan ilovalar bildirishnomalari ushlab turiladi va keyin bitta roʻyxatda koʻriladi.",
-  f6_h: "Ekran vaqti", f6_p: "Bugun, 7 kun va 8 hafta. Qaysi ilova qancha vaqt olayotganini hukmsiz, oddiy raqamlarda koʻrasiz.",
-  p_h: "Farzandingiz telefonida — xotirjam.",
-  p_intro: "Ota-ona qulfi PIN bilan himoyalanadi. Qulf ostida qoidalarni oʻzgartirib ham, Quietni oʻchirib ham boʻlmaydi.",
-  s1_h: "Qoidalar PIN ostida", s1_p: "Limitlar, jadvallar va bloklar qulf ostida faqat kuchaytiriladi, yumshatilmaydi.",
-  s2_h: "Kattalar uchun kontent yopiladi", s2_p: "Telegram, brauzer va ijtimoiy tarmoqlarda ekrandagi soʻzlar telefonning oʻzida tekshiriladi.",
-  s3_h: "Rasmlar ham tekshiriladi", s3_p: "Har bir necha soniyada ekran telefon ichidagi model bilan baholanadi. Rasm saqlanmaydi va hech qayerga yuborilmaydi.",
-  s4_h: "Telegram botlari", s4_p: "Beozor nom ortiga yashiringan botlar ham yopiladi. Kerakli botlarni oʻzingiz ruxsat berasiz.",
-  s5_h: "Sizga xabar keladi", s5_p: "Xohlasangiz, oʻz Telegram botingiz orqali: qaysi ilova, qachon va nima sababdan yopilgani. Ekrandagi hech narsa yuborilmaydi.",
-  hon_h: "Rostini aytamiz:", hon_p: "hech bir filtr 100% emas. Quiet Family Link kabi vositalar bilan birga ishlaganda eng yaxshi natija beradi. Xabar yuborish yoqilganda, bolaning telefonida buni bildiruvchi doimiy bildirishnoma turadi.",
-  pr_h: "Bepul boshlang. Kerak boʻlsa — Pro.",
-  pr_intro: "Siz sozlagan narsa Pro tugasa ham ishlashda davom etadi. Oʻchirish har doim bepul.",
-  free_h: "Bepul", free_price: "Doim",
-  free1: "Matnli uy ekrani va ilovalar roʻyxati", free2: "2 ta qoida: kutish, limit yoki blok", free3: "1 ta fokus profili", free4: "Bugungi va 7 kunlik ekran vaqti", free5: "Bildirishnomalar filtri va kulrang ekran",
-  pro_price: "Yillik obuna yoki bir martalik xarid. Narxi Google Play’da.",
-  pro1: "Cheksiz qoidalar va fokus profillari", pro2: "Qatʼiy rejim: muddatidan oldin toʻxtatib boʻlmaydi", pro3: "Shorts va Reelsdan chiqarish", pro4: "Ota-ona qulfi, soʻz, rasm va bot tekshiruvi", pro5: "Ota-onaga Telegram orqali xabar", pro6: "8 haftalik ekran vaqti tahlili",
-  pv_h: "Maʼlumotlaringiz telefonda qoladi.",
-  pv_intro: "Quietning serveri yoʻq. U siz haqingizda hech narsa yigʻmaydi va hech kimga sotmaydi.",
-  pv1_h: "Akkauntsiz", pv1_p: "Roʻyxatdan oʻtish, email yoki parol kerak emas.",
-  pv2_h: "Reklamasiz", pv2_p: "Reklama ham, analitika ham, kuzatuv kutubxonalari ham yoʻq.",
-  pv3_h: "Telefon ichida", pv3_p: "Soʻz va rasmlar telefonning oʻzida tekshiriladi va darhol oʻchiriladi.",
-  pv4_h: "Ochiq siyosat", pv4_p: "Har bir ruxsat nima uchun kerakligi oddiy tilda yozilgan.",
-  q_h: "Koʻp soʻraladigan savollar",
-  q1: "Quiet oddiy launcher bilan almashtiriladimi?", a1: "Ha, Quiet uy ekrani boʻladi. Istalgan payt Sozlamalardan avvalgi uy ekraniga qaytishingiz mumkin; chiqish yoʻli doim ochiq.",
-  q2: "Qoʻngʻiroqlar va zarur ilovalar bloklanib qolmaydimi?", a2: "Yoʻq. Telefon qoʻngʻiroqlari, signal soatlari va siz tanlagan ilovalar har doim ishlaydi. Hech narsa siz sozlamaguningizcha bloklanmaydi.",
-  q3: "Qaysi telefonlarda ishlaydi?", a3: "Android 8.0 va undan yangi har qanday telefonda. Rasm tekshiruvi Android 11 dan boshlab ishlaydi. Samsung One UI da alohida sinovdan oʻtgan.",
-  q4: "Rasm tekshiruvi ekranni yozib oladimi?", a4: "Yoʻq. Rasm faqat telefon xotirasida bir lahzaga baholanadi va darhol oʻchiriladi. U saqlanmaydi va hech qayerga yuborilmaydi.",
-  q5: "Bola Quietni oʻchirib qoʻya oladimi?", a5: "Qulf ostida ilova maʼlumotlari, oʻchirish, sana va vaqt sozlamalari yopiq turadi. Kompyuter orqali “device owner” qilib oʻrnatilsa, Xavfsiz rejim va zavod sozlamalariga qaytarish ham taqiqlanadi.",
-  q6: "Qaysi tillarda?", a6: "Oʻzbek, rus va ingliz tillarida.",
-  end_h: "Telefonni qoʻyib qoʻyish osonroq boʻlsin.",
-  end_p: "Quiet tez orada Google Play’da chiqadi.",
-  foot_privacy: "Maxfiylik siyosati"
+  title: "Quiet — Android uchun sokin bosh ekran",
+  nav_how: "Qanday ishlaydi", nav_parents: "Ota-onalar uchun", nav_pricing: "Narxlar", nav_faq: "Savollar",
+  kicker: "Android uchun bosh ekran",
+  h1: "Telefonni ochasiz, ishingizni qilasiz, qoʻyasiz.",
+  lead: "Quiet bosh ekranni oddiy matnli roʻyxatga aylantiradi va vaqtingizni oladigan ilovalar oldiga kichik toʻsiq qoʻyadi. Nimani cheklashni oʻzingiz hal qilasiz.",
+  status: "Tez orada Google Play’da", more: "Qanday ishlashini koʻrish",
+  fact1: "Android 8 va undan yangi", fact2: "Oʻzbek, rus va ingliz tillarida", fact3: "Roʻyxatdan oʻtish shart emas",
+  m_date: "Payshanba, 19-noyabr", m_today: "Bugun telefonda 38 daqiqa",
+  m_a1: "Telefon", m_a2: "Xabarlar", m_a3: "Kamera", m_a4: "Xarita", m_a5: "Taqvim",
+  m_open: "Instagram ochilmoqda", m_wait: "8 soniya kuting.", m_used: "Bugun 3 marta, 24 daqiqa.", m_why: "Nima uchun ochyapsiz?",
+  m_home: "Uyga qaytish", m_c5: "5 daqiqaga davom etish", m_c10: "10 daqiqaga davom etish", m_c20: "20 daqiqaga davom etish",
+  m_focus: "Ish · 25 daqiqa qoldi", m_f1: "Pochta", m_f2: "Taqvim", m_f3: "Hujjatlar",
+  m_toast: "Quiet yopdi: kattalar uchun kontent.",
+  how_h: "Oʻrnatganingizdan keyin uch narsa oʻzgaradi",
+  how_p: "Quiet hech narsani oʻzicha bloklamaydi. Qaysi ilovani cheklashni oʻzingiz tanlaysiz, xohlagan payt oʻzgartirasiz.",
+  r1_h: "Bosh ekranda sakkizta nom qoladi",
+  r1_p: "Belgilar, qizil nuqtalar va vidjetlar oʻrnida soat, sana va oʻzingiz tanlagan sakkiztagacha ilova turadi. Qolganlari bir surishda ochiladi yoki nomining ikki-uch harfi bilan topiladi.",
+  r2_h: "Odat boʻlib qolgan ilovalar darhol ochilmaydi",
+  r2_p: "Masalan, Instagramni bosdingiz. Quiet oʻn soniya kuttiradi va nima uchun ochayotganingizni soʻraydi. Davom etsangiz, 5, 10 yoki 20 daqiqani tanlaysiz; vaqt tugagach, ilova yopiladi. Kunlik limit qoʻyish ham mumkin.",
+  r3_h: "Ish paytida ekranda faqat ish turadi",
+  r3_p: "Fokus seansini boshlaganingizda bosh ekranda shu ish uchun tanlagan ilovalaringiz qoladi, qolganlari seans tugaguncha ochilmaydi. Bildirishnomalar yigʻilib turadi, qoʻngʻiroqlar esa har doim oʻtadi.",
+  also_h: "Yana nimalar bor",
+  d1_h: "Shorts va Reels", d1_p: "YouTube va Instagramning oʻzi ishlayveradi. Qisqa videolar tasmasi ochilsa, Quiet orqaga qaytaradi. Kerak boʻlgan kuni uni bir muddatga ochib qoʻyish mumkin.",
+  d2_h: "Bildirishnomalar", d2_p: "Tanlangan ilovalarning bildirishnomalari sizni chalgʻitmay yigʻilib turadi. Ularni oʻzingizga qulay paytda bitta roʻyxatda oʻqiysiz.",
+  d3_h: "Ekran vaqti", d3_p: "Bugun, oxirgi yetti kun va sakkiz hafta boʻyicha: qaysi ilovaga qancha vaqt ketgani va telefonni necha marta ochganingiz.",
+  d4_h: "Jadval", d4_p: "Ilovalarni kunning maʼlum soatlarida yopib qoʻyish mumkin. Masalan, ijtimoiy tarmoqlar 23:00 dan 07:00 gacha ochilmaydi.",
+  d5_h: "Qatʼiy rejim", d5_p: "Oʻzingizga ishonmagan kunlar uchun. Seansni muddatidan oldin tugatib ham, qoidalarni yumshatib ham boʻlmaydi.",
+  d6_h: "Kulrang ekran", d6_p: "Rangsiz ekran oʻziga kamroq tortadi. Buni yoqish uchun telefonni bir marta kompyuterga ulash kerak boʻladi.",
+  par_h: "Farzandingizning telefoni uchun",
+  par_p: "Quietni bolaning telefoniga oʻrnatib, sozlamalarni PIN-kod bilan yopib qoʻyish mumkin. Bu qism dastlab oʻz oilamiz uchun yozilgan, shuning uchun nimani uddalashini ham, nimani uddalay olmasligini ham ochiq aytamiz.",
+  can_h: "Nima qiladi",
+  can1_h: "Qoidalarni PIN-kod bilan yopadi", can1_p: "Qulf yopiq paytda limitlarni yumshatib ham, Quietni oʻchirib ham boʻlmaydi.",
+  can2_h: "Kattalar uchun sahifalarni yopadi", can2_p: "Telegram, brauzer va ijtimoiy tarmoqlarda ekrandagi soʻzlarni, yoqilgan boʻlsa rasmlarni ham tekshiradi. Tekshiruv telefonning oʻzida oʻtadi.",
+  can3_h: "Begona Telegram botlarini ochtirmaydi", can3_p: "Faqat oʻzingiz roʻyxatga qoʻshgan botlar ochiladi.",
+  can4_h: "Sizga xabar beradi", can4_p: "Xohlasangiz, biror sahifa yopilganda Telegramingizga yozadi: qaysi ilova, soat nechada va nima sababdan.",
+  cant_h: "Nima qilmaydi",
+  cant1_h: "Hamma narsani ushlay olmaydi", cant1_p: "Buni hech bir filtr uddalamaydi. Family Link kabi vositalarni oʻchirmang, Quiet ular bilan birga ishlaydi.",
+  cant2_h: "Yozishmalarni oʻqimaydi", cant2_p: "Sizga ekrandagi matn ham, rasm ham yuborilmaydi. Faqat ilova nomi, vaqt va sabab.",
+  cant3_h: "Yashirin ishlamaydi", cant3_p: "Xabar yuborish yoqilgan boʻlsa, bolaning telefonida bu haqda doimiy bildirishnoma turadi.",
+  cant4_h: "Xavfsiz rejimni oʻzi toʻsa olmaydi", cant4_p: "Telefon Xavfsiz rejimda yoqilsa, Quiet ishlamaydi. Buni yopish uchun telefonni kompyuter orqali bir marta alohida sozlash kerak.",
+  pr_h: "Bepul va Pro",
+  pr_p: "Kundalik foydalanishga bepul qismi yetadi. Pro muddati tugasa ham, sozlab qoʻygan narsalaringiz ishlashda davom etadi.",
+  t_what: "Imkoniyat", t_free: "Bepul",
+  t1: "Matnli bosh ekran va qidiruv", t2: "Qoidalar: kutish, limit, blok", t3: "Fokus profillari", t4: "Ekran vaqti tarixi", t5: "Bildirishnomalar filtri",
+  t6: "Shorts va Reelsni yopish", t7: "Qatʼiy rejim", t8: "Ota-ona qulfi va kontent tekshiruvi", t9: "Ota-onaga Telegram orqali xabar",
+  v_yes: "Bor", v_two: "2 ta", v_one: "1 ta", v_unl: "Cheksiz", v_7d: "7 kun", v_8w: "8 hafta",
+  pr_note: "Pro yillik obuna yoki bir martalik toʻlov bilan olinadi. Narxlar ilova chiqqanda Google Play’da koʻrsatiladi.",
+  pv_h: "Maʼlumotlar telefonda qoladi",
+  pv_p1: "Quietda akkaunt, reklama va analitika yoʻq, serverimiz ham yoʻq. Sozlamalaringiz va foydalanish tarixi faqat telefoningizda saqlanadi; ilovani oʻchirsangiz, ular ham oʻchadi.",
+  pv_p2: "Bitta istisno bor: ota-ona oʻz Telegram botini ulasa, yopilgan ilovaning nomi va vaqti shu botga yuboriladi. Ilovalarni cheklash uchun Quiet Androidning maxsus imkoniyatlar xizmatidan foydalanadi; u nimani oʻqishi oʻrnatish paytida koʻrsatiladi.",
+  pv_link: "Maxfiylik siyosatini toʻliq oʻqish",
+  q_h: "Savollar",
+  q1: "Avvalgi bosh ekranimga qaytsam boʻladimi?",
+  a1: "Ha. Telefon sozlamalaridagi “Standart ilovalar” boʻlimida istalgan payt avvalgi bosh ekranni tanlaysiz. Quietni oʻchirsangiz, hammasi oʻz holiga qaytadi.",
+  q2: "Muhim qoʻngʻiroq yoki xabarni oʻtkazib yubormaymanmi?",
+  a2: "Qoʻngʻiroqlar va budilnik hech qachon toʻsilmaydi. Bildirishnomalar faqat oʻzingiz tanlagan ilovalar uchun ushlab turiladi.",
+  q3: "Qaysi telefonlarda ishlaydi?",
+  a3: "Android 8.0 va undan yangi telefonlarda. Samsung Galaxy’da alohida sinab koʻrilgan. Rasm tekshiruvi uchun Android 11 kerak.",
+  q4: "Nega maxsus imkoniyatlar ruxsati soʻraladi?",
+  a4: "Android ilovaga hozir qaysi ilova ochiqligini boshqa yoʻl bilan bildirmaydi. Quiet bu ruxsatdan ilovalarni cheklash va, siz yoqsangiz, kattalar uchun sahifalarni yopish uchun foydalanadi. Yozayotgan matningizni va parollaringizni oʻqimaydi.",
+  q5: "Bola Quietni oʻchirib tashlay oladimi?",
+  a5: "Qulf yopiq paytda yoʻq: oʻchirish oynasi, ilova sozlamalari, sana va vaqt sahifalari yopiq turadi. Xavfsiz rejim va zavod sozlamalariga qaytarishni ham yopish uchun telefonni kompyuter orqali bir marta sozlash kerak.",
+  q6: "Pro obunasini bekor qilsam nima boʻladi?",
+  a6: "Sozlab qoʻygan qoidalaringiz ishlayveradi. Faqat Pro’ga kiradigan yangi narsalarni qoʻsha olmaysiz.",
+  end_h: "Quiet tez orada Google Play’da chiqadi",
+  end_p: "Chiqqan kuni havola shu sahifada paydo boʻladi. Savolingiz boʻlsa, yozing:",
+  foot_privacy: "Maxfiylik siyosati", foot_contact: "Aloqa"
 },
 ru: {
-  nav_features: "Возможности", nav_parents: "Родителям", nav_pro: "Pro", nav_faq: "Вопросы",
-  eyebrow: "Домашний экран для Android",
-  h1: "Телефон — полезный инструмент, а не похититель времени.",
-  lead: "Quiet — домашний экран без цвета и иконок, только текст. Сделали нужное — и отложили телефон.",
-  cta_play: "Скоро в Google Play", cta_more: "Подробнее",
-  cta_note: "Без аккаунта. Без рекламы. Без слежки.",
-  m_date: "Четверг, 19 ноября", m_today: "Сегодня в телефоне 38 мин",
-  m_app1: "Телефон", m_app2: "Сообщения", m_app3: "Камера", m_app4: "Карты",
-  m_swipe: "Свайп вверх: все приложения",
-  m_open: "Открывается Instagram", m_wait: "Подождите 8 с.", m_why: "Зачем вы его открываете?",
-  m_home: "На главный экран", m_cont: "Продолжить на 5 мин", m_cont2: "Продолжить на 10 мин",
-  m_lock: "Родительский замок", m_locked: "Заблокировано. Введите PIN-код, чтобы изменить.",
-  m_words: "Слова для взрослых  ●", m_pics: "Изображения на экране  ●", m_bots: "Боты Telegram  ●",
-  m_pin: "PIN открывает на 10 минут",
-  f_h: "Меньше отвлечений. Больше времени.",
-  f_intro: "Ничего не блокируется, пока вы сами это не настроите. Quiet останавливает только там, где вы решили, и всегда показывает выход.",
-  f1_h: "Текстовый домашний экран", f1_p: "Ни иконок, ни цвета, ни красных точек. Только время, дата и названия самых нужных приложений.",
-  f2_h: "Ожидание и лимиты", f2_p: "Короткая пауза и вопрос перед открытием соцсети. Когда дневной лимит исчерпан, приложение закрывается.",
-  f3_h: "Сеансы фокуса", f3_p: "Для работы или учёбы открыты только выбранные приложения. Звонки проходят всегда.",
-  f4_h: "Shorts и Reels", f4_p: "YouTube и Instagram работают, но бесконечные короткие видео Quiet закрывает.",
-  f5_h: "Фильтр уведомлений", f5_p: "Уведомления выбранных приложений откладываются и потом видны одним списком.",
-  f6_h: "Экранное время", f6_p: "Сегодня, 7 дней и 8 недель. Простые цифры без упрёков: какое приложение сколько времени забирает.",
-  p_h: "Спокойно за телефон ребёнка.",
-  p_intro: "Родительский замок защищён PIN-кодом. Под замком нельзя ни изменить правила, ни удалить Quiet.",
-  s1_h: "Правила под PIN-кодом", s1_p: "Лимиты, расписания и блокировки под замком можно только усилить, но не ослабить.",
-  s2_h: "Контент для взрослых закрывается", s2_p: "В Telegram, браузерах и соцсетях слова на экране проверяются прямо на телефоне.",
-  s3_h: "Проверяются и изображения", s3_p: "Каждые несколько секунд экран оценивает модель на самом телефоне. Изображение не сохраняется и никуда не отправляется.",
-  s4_h: "Боты Telegram", s4_p: "Закрываются и боты с безобидным названием. Нужных ботов вы разрешаете сами.",
-  s5_h: "Вам приходит сообщение", s5_p: "По желанию — через вашего Telegram-бота: какое приложение, когда и почему было закрыто. Ничего с экрана не отправляется.",
-  hon_h: "Честно:", hon_p: "ни один фильтр не даёт 100%. Лучше всего Quiet работает вместе с Family Link. Когда включены сообщения родителю, на телефоне ребёнка постоянно видно уведомление об этом.",
-  pr_h: "Начните бесплатно. Pro — когда нужно.",
-  pr_intro: "Всё, что вы настроили, продолжает работать и после окончания Pro. Выключить можно всегда бесплатно.",
-  free_h: "Бесплатно", free_price: "Навсегда",
-  free1: "Текстовый домашний экран и список приложений", free2: "2 правила: ожидание, лимит или блокировка", free3: "1 профиль фокуса", free4: "Экранное время за сегодня и 7 дней", free5: "Фильтр уведомлений и серый экран",
-  pro_price: "Годовая подписка или разовая покупка. Цена — в Google Play.",
-  pro1: "Без ограничений на правила и профили фокуса", pro2: "Строгий режим: нельзя закончить досрочно", pro3: "Выход из Shorts и Reels", pro4: "Родительский замок, проверка слов, изображений и ботов", pro5: "Сообщения родителю в Telegram", pro6: "Экранное время за 8 недель",
-  pv_h: "Ваши данные остаются в телефоне.",
-  pv_intro: "У Quiet нет сервера. Он ничего о вас не собирает и никому не продаёт.",
-  pv1_h: "Без аккаунта", pv1_p: "Не нужны регистрация, email или пароль.",
-  pv2_h: "Без рекламы", pv2_p: "Ни рекламы, ни аналитики, ни трекеров.",
-  pv3_h: "На телефоне", pv3_p: "Слова и изображения проверяются на самом телефоне и сразу удаляются.",
-  pv4_h: "Открытая политика", pv4_p: "Для каждого разрешения простым языком написано, зачем оно нужно.",
-  q_h: "Частые вопросы",
-  q1: "Quiet заменяет обычный лаунчер?", a1: "Да, Quiet становится домашним экраном. Вернуть прежний можно в любой момент в Настройках; выход всегда открыт.",
-  q2: "Не заблокируются ли звонки и нужные приложения?", a2: "Нет. Звонки, будильники и выбранные вами приложения работают всегда. Ничего не блокируется, пока вы это не настроите.",
-  q3: "На каких телефонах работает?", a3: "На любом телефоне с Android 8.0 и новее. Проверка изображений — с Android 11. Отдельно проверено на Samsung One UI.",
-  q4: "Проверка изображений записывает экран?", a4: "Нет. Изображение на мгновение оценивается в памяти телефона и сразу удаляется. Оно не сохраняется и никуда не отправляется.",
-  q5: "Может ли ребёнок отключить Quiet?", a5: "Под замком закрыты сведения о приложении, удаление, дата и время. Если с компьютера сделать Quiet владельцем устройства, запрещаются и безопасный режим, и сброс настроек.",
-  q6: "На каких языках?", a6: "На узбекском, русском и английском.",
-  end_h: "Пусть отложить телефон станет проще.",
-  end_p: "Quiet скоро выйдет в Google Play.",
-  foot_privacy: "Политика конфиденциальности"
+  title: "Quiet — спокойный домашний экран для Android",
+  nav_how: "Как это работает", nav_parents: "Родителям", nav_pricing: "Цены", nav_faq: "Вопросы",
+  kicker: "Домашний экран для Android",
+  h1: "Взяли телефон, сделали дело, отложили.",
+  lead: "Quiet превращает домашний экран в простой текстовый список и ставит небольшую преграду перед приложениями, которые съедают время. Что ограничивать, решаете вы.",
+  status: "Скоро в Google Play", more: "Посмотреть, как это работает",
+  fact1: "Android 8 и новее", fact2: "На узбекском, русском и английском", fact3: "Регистрация не нужна",
+  m_date: "Четверг, 19 ноября", m_today: "Сегодня в телефоне 38 минут",
+  m_a1: "Телефон", m_a2: "Сообщения", m_a3: "Камера", m_a4: "Карты", m_a5: "Календарь",
+  m_open: "Открывается Instagram", m_wait: "Подождите 8 секунд.", m_used: "Сегодня 3 раза, 24 минуты.", m_why: "Зачем вы его открываете?",
+  m_home: "На главный экран", m_c5: "Продолжить на 5 минут", m_c10: "Продолжить на 10 минут", m_c20: "Продолжить на 20 минут",
+  m_focus: "Работа · осталось 25 мин", m_f1: "Почта", m_f2: "Календарь", m_f3: "Документы",
+  m_toast: "Закрыто Quiet: контент для взрослых.",
+  how_h: "После установки меняются три вещи",
+  how_p: "Сам Quiet ничего не блокирует. Вы выбираете, какие приложения ограничить, и в любой момент можете это изменить.",
+  r1_h: "На главном экране остаётся восемь названий",
+  r1_p: "Вместо иконок, красных точек и виджетов — время, дата и до восьми приложений, которые вы выбрали сами. Остальные открываются одним свайпом или находятся по двум-трём буквам названия.",
+  r2_h: "Привычные приложения открываются не сразу",
+  r2_p: "Допустим, вы нажали на Instagram. Quiet просит подождать десять секунд и спрашивает, зачем вы его открываете. Если продолжаете, выбираете 5, 10 или 20 минут; когда время выйдет, приложение закроется. Можно задать и дневной лимит.",
+  r3_h: "Во время работы на экране только работа",
+  r3_p: "Когда вы запускаете сеанс фокуса, на главном экране остаются приложения, выбранные для этого дела, а остальные не открываются до конца сеанса. Уведомления копятся в стороне, звонки проходят всегда.",
+  also_h: "Что ещё есть",
+  d1_h: "Shorts и Reels", d1_p: "Сами YouTube и Instagram работают как обычно. Если открывается лента коротких видео, Quiet возвращает назад. В день, когда она нужна, её можно открыть на время.",
+  d2_h: "Уведомления", d2_p: "Уведомления выбранных приложений не отвлекают, а собираются в один список. Читаете их, когда удобно вам.",
+  d3_h: "Экранное время", d3_p: "За сегодня, за семь дней и за восемь недель: сколько времени ушло на каждое приложение и сколько раз вы разблокировали телефон.",
+  d4_h: "Расписание", d4_p: "Приложения можно закрывать в определённые часы. Например, соцсети не открываются с 23:00 до 07:00.",
+  d5_h: "Строгий режим", d5_p: "Для дней, когда себе не доверяешь. Сеанс нельзя закончить раньше времени, правила нельзя ослабить.",
+  d6_h: "Серый экран", d6_p: "Экран без цвета меньше притягивает. Чтобы его включить, телефон нужно один раз подключить к компьютеру.",
+  par_h: "Для телефона ребёнка",
+  par_p: "Quiet можно установить на телефон ребёнка и закрыть настройки PIN-кодом. Эту часть мы сначала писали для своей семьи, поэтому прямо говорим и о том, что она умеет, и о том, чего не умеет.",
+  can_h: "Что делает",
+  can1_h: "Закрывает правила PIN-кодом", can1_p: "Пока замок закрыт, нельзя ни ослабить лимиты, ни удалить Quiet.",
+  can2_h: "Закрывает страницы для взрослых", can2_p: "В Telegram, браузере и соцсетях проверяет слова на экране, а если включено, и изображения. Проверка идёт на самом телефоне.",
+  can3_h: "Не открывает посторонних Telegram-ботов", can3_p: "Открываются только боты, которых вы сами добавили в список.",
+  can4_h: "Сообщает вам", can4_p: "Если хотите, пишет в ваш Telegram, когда что-то закрыто: какое приложение, во сколько и по какой причине.",
+  cant_h: "Чего не делает",
+  cant1_h: "Не ловит всё подряд", cant1_p: "Этого не умеет ни один фильтр. Не отключайте Family Link и похожие средства: Quiet работает вместе с ними.",
+  cant2_h: "Не читает переписку", cant2_p: "Вам не отправляются ни текст, ни изображения с экрана. Только название приложения, время и причина.",
+  cant3_h: "Не работает скрытно", cant3_p: "Если отправка сообщений включена, на телефоне ребёнка постоянно висит уведомление об этом.",
+  cant4_h: "Сам не закрывает безопасный режим", cant4_p: "В безопасном режиме Quiet не работает. Чтобы закрыть и этот путь, телефон нужно один раз настроить с компьютера.",
+  pr_h: "Бесплатно и Pro",
+  pr_p: "Для повседневного использования хватает бесплатной части. Когда Pro закончится, всё, что вы настроили, продолжит работать.",
+  t_what: "Возможность", t_free: "Бесплатно",
+  t1: "Текстовый домашний экран и поиск", t2: "Правила: ожидание, лимит, блокировка", t3: "Профили фокуса", t4: "История экранного времени", t5: "Фильтр уведомлений",
+  t6: "Закрытие Shorts и Reels", t7: "Строгий режим", t8: "Родительский замок и проверка контента", t9: "Сообщения родителю в Telegram",
+  v_yes: "Есть", v_two: "2", v_one: "1", v_unl: "Без лимита", v_7d: "7 дней", v_8w: "8 недель",
+  pr_note: "Pro можно оформить как годовую подписку или купить один раз. Цены появятся в Google Play вместе с приложением.",
+  pv_h: "Данные остаются в телефоне",
+  pv_p1: "В Quiet нет аккаунта, рекламы и аналитики, и сервера у нас тоже нет. Настройки и история использования хранятся только на вашем телефоне; удалите приложение, и они исчезнут вместе с ним.",
+  pv_p2: "Исключение одно: если родитель подключает своего Telegram-бота, этому боту отправляются название закрытого приложения и время. Чтобы ограничивать приложения, Quiet использует службу специальных возможностей Android; что именно она читает, показано при установке.",
+  pv_link: "Прочитать политику конфиденциальности целиком",
+  q_h: "Вопросы",
+  q1: "Можно ли вернуть прежний домашний экран?",
+  a1: "Да. В настройках телефона, в разделе «Приложения по умолчанию», в любой момент выбирается прежний экран. Если удалить Quiet, всё вернётся как было.",
+  q2: "Я не пропущу важный звонок или сообщение?",
+  a2: "Звонки и будильник не блокируются никогда. Уведомления откладываются только у тех приложений, которые вы сами выбрали.",
+  q3: "На каких телефонах работает?",
+  a3: "На телефонах с Android 8.0 и новее. Отдельно проверено на Samsung Galaxy. Для проверки изображений нужен Android 11.",
+  q4: "Зачем нужен доступ к специальным возможностям?",
+  a4: "Иначе Android не сообщает приложению, какое приложение сейчас открыто. Quiet использует этот доступ, чтобы ограничивать приложения и, если вы включите, закрывать страницы для взрослых. То, что вы печатаете, и пароли он не читает.",
+  q5: "Может ли ребёнок удалить Quiet?",
+  a5: "Пока замок закрыт, нет: окно удаления, настройки приложения, страницы даты и времени остаются закрытыми. Чтобы закрыть ещё и безопасный режим со сбросом настроек, телефон нужно один раз настроить с компьютера.",
+  q6: "Что будет, если отменить Pro?",
+  a6: "Настроенные правила продолжат работать. Нельзя будет только добавлять новое из того, что входит в Pro.",
+  end_h: "Quiet скоро выйдет в Google Play",
+  end_p: "В день выхода ссылка появится на этой странице. Если есть вопрос, напишите:",
+  foot_privacy: "Политика конфиденциальности", foot_contact: "Контакты"
 },
 en: {
-  nav_features: "Features", nav_parents: "For parents", nav_pro: "Pro", nav_faq: "FAQ",
-  eyebrow: "A home screen for Android",
-  h1: "Make the phone a tool again, not a time sink.",
-  lead: "Quiet is a home screen with no colour and no icons, just text. Do what you came for, then put the phone down.",
-  cta_play: "Coming soon to Google Play", cta_more: "Learn more",
-  cta_note: "No account. No ads. No tracking.",
-  m_date: "Thursday, 19 November", m_today: "38 min on the phone today",
-  m_app1: "Phone", m_app2: "Messages", m_app3: "Camera", m_app4: "Maps",
-  m_swipe: "Swipe up for all apps",
-  m_open: "Opening Instagram", m_wait: "Wait 8 s.", m_why: "What are you opening this for?",
-  m_home: "Go home", m_cont: "Continue for 5 min", m_cont2: "Continue for 10 min",
-  m_lock: "Parent lock", m_locked: "Locked. Enter the PIN to change the setup.",
-  m_words: "Adult words  ●", m_pics: "Pictures on screen  ●", m_bots: "Telegram bots  ●",
-  m_pin: "The PIN opens it for 10 minutes",
-  f_h: "Fewer pulls. More time.",
-  f_intro: "Nothing is blocked until you set it up. Quiet steps in only where you decided, and the way out is always in view.",
-  f1_h: "A text-only home screen", f1_p: "No icons, no colour, no red dots. Just the time, the date and the names of the apps you need.",
-  f2_h: "Waits and limits", f2_p: "A short pause and a question before a social app opens. When the daily limit is used up, the app closes.",
-  f3_h: "Focus sessions", f3_p: "For work or study, only the apps you chose stay open. Calls always get through.",
-  f4_h: "Shorts and Reels", f4_p: "YouTube and Instagram keep working; endless short videos are stepped out of.",
-  f5_h: "Notification filter", f5_p: "Notifications of the apps you choose are held and shown later in one list.",
-  f6_h: "Screen time", f6_p: "Today, 7 days and 8 weeks. Plain numbers, no blame: which app takes how much of your day.",
-  p_h: "Peace of mind on your child's phone.",
-  p_intro: "The parent lock is protected by a PIN. Under the lock the rules cannot be changed and Quiet cannot be removed.",
-  s1_h: "Rules under a PIN", s1_p: "Under the lock, limits, schedules and blocks can be tightened, never loosened.",
-  s2_h: "Adult content is closed", s2_p: "In Telegram, browsers and social apps, the words on screen are checked on the phone itself.",
-  s3_h: "Pictures are checked too", s3_p: "Every few seconds a model on the phone looks at the screen. The picture is never stored or sent.",
-  s4_h: "Telegram bots", s4_p: "Bots that hide behind a harmless name are closed too. You let through the ones that are needed.",
-  s5_h: "You are told", s5_p: "If you like, through your own Telegram bot: which app was closed, when and why. Nothing from the screen is sent.",
-  hon_h: "To be honest:", hon_p: "no filter is perfect. Quiet works best next to tools like Family Link. When messages to the parent are on, the child's phone always shows a notification saying so.",
-  pr_h: "Start free. Pro when you need it.",
-  pr_intro: "Whatever you set up keeps working when Pro ends. Switching things off is always free.",
-  free_h: "Free", free_price: "Always",
-  free1: "Text-only home screen and app list", free2: "2 rules: wait, limit or block", free3: "1 focus profile", free4: "Screen time for today and 7 days", free5: "Notification filter and grayscale",
-  pro_price: "Yearly subscription or one-time purchase. Price on Google Play.",
-  pro1: "Unlimited rules and focus profiles", pro2: "Strict mode: a session cannot be ended early", pro3: "Step out of Shorts and Reels", pro4: "Parent lock with word, picture and bot checks", pro5: "Messages to the parent through Telegram", pro6: "8 weeks of screen-time trends",
-  pv_h: "Your data stays on your phone.",
-  pv_intro: "Quiet has no server. It collects nothing about you and sells nothing to anyone.",
-  pv1_h: "No account", pv1_p: "No sign-up, no email, no password.",
-  pv2_h: "No ads", pv2_p: "No advertising, no analytics, no trackers.",
-  pv3_h: "On the phone", pv3_p: "Words and pictures are checked on the phone and dropped at once.",
-  pv4_h: "Plain policy", pv4_p: "Every permission is explained in plain words.",
+  title: "Quiet — a calm home screen for Android",
+  nav_how: "How it works", nav_parents: "For parents", nav_pricing: "Pricing", nav_faq: "Questions",
+  kicker: "A home screen for Android",
+  h1: "Pick up the phone, do the thing, put it down.",
+  lead: "Quiet turns your home screen into a plain list of words and puts a small obstacle in front of the apps that eat your time. What gets limited is up to you.",
+  status: "Coming soon to Google Play", more: "See how it works",
+  fact1: "Android 8 and newer", fact2: "In Uzbek, Russian and English", fact3: "No sign-up",
+  m_date: "Thursday, 19 November", m_today: "38 minutes on the phone today",
+  m_a1: "Phone", m_a2: "Messages", m_a3: "Camera", m_a4: "Maps", m_a5: "Calendar",
+  m_open: "Opening Instagram", m_wait: "Wait 8 seconds.", m_used: "3 times today, 24 minutes.", m_why: "What are you opening this for?",
+  m_home: "Go home", m_c5: "Continue for 5 minutes", m_c10: "Continue for 10 minutes", m_c20: "Continue for 20 minutes",
+  m_focus: "Work · 25 min left", m_f1: "Mail", m_f2: "Calendar", m_f3: "Docs",
+  m_toast: "Closed by Quiet: adult content.",
+  how_h: "Three things change once it is installed",
+  how_p: "Quiet blocks nothing on its own. You choose which apps to limit, and you can change your mind whenever you like.",
+  r1_h: "Eight names are left on the home screen",
+  r1_p: "Where the icons, red dots and widgets were, there is the time, the date and up to eight apps you picked yourself. Everything else is one swipe away, or two or three letters of its name.",
+  r2_h: "The apps you open out of habit stop opening at once",
+  r2_p: "Say you tap Instagram. Quiet makes you wait ten seconds and asks what you are opening it for. If you carry on, you pick 5, 10 or 20 minutes, and the app closes when the time is up. You can set a daily limit as well.",
+  r3_h: "While you work, only work is on the screen",
+  r3_p: "Start a focus session and the home screen keeps the apps you chose for that job; the rest will not open until the session ends. Notifications wait in a list, and calls always come through.",
+  also_h: "What else is in it",
+  d1_h: "Shorts and Reels", d1_p: "YouTube and Instagram themselves keep working. When the feed of short videos opens, Quiet steps back out of it. On a day you need it, you can open it for a while.",
+  d2_h: "Notifications", d2_p: "Notifications from the apps you choose collect in one list instead of interrupting you. You read them when it suits you.",
+  d3_h: "Screen time", d3_p: "For today, the last seven days and eight weeks: how long each app took and how many times you unlocked the phone.",
+  d4_h: "Schedules", d4_p: "Apps can be closed at set hours. Social apps that will not open between 23:00 and 07:00, for instance.",
+  d5_h: "Strict mode", d5_p: "For the days you do not trust yourself. A session cannot be ended early and the rules cannot be loosened.",
+  d6_h: "Grayscale", d6_p: "A screen without colour pulls at you less. Switching it on takes one connection to a computer.",
+  par_h: "For your child's phone",
+  par_p: "You can install Quiet on a child's phone and close its settings with a PIN. We wrote this part for our own family first, so we would rather be plain about what it does and what it does not.",
+  can_h: "What it does",
+  can1_h: "Closes the rules with a PIN", can1_p: "While it is locked, the limits cannot be loosened and Quiet cannot be removed.",
+  can2_h: "Closes pages meant for adults", can2_p: "In Telegram, the browser and social apps it checks the words on screen and, if you turn that on, the pictures. The checking happens on the phone.",
+  can3_h: "Keeps unknown Telegram bots shut", can3_p: "Only the bots you put on the list will open.",
+  can4_h: "Lets you know", can4_p: "If you want, it writes to your Telegram when something is closed: which app, at what time and why.",
+  cant_h: "What it does not do",
+  cant1_h: "It does not catch everything", cant1_p: "No filter does. Keep Family Link and similar tools on: Quiet works alongside them.",
+  cant2_h: "It does not read conversations", cant2_p: "No text or picture from the screen is sent to you. Only the app's name, the time and the reason.",
+  cant3_h: "It does not hide", cant3_p: "While messages to you are on, the child's phone shows a notification that says so.",
+  cant4_h: "It cannot stop Safe Mode by itself", cant4_p: "Quiet does not run in Safe Mode. Closing that way out takes a one-time setup from a computer.",
+  pr_h: "Free and Pro",
+  pr_p: "The free part is enough for everyday use. When Pro ends, whatever you set up keeps working.",
+  t_what: "Feature", t_free: "Free",
+  t1: "Text home screen and search", t2: "Rules: wait, limit, block", t3: "Focus profiles", t4: "Screen-time history", t5: "Notification filter",
+  t6: "Closing Shorts and Reels", t7: "Strict mode", t8: "Parent lock and content checks", t9: "Messages to the parent in Telegram",
+  v_yes: "Yes", v_two: "2", v_one: "1", v_unl: "Unlimited", v_7d: "7 days", v_8w: "8 weeks",
+  pr_note: "Pro is a yearly subscription or a one-time purchase. Prices will be shown on Google Play when the app is out.",
+  pv_h: "Your data stays on the phone",
+  pv_p1: "Quiet has no account, no ads and no analytics, and we run no server. Your settings and usage history are kept on your phone only; uninstall the app and they go with it.",
+  pv_p2: "There is one exception: when a parent connects their own Telegram bot, the name of a closed app and the time are sent to that bot. To limit apps, Quiet uses Android's accessibility service; what it reads is shown during setup.",
+  pv_link: "Read the full privacy policy",
   q_h: "Questions",
-  q1: "Does Quiet replace my launcher?", a1: "Yes, Quiet becomes the home screen. You can go back to the old one in Settings at any time; the way out is always open.",
-  q2: "Will calls or important apps get blocked?", a2: "No. Phone calls, alarms and the apps you choose always work. Nothing is blocked until you set it up.",
-  q3: "Which phones does it run on?", a3: "Any phone with Android 8.0 or newer. The picture check needs Android 11. Tested on Samsung One UI.",
-  q4: "Does the picture check record my screen?", a4: "No. A picture is judged in the phone's memory for a moment and dropped at once. It is never stored or sent.",
-  q5: "Can a child switch Quiet off?", a5: "Under the lock, Quiet's app info, uninstalling, and date and time settings stay closed. Set up as device owner from a computer, Safe Mode and factory reset are refused as well.",
-  q6: "Which languages?", a6: "Uzbek, Russian and English.",
-  end_h: "Make putting the phone down easier.",
-  end_p: "Quiet is coming to Google Play soon.",
-  foot_privacy: "Privacy policy"
+  q1: "Can I go back to my old home screen?",
+  a1: "Yes. Under “Default apps” in the phone's settings you can pick the old one at any time. Uninstall Quiet and everything is as it was.",
+  q2: "Will I miss an important call or message?",
+  a2: "Calls and alarms are never blocked. Notifications are held only for the apps you chose.",
+  q3: "Which phones does it run on?",
+  a3: "Phones with Android 8.0 or newer. It has been tested separately on Samsung Galaxy. The picture check needs Android 11.",
+  q4: "Why does it ask for accessibility access?",
+  a4: "Android gives an app no other way to know which app is open. Quiet uses the access to limit apps and, if you turn it on, to close pages meant for adults. It does not read what you type or your passwords.",
+  q5: "Can a child uninstall Quiet?",
+  a5: "Not while it is locked: the uninstall dialog, the app's settings and the date and time pages stay closed. Closing Safe Mode and factory reset as well takes a one-time setup from a computer.",
+  q6: "What happens if I cancel Pro?",
+  a6: "The rules you set up keep working. You just cannot add new things that belong to Pro.",
+  end_h: "Quiet is coming to Google Play soon",
+  end_p: "The link will appear on this page the day it is out. If you have a question, write to",
+  foot_privacy: "Privacy policy", foot_contact: "Contact"
 }
 };
 
@@ -478,9 +652,11 @@ function pickLang() {
 function apply(lang) {
   const t = T[lang];
   document.documentElement.lang = lang;
+  document.title = t.title;
   // The policy in the same language as the page.
-  document.getElementById("privacy-link").href =
-    "https://encrypster.github.io/quiet-privacy/" + (lang === "en" ? "" : lang + "/");
+  const policy = "https://encrypster.github.io/quiet-privacy/" + (lang === "en" ? "" : lang + "/");
+  document.getElementById("privacy-link").href = policy;
+  document.getElementById("privacy-link-foot").href = policy;
   document.querySelectorAll("[data-t]").forEach(el => {
     const v = t[el.dataset.t];
     if (v !== undefined) el.textContent = v;
