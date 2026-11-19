@@ -532,6 +532,7 @@
     .card .btn { max-width: 100%; }
   }
   /* Desktop pass */
+  @keyframes fade-in { from { opacity: 0; } }
   .mark, .rail { display: none !important; }
   .logo { font-size: 22px; gap: 11px; letter-spacing: -.035em; }
   .logo i { width: 20px; height: 20px; border-width: 4px; }
@@ -544,6 +545,9 @@
     .bar { left: calc(var(--gut) + var(--edge)); }
     /* The phone on the parents' scene, at a size that can be read. */
     #parents .inner { position: relative; }
+    /* Anything with a transform between the phone and the scene would carry the phone with it while it settles. */
+    #parents .inner > .rv { transform: none !important; }
+    #parents .par[data-k].on { animation-name: fade-in; }
     .par { grid-template-columns: minmax(0, 1fr) 300px; }
     .par .shot { position: absolute; right: 0; top: 50%; transform: translateY(-50%); }
     .par .shot .phone { zoom: 1.4; }
