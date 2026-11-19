@@ -12,7 +12,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23000'/%3E%3Ccircle cx='32' cy='32' r='13' fill='none' stroke='%23fff' stroke-width='5'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   /* AI look, pass 3 */
   :root {
@@ -358,6 +358,31 @@
     .ck { padding: 30px 28px; }
   }
 
+  /* Pass 6: the story told by one field of dots, and the small print in mono */
+  :root { --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace; }
+  .eyebrow, .tape span, .step .n, .segs button, .tr.th, .cr.th, .col > h3, .tm-num span, .scan-top, .stats span { font-family: var(--mono); }
+  .eyebrow { font-size: 12px; letter-spacing: .14em; }
+  .story { padding: 0; height: 430vh; height: 430svh; }
+  .st-pin { position: sticky; top: 60px; height: calc(100vh - 60px); height: calc(100svh - 60px); overflow: hidden; touch-action: pan-y; -webkit-user-select: none; user-select: none; }
+  .st-pin canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .ghost { position: absolute; right: -.04em; top: .06em; font: 600 clamp(190px, 60vw, 440px)/.8 Inter, system-ui, sans-serif; letter-spacing: -.07em; color: transparent; -webkit-text-stroke: 1px var(--line); pointer-events: none; }
+  .st-meta { position: absolute; left: 20px; top: 20px; display: flex; align-items: center; gap: 12px; font: 500 12px/1 var(--mono); letter-spacing: .14em; color: var(--muted); pointer-events: none; }
+  .st-meta b { color: var(--fg); font-weight: 500; }
+  .st-ticks { display: flex; gap: 4px; }
+  .st-ticks i { width: 18px; height: 2px; border-radius: 2px; background: var(--line); transition: background .3s; }
+  .st-ticks i.on { background: var(--fg); }
+  .st-caps { position: absolute; left: 20px; right: 20px; bottom: 11%; height: 0; pointer-events: none; }
+  .st-caps p { position: absolute; left: 0; right: 0; bottom: 0; margin: 0 auto; max-width: 19ch; text-align: center; font-size: clamp(23px, 6.4vw, 38px); font-weight: 600; letter-spacing: -.03em; line-height: 1.14; text-wrap: balance; text-shadow: 0 0 22px var(--bg), 0 0 8px var(--bg), 0 0 2px var(--bg); opacity: 0; transform: translateY(12px); transition: opacity .45s, transform .45s; }
+  .st-caps p.on { opacity: 1; transform: none; }
+  .st-hint { position: absolute; left: 0; right: 0; bottom: 3.5%; text-align: center; font: 500 11.5px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); pointer-events: none; transition: opacity .4s; }
+  .st-hint::after { content: "↓"; display: inline-block; margin-left: 8px; animation: nudge 1.4s ease-in-out infinite alternate; }
+  @keyframes nudge { to { transform: translateY(5px); } }
+  .started .st-hint { opacity: 0; }
+  section[data-n]:not(.story) { position: relative; overflow: clip; }
+  section[data-n]:not(.story)::before { content: attr(data-n); position: absolute; right: -.04em; top: 28px; font: 600 clamp(150px, 46vw, 340px)/.8 Inter, system-ui, sans-serif; letter-spacing: -.07em; color: transparent; -webkit-text-stroke: 1px var(--line); pointer-events: none; }
+  section[data-n] > .wrap { position: relative; }
+  @media (min-width: 720px) { .st-meta { left: 32px; top: 28px; } }
+
   @media (min-width: 720px) {
     .wrap { padding: 0 32px; }
     section { padding: 96px 0; }
@@ -443,6 +468,16 @@
   </section>
 
   <div class="tape" aria-hidden="true"><div><span>ON-DEVICE AI</span><span>TENSORFLOW LITE</span><span>KOTLIN</span><span>0 SERVERS</span><span>OFFLINE</span><span>ANDROID 8+</span><span>NO ACCOUNT</span><span>ON-DEVICE AI</span><span>TENSORFLOW LITE</span><span>KOTLIN</span><span>0 SERVERS</span><span>OFFLINE</span><span>ANDROID 8+</span><span>NO ACCOUNT</span><span>ON-DEVICE AI</span><span>TENSORFLOW LITE</span><span>KOTLIN</span><span>0 SERVERS</span><span>OFFLINE</span><span>ANDROID 8+</span><span>NO ACCOUNT</span><span>ON-DEVICE AI</span><span>TENSORFLOW LITE</span><span>KOTLIN</span><span>0 SERVERS</span><span>OFFLINE</span><span>ANDROID 8+</span><span>NO ACCOUNT</span></div></div>
+
+  <section id="story" class="story">
+    <div class="st-pin" id="st-pin">
+      <canvas id="scv" aria-hidden="true"></canvas>
+      <div class="ghost" aria-hidden="true">01</div>
+      <div class="st-meta" aria-hidden="true"><span><b id="st-n">01</b> / 04</span><span class="st-ticks" id="st-ticks"></span><span id="st-l"></span></div>
+      <div class="st-caps" id="st-caps"></div>
+      <div class="st-hint" id="st-hint" aria-hidden="true"></div>
+    </div>
+  </section>
 
   <section id="shift">
     <div class="wrap">
@@ -995,6 +1030,7 @@ function apply(lang) {
   try { localStorage.setItem("quiet-lang", lang); } catch (e) {}
   Player.label();
   Extra.lang();
+  Story.lang();
 }
 
 /* ---- Light or dark: the system's choice until the visitor makes their own. ---- */
@@ -1008,6 +1044,177 @@ function theme(set) {
 try { const saved = localStorage.getItem("quiet-theme"); if (saved === "dark" || saved === "light") document.documentElement.dataset.theme = saved; } catch (e) {}
 theme();
 document.getElementById("theme").addEventListener("click", () => theme(theme() ? "light" : "dark"));
+
+// Words for the story.
+Object.assign(T.uz, {
+  st: ["Bildirishnoma. Qizil belgi. «Yana bir daqiqa».", "Quiet shovqinni bir joyga yig‘adi.", "Bosh ekranda faqat kerakli nomlar qoladi.", "Qolganini telefondagi AI kuzatadi."],
+  st_l: ["SHOVQIN", "SOKINLIK", "BOSH EKRAN", "AI"], st_hint: "Pastga suring"
+});
+Object.assign(T.ru, {
+  st: ["Уведомление. Красный значок. «Ещё минутку».", "Quiet собирает шум в одну точку.", "На экране остаются только нужные названия.", "За остальным следит ИИ в самом телефоне."],
+  st_l: ["ШУМ", "ТИШИНА", "ЭКРАН", "ИИ"], st_hint: "Листайте вниз"
+});
+Object.assign(T.en, {
+  st: ["A notification. A red badge. One more minute.", "Quiet gathers the noise into one place.", "Only the names you need stay on the screen.", "The AI on the phone watches the rest."],
+  st_l: ["NOISE", "CALM", "HOME", "AI"], st_hint: "Scroll down"
+});
+
+/* ---- The story: one field of dots that takes four shapes as the page is scrolled. Nothing to press. ---- */
+const Story = (() => {
+  const $ = id => document.getElementById(id);
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const CHAOS = [[255, 69, 58], [255, 159, 10], [48, 209, 88], [10, 132, 255], [191, 90, 242], [255, 55, 95]];
+  const CALM_D = [[150, 125, 255], [96, 165, 250], [103, 232, 249], [240, 240, 255], [240, 240, 255], [150, 125, 255]];
+  const CALM_L = [[92, 64, 230], [37, 99, 235], [8, 145, 178], [20, 20, 26], [20, 20, 26], [92, 64, 230]];
+  const S = 4;
+  let sec, pin, cv, ctx, caps = [];
+  let W = 0, H = 0, N = 0, X, Y, VX, VY, BX, BY, SD, shapes = [];
+  let f = 0, cm = 0, idx = -1, t = 0, last = 0, raf = 0, on = false, mx = -1e4, my = -1e4, bg = "7,7,10", dark = true;
+
+  function theme() {
+    dark = document.documentElement.dataset.theme !== "light";
+    const m = getComputedStyle(document.body).backgroundColor.match(/\d+/g);
+    if (m) bg = m.slice(0, 3).join(",");
+  }
+  function rr(c, x, y, w, h, r) { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
+  // A shape is drawn once, off screen, and the dots take their places from its pixels.
+  function sample(draw) {
+    const g = W < 640 ? 4 : 5, oc = document.createElement("canvas");
+    oc.width = W; oc.height = H;
+    const c = oc.getContext("2d", { willReadFrequently: true });
+    c.fillStyle = c.strokeStyle = "#000"; draw(c);
+    const d = c.getImageData(0, 0, W, H).data, pts = [];
+    for (let y = 0; y < H; y += g) for (let x = 0; x < W; x += g) if (d[(y * W + x) * 4 + 3] > 120) pts.push(x, y);
+    const out = new Float32Array(N * 2), n = pts.length / 2;
+    for (let i = 0; i < N; i++) {
+      const q = n ? ((i * 7919) % n) * 2 : 0;
+      out[i * 2] = (n ? pts[q] : W / 2) + (SD[i] - .5) * g;
+      out[i * 2 + 1] = (n ? pts[q + 1] : H / 2) + (SD[(i * 3 + 1) % N] - .5) * g;
+    }
+    return out;
+  }
+  function build() {
+    const cx = W / 2, cy = H * .42, s = Math.min(W * .66, H * .44), font = "px Inter, system-ui, sans-serif";
+    shapes = [null,
+      // The ring.
+      sample(c => { c.lineWidth = s * .17; c.beginPath(); c.arc(cx, cy, s * .4, 0, 6.2832); c.stroke(); }),
+      // The home screen: a phone, the time, five names.
+      sample(c => {
+        const w = s * .64, h = s * 1.18, x = cx - w / 2, y = cy - h / 2;
+        c.lineWidth = Math.max(3, s * .024); rr(c, x, y, w, h, w * .17); c.stroke();
+        c.font = "600 " + Math.round(w * .3) + font; c.textBaseline = "top"; c.fillText("9:41", x + w * .13, y + h * .1);
+        [.5, .64, .44, .58, .7].forEach((k, i) => { rr(c, x + w * .13, y + h * .47 + i * h * .095, w * k, h * .042, h * .021); c.fill(); });
+      }),
+      // AI, inside a thin circle.
+      sample(c => {
+        c.font = "600 " + Math.round(s * .6) + font; c.textAlign = "center"; c.textBaseline = "middle"; c.fillText("AI", cx, cy + s * .03);
+        c.lineWidth = Math.max(2.5, s * .02); c.beginPath(); c.arc(cx, cy, s * .6, 0, 6.2832); c.stroke();
+      })
+    ];
+  }
+  function size() {
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    W = pin.clientWidth; H = pin.clientHeight;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const n = W < 640 ? 1500 : 3000, fresh = n !== N;
+    if (fresh) {
+      N = n;
+      [X, Y, VX, VY, BX, BY, SD] = Array.from({ length: 7 }, () => new Float32Array(N));
+      for (let i = 0; i < N; i++) SD[i] = Math.random();
+    }
+    for (let i = 0; i < N; i++) { BX[i] = Math.random() * W; BY[i] = Math.random() * H; if (fresh) { X[i] = BX[i]; Y[i] = BY[i]; } }
+    build(); theme();
+  }
+  function step(dt, snap) {
+    const k = dt * 60, fi = Math.min(S - 1 - 1e-3, Math.max(0, f)), i0 = fi | 0, fr = fi - i0;
+    let b = Math.min(1, Math.max(0, (fr - .18) / .64)); b = b * b * (3 - 2 * b);
+    const A = shapes[i0], B = shapes[i0 + 1], w = A ? 1 : b, damp = Math.pow(.86, k);
+    cm += ((i0 >= 1 ? 1 : b) - cm) * (snap ? 1 : Math.min(1, dt * 5));
+    for (let i = 0; i < N; i++) {
+      const s = SD[i], j = i * 2;
+      const wx = BX[i] + Math.sin(t * .55 + s * 40) * 28, wy = BY[i] + Math.cos(t * .45 + s * 29) * 28;
+      const ax = A ? A[j] : wx, ay = A ? A[j + 1] : wy;
+      const tx = ax + (B[j] - ax) * b + Math.sin(t * 1.7 + s * 60) * 1.1 * w, ty = ay + (B[j + 1] - ay) * b + Math.cos(t * 1.5 + s * 47) * 1.1 * w;
+      if (snap) { X[i] = tx; Y[i] = ty; continue; }
+      const sp = (.004 + .07 * w) * (.5 + s);
+      let vx = VX[i] + (tx - X[i]) * sp * k, vy = VY[i] + (ty - Y[i]) * sp * k;
+      const dx = X[i] - mx, dy = Y[i] - my, d2 = dx * dx + dy * dy;
+      if (d2 < 8100 && d2 > 1) { const q = (1 - d2 / 8100) * 2.6 * k / Math.sqrt(d2); vx += dx * q; vy += dy * q; }
+      VX[i] = vx * damp; VY[i] = vy * damp; X[i] += VX[i] * k; Y[i] += VY[i] * k;
+    }
+  }
+  function draw(clean) {
+    ctx.globalCompositeOperation = "source-over";
+    ctx.fillStyle = "rgba(" + bg + "," + (clean ? 1 : .32) + ")";
+    ctx.fillRect(0, 0, W, H);
+    if (dark) ctx.globalCompositeOperation = "lighter";
+    const calm = dark ? CALM_D : CALM_L, m = cm * cm * (3 - 2 * cm), z = W < 640 ? 1.8 : 2;
+    for (let g = 0; g < 6; g++) {
+      const a = CHAOS[g], b = calm[g];
+      ctx.fillStyle = "rgb(" + Math.round(a[0] + (b[0] - a[0]) * m) + "," + Math.round(a[1] + (b[1] - a[1]) * m) + "," + Math.round(a[2] + (b[2] - a[2]) * m) + ")";
+      // The red ones are the badges: larger while it is noisy.
+      const s = g === 0 ? z * (2 - m) : z, h = s / 2;
+      for (let i = g; i < N; i += 6) ctx.fillRect(X[i] - h, Y[i] - h, s, s);
+    }
+  }
+  function frame(now) {
+    raf = 0;
+    const dt = Math.min(.05, (now - last) / 1000 || .016); last = now; t += dt;
+    step(dt); draw();
+    if (on) raf = requestAnimationFrame(frame);
+  }
+  function show(n) {
+    idx = n;
+    caps.forEach((el, i) => el.classList.toggle("on", i === n));
+    $("st-n").textContent = "0" + (n + 1);
+    $("st-l").textContent = T[LANG].st_l[n];
+    [...$("st-ticks").children].forEach((el, i) => el.classList.toggle("on", i <= n));
+    pin.classList.toggle("started", n > 0);
+  }
+  function onScroll() {
+    const r = sec.getBoundingClientRect(), top = parseFloat(getComputedStyle(pin).top) || 0, span = r.height - pin.offsetHeight;
+    f = span > 0 ? Math.min(1, Math.max(0, (top - r.top) / span)) * (S - 1) : 0;
+    const n = Math.round(f);
+    if (n !== idx) show(n);
+    const vis = r.bottom > 0 && r.top < innerHeight && !document.hidden;
+    if (still) { if (vis) { step(0, true); draw(true); } return; }
+    if (vis && !on) { on = true; if (!raf) { last = performance.now(); raf = requestAnimationFrame(frame); } }
+    else if (!vis) on = false;
+  }
+  function lang() {
+    const tt = T[LANG];
+    caps.forEach((el, i) => { el.textContent = tt.st[i]; });
+    $("st-hint").textContent = tt.st_hint;
+    if (idx >= 0) $("st-l").textContent = tt.st_l[idx];
+  }
+  function init() {
+    sec = $("story"); pin = $("st-pin"); cv = $("scv");
+    ctx = cv.getContext && cv.getContext("2d");
+    $("st-caps").innerHTML = "<p></p>".repeat(S);
+    caps = [...$("st-caps").children];
+    $("st-ticks").innerHTML = "<i></i>".repeat(S);
+    // The ghost numbers behind the sections.
+    let n = 2;
+    document.querySelectorAll("main > section").forEach(s => { if (!/^(story|time|end)$/.test(s.id) && !s.classList.contains("hero")) s.dataset.n = String(n++).padStart(2, "0"); });
+    if (!ctx) return;
+    size();
+    pin.addEventListener("pointermove", e => { const r = pin.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; });
+    ["pointerleave", "pointercancel", "pointerup"].forEach(nm => pin.addEventListener(nm, e => { if (nm !== "pointerup" || e.pointerType !== "mouse") mx = my = -1e4; }));
+    // A tap sends the dots flying from under the finger; they find their way back.
+    pin.addEventListener("pointerdown", e => {
+      const r = pin.getBoundingClientRect(), px = e.clientX - r.left, py = e.clientY - r.top;
+      for (let i = 0; i < N; i++) { const dx = X[i] - px, dy = Y[i] - py, d2 = dx * dx + dy * dy; if (d2 < 22500) { const d = Math.sqrt(d2) || 1, v = (1 - d / 150) * 16; VX[i] += dx / d * v; VY[i] += dy / d * v; } }
+    });
+    addEventListener("resize", () => { if (pin.clientWidth !== W || Math.abs(pin.clientHeight - H) > 80) { size(); onScroll(); } });
+    addEventListener("scroll", onScroll, { passive: true });
+    document.addEventListener("visibilitychange", onScroll);
+    $("theme").addEventListener("click", () => setTimeout(() => { theme(); if (still) draw(true); }, 0));
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { build(); if (still) onScroll(); });
+    onScroll();
+  }
+  return { init: init, lang: lang };
+})();
 
 // Words for the parts that respond.
 Object.assign(T.uz, {
@@ -1223,6 +1430,7 @@ document.querySelectorAll(".langs button").forEach(b => b.addEventListener("clic
 build();
 Player.init();
 Extra.init();
+Story.init();
 apply(pickLang());
 Player.show(0);
 
