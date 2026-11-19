@@ -637,6 +637,8 @@
     th, td { padding-top: 8px; padding-bottom: 8px; }
     th:nth-child(n+2), td:nth-child(n+2) { width: 70px; }
   }
+  .perm-intro { font-weight: 500; margin: 0 0 14px; }
+  @media (max-width: 960px) { .perm-intro { font-size: 14.5px; margin-bottom: 10px; } #s-privacy .perm .ex button { padding: 7px 11px; font-size: 13px; } }
 </style>
 </head>
 <body data-scene="0" data-step="0" data-stop="0">
@@ -855,13 +857,14 @@
         <h2 class="rv" style="--i:1" data-t="pv_h"></h2>
         <p class="sub rv" style="--i:2" data-t="pv_p1"></p>
         <div class="perm rv" style="--i:3">
+          <p class="perm-intro" data-t="perm_intro"></p>
           <div class="ex" id="perm-tabs"></div>
           <p class="perm-text" id="perm-text" role="status"></p>
         </div>
         <p class="rv" style="--i:4"><a class="pv-link" id="privacy-link" href="https://encrypster.github.io/quiet-privacy/uz/" data-t="pv_link"></a></p>
       </div>
       <div data-k="1">
-        <p class="num">06</p>
+        <p class="num" data-name="q_h">06</p>
         <h2 data-t="q_h"></h2>
         <details><summary data-t="q1"></summary><p data-t="a1"></p></details>
         <details><summary data-t="q2"></summary><p data-t="a2"></p></details>
@@ -931,7 +934,7 @@ uz: {
   d5_h: "Qatʼiy rejim", d5_p: "O‘zingizga ishonmagan kunlar uchun. Seansni muddatidan oldin tugatib ham, qoidalarni yumshatib ham bo‘lmaydi.",
   d6_h: "Kulrang ekran", d6_p: "Rangsiz ekran o‘ziga kamroq tortadi. Buni yoqish uchun telefonni bir marta kompyuterga ulash kerak bo‘ladi.",
   par_h: "Farzandingizning telefoni uchun",
-  par_p: "Quietni bolaning telefoniga o‘rnatib, sozlamalarni PIN-kod bilan yopib qo‘yish mumkin. Bu qism dastlab o‘z oilamiz uchun yozilgan, shuning uchun nimani uddalashini ham, nimani uddalay olmasligini ham ochiq aytamiz.",
+  par_p: "Quietni bolaning telefoniga o‘rnatib, sozlamalarni PIN-kod bilan yopib qo‘yish mumkin. Quyida u nimani uddalashi va nimani uddalay olmasligini ochiq aytamiz.",
   can_h: "Nima qiladi",
   can1_h: "Qoidalarni PIN-kod bilan yopadi", can1_p: "Qulf yopiq paytda limitlarni yumshatib ham, Quietni o‘chirib ham bo‘lmaydi.",
   can2_h: "Kattalar uchun sahifalarni yopadi", can2_p: "Telegram, brauzer va ijtimoiy tarmoqlarda ekrandagi so‘zlarni, yoqilgan bo‘lsa rasmlarni ham tekshiradi. Tekshiruv telefonning o‘zida o‘tadi.",
@@ -1000,7 +1003,7 @@ ru: {
   d5_h: "Строгий режим", d5_p: "Для дней, когда себе не доверяешь. Сеанс нельзя закончить раньше времени, правила нельзя ослабить.",
   d6_h: "Серый экран", d6_p: "Экран без цвета меньше притягивает. Чтобы его включить, телефон нужно один раз подключить к компьютеру.",
   par_h: "Для телефона ребёнка",
-  par_p: "Quiet можно установить на телефон ребёнка и закрыть настройки PIN-кодом. Эту часть мы сначала писали для своей семьи, поэтому прямо говорим и о том, что она умеет, и о том, чего не умеет.",
+  par_p: "Quiet можно установить на телефон ребёнка и закрыть настройки PIN-кодом. Ниже мы прямо говорим, что он умеет и чего не умеет.",
   can_h: "Что делает",
   can1_h: "Закрывает правила PIN-кодом", can1_p: "Пока замок закрыт, нельзя ни ослабить лимиты, ни удалить Quiet.",
   can2_h: "Закрывает страницы для взрослых", can2_p: "В Telegram, браузере и соцсетях проверяет слова на экране, а если включено, и изображения. Проверка идёт на самом телефоне.",
@@ -1069,7 +1072,7 @@ en: {
   d5_h: "Strict mode", d5_p: "For the days you do not trust yourself. A session cannot be ended early and the rules cannot be loosened.",
   d6_h: "Grayscale", d6_p: "A screen without colour pulls at you less. Switching it on takes one connection to a computer.",
   par_h: "For your child's phone",
-  par_p: "You can install Quiet on a child's phone and close its settings with a PIN. We wrote this part for our own family first, so we would rather be plain about what it does and what it does not.",
+  par_p: "You can install Quiet on a child's phone and close its settings with a PIN. Below, we say plainly what it does and what it does not do.",
   can_h: "What it does",
   can1_h: "Closes the rules with a PIN", can1_p: "While it is locked, the limits cannot be loosened and Quiet cannot be removed.",
   can2_h: "Closes pages meant for adults", can2_p: "In Telegram, the browser and social apps it checks the words on screen and, if you turn that on, the pictures. The checking happens on the phone.",
@@ -1620,6 +1623,7 @@ const Deck = (() => {
     fit();
     $("rail").innerHTML = slides.map((_, i) => '<button type="button" data-go="' + i + '" aria-current="' + (i === s) + '"><span>' + names()[i] + "</span></button>").join("");
     $("b-n").textContent = String(s + 1).padStart(2, "0");
+    slides.forEach((el, i) => el.querySelectorAll(".num:not([data-t])").forEach(n => { n.textContent = String(i + 1).padStart(2, "0") + " · " + (n.dataset.name ? T[LANG][n.dataset.name] : names()[i]); }));
     $("b-total").textContent = String(slides.length).padStart(2, "0");
     $("b-name").textContent = names()[s];
     const g = $("ghost").firstElementChild, num = String(s + 1).padStart(2, "0");
@@ -1748,7 +1752,7 @@ Object.assign(T.uz, {
   r4_h: "YouTube qoladi, Shorts ketadi",
   r4_p: "YouTube va Instagramning o‘zi ishlayveradi. Qisqa videolar tasmasi ochilsa, Quiet orqaga qaytaradi. Kerak bo‘lgan kuni uni bir muddatga ochib qo‘yish mumkin.",
   r5_h: "Begona botlar ochilmaydi",
-  r5_p: "Telegramdagi oddiy chatlar ishlaydi. Bot esa, nomi va rasmi qanchalik beozor bo‘lmasin, ota-ona ro‘yxatiga kiritilmagan bo‘lsa yopiladi.",
+  r5_p: "Telegramdagi oddiy chatlar ishlaydi. Bot esa, nomi va rasmi qanchalik oddiy ko‘rinmasin, ota-ona ro‘yxatiga kiritilmagan bo‘lsa yopiladi.",
   k1: "Sinab ko‘ring: “Barcha ilovalar”ni oching va biror ilovani qidiring.",
   k2: "Sinab ko‘ring: sanoq tugashini kuting va 5 daqiqani tanlang.",
   k3: "Sinab ko‘ring: “Barcha ilovalar”dan Instagramni oching.",
@@ -1773,7 +1777,7 @@ T.uz.w = {
   strictNo: "Bo‘lmaydi. Qatʼiy seans o‘z vaqtida tugaydi: {t} qoldi.",
   gPh: "Masalan: Tungi kinolar", gEx: ["Sinfdoshlar 7-A", "Tungi kinolar 🔞", "Kino 18+", "Kinolar yashirin"],
   gClose: ["Yopiladi.", "Nomida kattalar uchun kontentni bildiruvchi so‘z yoki belgi bor."],
-  gPass: ["So‘z tekshiruvidan o‘tadi.", "Shuning uchun rasm tekshiruvi va botlarni yopish ham bor: nomi beozor bo‘lsa-da, ichidagisi tekshiriladi."],
+  gPass: ["So‘z tekshiruvidan o‘tadi.", "Shuning uchun rasm tekshiruvi va botlarni yopish ham bor: nomi oddiy bo‘lsa-da, ichidagisi tekshiriladi."],
   needs: [["Matnli bosh ekran", 0], ["Kutish va kunlik limit", 0], ["Bildirishnomalar filtri", 0], ["Ikkitadan ko‘p qoida", 1], ["Bir nechta fokus profili", 1], ["Shorts va Reelsni yopish", 1], ["Qatʼiy rejim", 1], ["Farzandim telefoni nazorati", 1]],
   needNone: "Hali hech narsa belgilanmagan.", needFree: "Sizga bepul qismi yetadi.", needPro: "Buning uchun Pro kerak bo‘ladi.",
   perms: [["Maxsus imkoniyatlar", "Qaysi ilova ochiqligini bilish va uni cheklash uchun. Siz yoqsangiz, kattalar uchun sahifalarni yopishda ekrandagi so‘zlarni ham tekshiradi. Yozayotgan matningizni va parollaringizni o‘qimaydi."],
@@ -1789,7 +1793,7 @@ Object.assign(T.ru, {
   r4_h: "YouTube остаётся, Shorts уходит",
   r4_p: "Сами YouTube и Instagram работают как обычно. Если открывается лента коротких видео, Quiet возвращает назад. В день, когда она нужна, её можно открыть на время.",
   r5_h: "Посторонние боты не открываются",
-  r5_p: "Обычные чаты в Telegram работают. А бот, каким бы безобидным ни было его название и фото, закрывается, если родитель не добавил его в список.",
+  r5_p: "Обычные чаты в Telegram работают. А бот, каким бы обычным ни выглядело его название и фото, закрывается, если родитель не добавил его в список.",
   k1: "Попробуйте: откройте «Все приложения» и найдите любое приложение.",
   k2: "Попробуйте: дождитесь конца отсчёта и выберите 5 минут.",
   k3: "Попробуйте: откройте Instagram через «Все приложения».",
@@ -1814,7 +1818,7 @@ T.ru.w = {
   strictNo: "Не получится. Строгий сеанс закончится в своё время: осталось {t}.",
   gPh: "Например: Ночное кино", gEx: ["Одноклассники 7-А", "Ночное кино 🔞", "Кино 18+", "Скрытые фильмы"],
   gClose: ["Закроется.", "В названии есть слово или знак, указывающий на контент для взрослых."],
-  gPass: ["Проверку слов пройдёт.", "Поэтому есть ещё проверка изображений и закрытие ботов: название безобидное, но содержимое проверяется."],
+  gPass: ["Проверку слов пройдёт.", "Поэтому есть ещё проверка изображений и закрытие ботов: название обычное, но содержимое проверяется."],
   needs: [["Текстовый главный экран", 0], ["Ожидание и дневной лимит", 0], ["Фильтр уведомлений", 0], ["Больше двух правил", 1], ["Несколько профилей фокуса", 1], ["Закрытие Shorts и Reels", 1], ["Строгий режим", 1], ["Контроль телефона ребёнка", 1]],
   needNone: "Пока ничего не отмечено.", needFree: "Вам хватит бесплатной части.", needPro: "Для этого понадобится Pro.",
   perms: [["Специальные возможности", "Чтобы знать, какое приложение открыто, и ограничивать его. Если вы включите, при закрытии страниц для взрослых проверяются и слова на экране. То, что вы печатаете, и пароли не читаются."],
@@ -1830,7 +1834,7 @@ Object.assign(T.en, {
   r4_h: "YouTube stays, Shorts goes",
   r4_p: "YouTube and Instagram themselves keep working. When the feed of short videos opens, Quiet steps back out of it. On a day you need it, you can open it for a while.",
   r5_h: "Unknown bots stay shut",
-  r5_p: "Ordinary Telegram chats work. A bot is closed unless a parent put it on the list, however harmless its name and photo look.",
+  r5_p: "Ordinary Telegram chats work. A bot is closed unless a parent put it on the list, however ordinary its name and photo look.",
   k1: "Try it: open “All apps” and search for an app.",
   k2: "Try it: wait for the countdown and pick 5 minutes.",
   k3: "Try it: open Instagram from “All apps”.",
@@ -1855,7 +1859,7 @@ T.en.w = {
   strictNo: "No. A strict session ends when it ends: {t} left.",
   gPh: "For example: Late night movies", gEx: ["Class 7-A", "Late night movies 🔞", "Movies 18+", "Hidden films"],
   gClose: ["It gets closed.", "The name carries a word or sign that marks adult content."],
-  gPass: ["It passes the word check.", "That is why there is a picture check and the bot rule as well: a harmless name still has its content looked at."],
+  gPass: ["It passes the word check.", "That is why there is a picture check and the bot rule as well: an ordinary name still has its content looked at."],
   needs: [["Text home screen", 0], ["Wait and daily limit", 0], ["Notification filter", 0], ["More than two rules", 1], ["Several focus profiles", 1], ["Closing Shorts and Reels", 1], ["Strict mode", 1], ["Control of my child's phone", 1]],
   needNone: "Nothing picked yet.", needFree: "The free part covers it.", needPro: "That takes Pro.",
   perms: [["Accessibility", "To know which app is open and to limit it. If you turn it on, the words on screen are also checked when closing pages meant for adults. What you type and your passwords are not read."],
@@ -1993,8 +1997,8 @@ const Touch = (() => {
     });
     on("y-h", "input", year); on("y-c", "input", year);
     on("gray-on", "change", () => $("feed").classList.toggle("gray", $("gray-on").checked));
-    on("guard-in", "input", () => guard(true));
-    on("guard-ex", "click", e => { const b = e.target.closest("button"); if (b) { $("guard-in").value = b.textContent; guard(true); } });
+    on("guard-in", "input", () => { $("guard-in").dataset.auto = ""; guard(true); });
+    on("guard-ex", "click", e => { const b = e.target.closest("button"); if (b) { $("guard-in").value = b.textContent; $("guard-in").dataset.auto = ""; guard(true); } });
     pick("needs", i => { picked.has(i) ? picked.delete(i) : picked.add(i); needs(); });
     pick("perm-tabs", i => { perm = i; perms(); });
     on("ring", "click", () => {
@@ -2010,6 +2014,8 @@ const Touch = (() => {
     $("sched").setAttribute("aria-label", T[LANG].d4_h);
     $("ring").setAttribute("aria-label", w().ring);
     $("guard-ex").innerHTML = w().gEx.map(x => '<button type="button">' + esc(x) + "</button>").join("");
+    const gi = $("guard-in");
+    if (!gi.value || gi.dataset.auto) { gi.value = w().gEx[1]; gi.dataset.auto = "1"; }
     guard(false);
   }
   return { init, lang };
@@ -2037,7 +2043,7 @@ Object.assign(T.uz, {
 });
 Object.assign(T.uz.w, {
   needFree: "Sizga bepul versiya yetadi.",
-  gPass: ["So‘z tekshiruvidan o‘tadi.", "Lekin beozor nom hech narsani yashirmaydi: ichidagi rasmlar alohida tekshiriladi, begona botlar esa umuman ochilmaydi."]
+  gPass: ["So‘z tekshiruvidan o‘tadi.", "Lekin oddiy nom hech narsani yashirmaydi: ichidagi rasmlar alohida tekshiriladi, begona botlar esa umuman ochilmaydi."]
 });
 Object.assign(T.ru, {
   m_toast: "Quiet закрыл страницу: контент для взрослых.",
@@ -2051,7 +2057,7 @@ Object.assign(T.ru, {
 Object.assign(T.ru.w, {
   holdCount: "в очереди, без звука",
   needFree: "Вам хватит бесплатной версии.",
-  gPass: ["Проверку слов пройдёт.", "Но безобидное название ничего не скрывает: изображения внутри проверяются отдельно, а посторонние боты не открываются вовсе."]
+  gPass: ["Проверку слов пройдёт.", "Но обычное название ничего не скрывает: изображения внутри проверяются отдельно, а посторонние боты не открываются вовсе."]
 });
 Object.assign(T.ru.d, { bot_toast: "Quiet закрыл чат: посторонние боты на этом телефоне не открываются." });
 Object.assign(T.en, {
@@ -2062,7 +2068,7 @@ Object.assign(T.en, {
   r2_p: "Say you tap Instagram. Quiet makes you wait ten seconds and asks why you are opening it. If you go on, you pick 5, 10 or 20 minutes, and the app closes when the time is up. You can set a daily limit too.",
   r4_p: "YouTube and Instagram themselves keep working. When the short-video feed opens, Quiet takes you back out. On a day you need it, you can open it for a while.",
   also_h: "Try the other tools too",
-  par_p: "You can install Quiet on a child's phone and lock its settings with a PIN. We built this part for our own family first, so we are upfront about what it does and what it does not do.",
+  par_p: "You can install Quiet on a child's phone and lock its settings with a PIN. Below, we say plainly what it does and what it does not do.",
   can1_h: "Locks the rules with a PIN",
   can2_p: "In Telegram, the browser and social apps it checks the words on screen and, if you turn it on, the pictures too. All checks run on the phone itself.",
   pr_p: "The free version is enough for everyday use. When Pro ends, whatever you set up keeps working.",
@@ -2078,9 +2084,43 @@ Object.assign(T.en.w, {
   holdCount: "waiting in silence",
   strictNo: "Not possible. A strict session runs to the end: {t} left.",
   needFree: "The free version covers it.",
-  gPass: ["It passes the word check.", "But a harmless name hides nothing: the pictures inside are checked separately, and unknown bots do not open at all."]
+  gPass: ["It passes the word check.", "But an ordinary name hides nothing: the pictures inside are checked separately, and unknown bots do not open at all."]
 });
 Object.assign(T.en.d, { bot_toast: "Quiet closed this chat: unknown bots do not open on this phone." });
+// Clarity pass: plain names for the scenes, no claim about the family, and a line where a widget needed one.
+T.uz.scenes = ["Boshlanish", "Sinab ko‘ring", "Yil hisobi", "Vositalar", "Ota-onalar", "Bepul va Pro", "Maxfiylik", "Yakun"];
+T.ru.scenes = ["Начало", "Попробуйте", "Ваш год", "Инструменты", "Родителям", "Бесплатно и Pro", "Приватность", "Финал"];
+T.en.scenes = ["Start", "Try it", "Your year", "Tools", "Parents", "Free and Pro", "Privacy", "The end"];
+Object.assign(T.uz, {
+  nav_pricing: "Bepul va Pro",
+  par_p: "Quietni bolaning telefoniga o‘rnatib, sozlamalarni PIN-kod bilan yopib qo‘yish mumkin. Quyida u nimani uddalashi va nimani uddalay olmasligini ochiq aytamiz.",
+  r5_p: "Telegramdagi oddiy chatlar ishlaydi. Bot esa, nomi va rasmi qanchalik oddiy ko‘rinmasin, ota-ona ro‘yxatiga kiritilmagan bo‘lsa yopiladi.",
+  perm_intro: "Quiet so‘raydigan ruxsatlar. Har birini bosing — nima uchun kerakligini ko‘rasiz."
+});
+Object.assign(T.uz.w, {
+  gPass: ["So‘z tekshiruvidan o‘tadi.", "Lekin oddiy nom hech narsani yashirmaydi: ichidagi rasmlar alohida tekshiriladi, begona botlar esa umuman ochilmaydi."],
+  ring: "Halqani bosing va u bilan birga nafas oling"
+});
+Object.assign(T.ru, {
+  nav_pricing: "Бесплатно и Pro",
+  par_p: "Quiet можно установить на телефон ребёнка и закрыть настройки PIN-кодом. Ниже мы прямо говорим, что он умеет и чего не умеет.",
+  r5_p: "Обычные чаты в Telegram работают. А бот, каким бы обычным ни выглядело его название и фото, закрывается, если родитель не добавил его в список.",
+  perm_intro: "Разрешения, которые просит Quiet. Нажмите на любое — увидите, зачем оно нужно."
+});
+Object.assign(T.ru.w, {
+  gPass: ["Проверку слов пройдёт.", "Но обычное название ничего не скрывает: изображения внутри проверяются отдельно, а посторонние боты не открываются вовсе."],
+  ring: "Нажмите на кольцо и дышите вместе с ним"
+});
+Object.assign(T.en, {
+  nav_pricing: "Free and Pro",
+  par_p: "You can install Quiet on a child's phone and lock its settings with a PIN. Below, we say plainly what it does and what it does not do.",
+  r5_p: "Ordinary Telegram chats work. A bot is closed unless a parent put it on the list, however ordinary its name and photo look.",
+  perm_intro: "The permissions Quiet asks for. Tap one to see what it is for."
+});
+Object.assign(T.en.w, {
+  gPass: ["It passes the word check.", "But an ordinary name hides nothing: the pictures inside are checked separately, and unknown bots do not open at all."],
+  ring: "Tap the ring and breathe with it"
+});
 
 function pickLang() {
   try { const saved = localStorage.getItem("quiet-lang"); if (saved && T[saved]) return saved; } catch (e) {}
