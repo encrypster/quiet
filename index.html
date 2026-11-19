@@ -2022,6 +2022,65 @@ T.en.scenes = ["Start", "Try it", "The sum", "Tools", "Parents", "Pricing", "Pri
 Object.assign(T.uz, { how_h: "Bu telefon ishlaydi. Bosib ko‘ring.", scroll_hint: "Suring", also_h: "Qolganini ham ushlab ko‘ring" });
 Object.assign(T.ru, { how_h: "Этот телефон работает. Нажимайте.", scroll_hint: "Листайте", also_h: "Остальное тоже можно потрогать" });
 Object.assign(T.en, { how_h: "This phone works. Go on, tap it.", scroll_hint: "Scroll", also_h: "The rest is yours to play with too" });
+// Copy pass: the wording read through again in each language.
+Object.assign(T.uz, {
+  r1_p: "Ikonkalar, qizil nuqtalar va vidjetlar o‘rnida soat, sana va o‘zingiz tanlagan sakkiztagacha ilova turadi. Qolganlari bir surishda ochiladi yoki nomining ikki-uch harfi bilan topiladi.",
+  also_h: "Boshqa vositalarni ham sinab ko‘ring",
+  can2_p: "Telegram, brauzer va ijtimoiy tarmoqlarda ekrandagi so‘zlarni, yoqilgan bo‘lsa rasmlarni ham tekshiradi. Tekshiruv telefonning o‘zida bajariladi.",
+  can4_p: "Xohlasangiz, biror sahifa yopilganda Telegram’ingizga yozadi: qaysi ilova, soat nechada va nima sababdan.",
+  cant4_p: "Telefon Xavfsiz rejimda yoqilsa, Quiet ishlamaydi. Buning oldini olish uchun telefonni bir marta kompyuter orqali sozlash kerak.",
+  pr_p: "Kundalik foydalanish uchun bepul versiya yetarli. Pro muddati tugasa ham, sozlab qo‘ygan narsalaringiz ishlayveradi.",
+  a5: "Qulf yopiq paytda yo‘q: o‘chirish oynasi, ilova sozlamalari, sana va vaqt sahifalari ochilmaydi. Xavfsiz rejim va zavod sozlamalarini tiklashni ham to‘sish uchun telefonni bir marta kompyuter orqali sozlash kerak.",
+  a6: "Sozlab qo‘ygan qoidalaringiz ishlayveradi. Faqat Pro’dagi yangi imkoniyatlarni qo‘sha olmaysiz.",
+  w_strict_p: "Qatʼiy seans davom etyapti. Uni to‘xtatib ko‘ring.",
+  ch_p: "Sizga nimalar kerak? Belgilang — bepul versiya yetadimi yoki Pro kerakmi, aytib beramiz."
+});
+Object.assign(T.uz.w, {
+  needFree: "Sizga bepul versiya yetadi.",
+  gPass: ["So‘z tekshiruvidan o‘tadi.", "Lekin beozor nom hech narsani yashirmaydi: ichidagi rasmlar alohida tekshiriladi, begona botlar esa umuman ochilmaydi."]
+});
+Object.assign(T.ru, {
+  m_toast: "Quiet закрыл страницу: контент для взрослых.",
+  how_h: "Этот телефон настоящий — нажимайте.",
+  also_h: "Другие инструменты тоже можно попробовать",
+  pr_p: "Для повседневного использования хватает бесплатной версии. Когда Pro закончится, всё, что вы настроили, продолжит работать.",
+  a1: "Да. В настройках телефона, в разделе «Приложения по умолчанию», прежний экран можно выбрать в любой момент. Если удалить Quiet, всё вернётся как было.",
+  a6: "Настроенные правила продолжат работать. Вы просто не сможете добавлять новые функции из Pro.",
+  w_hold_p: "Выключите переключатель и посмотрите, что изменится."
+});
+Object.assign(T.ru.w, {
+  holdCount: "в очереди, без звука",
+  needFree: "Вам хватит бесплатной версии.",
+  gPass: ["Проверку слов пройдёт.", "Но безобидное название ничего не скрывает: изображения внутри проверяются отдельно, а посторонние боты не открываются вовсе."]
+});
+Object.assign(T.ru.d, { bot_toast: "Quiet закрыл чат: посторонние боты на этом телефоне не открываются." });
+Object.assign(T.en, {
+  lead: "Quiet turns your home screen into a plain list of words and puts a small obstacle in front of the apps that eat your time. You decide what to limit.",
+  r1_h: "Your home screen, down to eight names",
+  r1_p: "Instead of icons, red dots and widgets, you see the time, the date and up to eight apps you chose yourself. Everything else is one swipe away, or two or three letters into a search.",
+  r2_h: "Habit apps no longer open straight away",
+  r2_p: "Say you tap Instagram. Quiet makes you wait ten seconds and asks why you are opening it. If you go on, you pick 5, 10 or 20 minutes, and the app closes when the time is up. You can set a daily limit too.",
+  r4_p: "YouTube and Instagram themselves keep working. When the short-video feed opens, Quiet takes you back out. On a day you need it, you can open it for a while.",
+  also_h: "Try the other tools too",
+  par_p: "You can install Quiet on a child's phone and lock its settings with a PIN. We built this part for our own family first, so we are upfront about what it does and what it does not do.",
+  can1_h: "Locks the rules with a PIN",
+  can2_p: "In Telegram, the browser and social apps it checks the words on screen and, if you turn it on, the pictures too. All checks run on the phone itself.",
+  pr_p: "The free version is enough for everyday use. When Pro ends, whatever you set up keeps working.",
+  a3: "Phones with Android 8.0 or newer. It has been tested on Samsung Galaxy in particular. The picture check needs Android 11.",
+  a5: "Not while it is locked: the uninstall dialog, the app's settings and the date and time pages stay closed. Blocking Safe Mode and factory reset as well takes a one-time setup from a computer.",
+  a6: "The rules you set up keep working. You just cannot add new Pro features.",
+  w_hold_p: "Switch it off and see what changes.",
+  w_gray_p: "Colour pulls at your attention. Flip the switch. On a real phone, this needs a one-time connection to a computer.",
+  ch_p: "What do you need? Tick it, and we will tell you which plan covers it.",
+  y_l2: "How much you want to cut each day"
+});
+Object.assign(T.en.w, {
+  holdCount: "waiting in silence",
+  strictNo: "Not possible. A strict session runs to the end: {t} left.",
+  needFree: "The free version covers it.",
+  gPass: ["It passes the word check.", "But a harmless name hides nothing: the pictures inside are checked separately, and unknown bots do not open at all."]
+});
+Object.assign(T.en.d, { bot_toast: "Quiet closed this chat: unknown bots do not open on this phone." });
 
 function pickLang() {
   try { const saved = localStorage.getItem("quiet-lang"); if (saved && T[saved]) return saved; } catch (e) {}
