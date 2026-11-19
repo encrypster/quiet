@@ -298,7 +298,7 @@
 <footer>
   <div class="wrap">
     <span>Quiet · Android 8+</span>
-    <span><a href="https://encrypster.github.io/quiet-privacy/" data-t="foot_privacy"></a></span>
+    <span><a id="privacy-link" href="https://encrypster.github.io/quiet-privacy/" data-t="foot_privacy"></a></span>
     <span><a href="mailto:test@example.com">test@example.com</a></span>
   </div>
 </footer>
@@ -478,6 +478,9 @@ function pickLang() {
 function apply(lang) {
   const t = T[lang];
   document.documentElement.lang = lang;
+  // The policy in the same language as the page.
+  document.getElementById("privacy-link").href =
+    "https://encrypster.github.io/quiet-privacy/" + (lang === "en" ? "" : lang + "/");
   document.querySelectorAll("[data-t]").forEach(el => {
     const v = t[el.dataset.t];
     if (v !== undefined) el.textContent = v;
