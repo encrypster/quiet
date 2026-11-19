@@ -247,6 +247,96 @@
     .scene .hero { padding-top: 72px; padding-bottom: 72px; }
   }
 
+  /* ---- Things to touch ---- */
+  .tabs, .ex { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tabs { margin-bottom: 28px; }
+  .tabs button, .ex button { font: 500 14px/1 Inter, system-ui, sans-serif; padding: 10px 14px; border-radius: 999px; border: 1px solid var(--line); background: none; color: var(--muted); cursor: pointer; transition: background .2s, color .2s, border-color .2s; }
+  .tabs button:hover, .ex button:hover { color: var(--fg); border-color: var(--fg); }
+  .tabs button[aria-selected="true"], .ex button[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+  .story .row { grid-template-columns: 1fr; }
+  .ch-n { font: 500 13px/1 Inter, system-ui, sans-serif; letter-spacing: .08em; color: var(--muted); margin-bottom: 16px; font-variant-numeric: tabular-nums; }
+  .row p.task { margin-top: 24px; display: flex; gap: 12px; align-items: flex-start; font-size: 16px; color: var(--fg); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; max-width: 30em; transition: border-color .3s; }
+  .task::before { content: ""; width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--muted); flex: none; margin-top: 2px; font: 600 12px/18px Inter, system-ui, sans-serif; text-align: center; }
+  .task.done { border-color: var(--fg); }
+  .task.done::before { content: "✓"; background: var(--fg); color: var(--bg); border-color: var(--fg); }
+  .story-note { color: var(--muted); font-size: 15px; margin-top: 28px; }
+  .linkbtn { background: none; border: 0; color: var(--fg); font: inherit; font-weight: 500; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; padding: 0; }
+  @media (min-width: 961px) {
+    .tabs { display: none; }
+    .pin .phone.demo { width: min(300px, calc((100vh - 64px - 150px) * 9 / 19)); }
+  }
+  @media (max-width: 960px) {
+    .story .row { display: none; }
+    .story .row.active { display: grid; }
+    .pin { display: flex; justify-content: center; margin-top: 32px; }
+  }
+  .chip { cursor: pointer; }
+  .chip.gone { opacity: 0 !important; transform: translate(-50%, -50%) translate(var(--dx), var(--dy)) scale(0) !important; transition: transform .35s, opacity .35s; pointer-events: none; }
+
+  .bento { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .card { border: 1px solid var(--line); background: var(--soft); border-radius: 24px; padding: 26px; display: flex; flex-direction: column; gap: 14px; min-height: 320px; }
+  .card.wide { grid-column: span 2; }
+  .card h3 { font-size: 20px; }
+  .card > p { color: var(--muted); font-size: 15.5px; line-height: 1.5; }
+  @media (max-width: 900px) { .bento { grid-template-columns: 1fr; } .card.wide { grid-column: auto; } }
+  .w-read { font-weight: 500; font-size: 15.5px; min-height: 1.6em; color: var(--fg) !important; }
+  .bars { display: flex; align-items: flex-end; gap: 10px; height: 140px; margin-top: auto; }
+  .bars button { flex: 1; min-width: 0; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 8px; background: none; border: 0; padding: 0; cursor: pointer; color: var(--muted); font: 500 11.5px/1 Inter, system-ui, sans-serif; }
+  .bars i { display: block; width: 100%; min-height: 4px; height: var(--h); border-radius: 8px 8px 3px 3px; background: var(--line); transition: height .7s cubic-bezier(.2, .7, .2, 1), background .2s; }
+  .bars button:hover i, .bars button.on i { background: var(--fg); }
+  .bars button.on { color: var(--fg); }
+  .bars span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+  .sw { display: flex; align-items: center; gap: 12px; cursor: pointer; font-weight: 500; font-size: 15.5px; position: relative; }
+  .sw input { position: absolute; opacity: 0; width: 46px; height: 28px; margin: 0; }
+  .sw i { width: 46px; height: 28px; border-radius: 999px; border: 1.5px solid var(--fg); position: relative; flex: none; transition: background .2s; }
+  .sw i::after { content: ""; position: absolute; top: 3px; left: 3px; width: 19px; height: 19px; border-radius: 50%; background: var(--fg); transition: transform .25s, background .2s; }
+  .sw input:checked + i { background: var(--fg); }
+  .sw input:checked + i::after { transform: translateX(18px); background: var(--bg); }
+  .sw input:focus-visible + i { outline: 2px solid var(--fg); outline-offset: 3px; }
+  .hold-box { margin-top: auto; min-height: 132px; display: flex; flex-direction: column; justify-content: flex-end; gap: 8px; }
+  .hold-chip { border: 1px solid var(--line); background: var(--bg); border-radius: 12px; padding: 9px 12px; font-size: 13.5px; font-weight: 500; animation: pop .35s cubic-bezier(.2, 1.4, .4, 1), shake .5s .35s; }
+  .hold-count b { display: block; font-size: 44px; font-weight: 600; letter-spacing: -.03em; line-height: 1; }
+  .hold-count span { color: var(--muted); font-size: 14px; }
+  @keyframes pop { from { opacity: 0; transform: scale(.8) translateY(10px); } }
+  @keyframes shake { 20% { transform: translateX(-5px); } 40% { transform: translateX(5px); } 60% { transform: translateX(-3px); } 80% { transform: translateX(2px); } }
+  .shake { animation: shake .45s; }
+  .day { position: relative; height: 12px; border-radius: 6px; background: var(--line); margin-top: auto; overflow: hidden; }
+  .day .closed { position: absolute; top: 0; bottom: 0; background: var(--fg); }
+  .day .a { left: 0; width: 29.2%; } .day .b { left: 95.8%; right: 0; }
+  input[type="range"] { width: 100%; accent-color: var(--fg); margin: 0; }
+  .timer { font-size: 56px; font-weight: 600; letter-spacing: -.04em; line-height: 1; font-variant-numeric: tabular-nums; margin-top: auto; }
+  .feed { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: auto; transition: filter .7s; }
+  .feed i { display: block; aspect-ratio: 1.25; border-radius: 12px; }
+  .feed i:nth-child(1) { background: linear-gradient(135deg, #ff5f6d, #ffc371); } .feed i:nth-child(2) { background: linear-gradient(135deg, #7f5af0, #2cb67d); }
+  .feed i:nth-child(3) { background: linear-gradient(135deg, #f72585, #7209b7); } .feed i:nth-child(4) { background: linear-gradient(135deg, #00b4d8, #90e0ef); }
+  .feed i:nth-child(5) { background: linear-gradient(135deg, #ffd60a, #ff7b00); } .feed i:nth-child(6) { background: linear-gradient(135deg, #06d6a0, #118ab2); }
+  .feed.gray { filter: grayscale(1); }
+
+  .tester { margin-bottom: 64px; max-width: 760px; }
+  .tester label { display: block; font-weight: 500; margin-bottom: 14px; font-size: 18px; }
+  .tester input { width: 100%; font: 500 19px/1.2 Inter, system-ui, sans-serif; padding: 15px 18px; border-radius: 16px; border: 1.5px solid var(--fg); background: var(--bg); color: var(--fg); }
+  .tester input::placeholder { color: var(--muted); font-weight: 400; }
+  .tester .ex { margin-top: 12px; }
+  .verdict { margin-top: 16px; min-height: 3.4em; color: var(--muted); }
+  .verdict b { display: block; color: var(--fg); font-weight: 600; font-size: 19px; }
+  .ph-head { font-weight: 600; font-size: 14px; padding-bottom: 10px; margin-bottom: 4px; border-bottom: 1px solid #1f1f1f; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-height: 31px; }
+  .pass .ph-toast { visibility: hidden; }
+
+  .chooser { margin-bottom: 40px; }
+  .chooser > p:first-child { font-weight: 500; margin-bottom: 14px; }
+  .chooser .w-read { margin-top: 16px; font-size: 18px; }
+  #plans th { transition: color .2s, box-shadow .2s; }
+  #plans.pick-free th:nth-child(2), #plans.pick-pro th:nth-child(3) { color: var(--fg); box-shadow: inset 0 -3px 0 var(--fg); }
+  #plans.pick-free td:nth-child(3), #plans.pick-pro td:nth-child(2) { color: var(--muted); font-weight: 400; }
+
+  .perm { border: 1px solid var(--line); border-radius: 22px; padding: 22px; margin: 26px 0; }
+  .privacy .body p.perm-text { font-size: 17px; margin-top: 16px; min-height: 6.4em; }
+
+  .ring-box { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+  button.ring { background: none; cursor: pointer; padding: 0; }
+  .ring.go { animation: breathe 8s ease-in-out infinite; }
+  .ring-cap { font-size: 14px !important; color: var(--muted); min-height: 1.4em; text-align: center; }
+
   /* Sections */
   section { padding: 104px 0; }
   .sec-head { max-width: 46em; margin-bottom: 64px; }
@@ -362,7 +452,7 @@
       <p class="lead" data-t="lead"></p>
       <div class="hero-actions">
         <span class="status"><i></i><span data-t="status"></span></span>
-        <a class="more" href="#try" data-t="more"></a>
+        <a class="more" href="#how" data-t="more"></a>
       </div>
     </div>
     <div class="stage tilt" id="stage" aria-hidden="true">
@@ -401,32 +491,6 @@
     </ul></div>
   </div>
 
-  <section id="try" class="try">
-    <div class="wrap try-grid">
-      <div class="try-head">
-        <p class="num" data-t="try_num"></p>
-        <h2 data-t="try_h"></h2>
-        <p data-t="try_p"></p>
-      </div>
-      <div class="try-phone">
-        <div class="phone demo" id="demo">
-          <div class="sb"><span id="demo-clock">7:42</span><span><em></em><b></b></span></div>
-          <div id="demo-screen"></div>
-          <div id="demo-toast" role="status" aria-live="polite"></div>
-          <button class="d-homebar" type="button" data-act="home" id="demo-home"><i></i></button>
-        </div>
-      </div>
-      <div class="try-side">
-        <ol class="steps" id="demo-steps"></ol>
-        <div class="try-actions">
-          <button class="btn" type="button" id="demo-focus"></button>
-          <button class="btn ghost" type="button" id="demo-reset"></button>
-        </div>
-        <p class="try-done" id="demo-done" hidden></p>
-      </div>
-    </div>
-  </section>
-
   <section id="how">
     <div class="wrap">
       <div class="sec-head">
@@ -434,60 +498,26 @@
         <h2 data-t="how_h"></h2>
         <p data-t="how_p"></p>
       </div>
+      <div class="tabs" id="story-tabs" role="tablist"></div>
       <div class="story">
       <div class="rows">
-        <div class="row">
-          <div class="shot" aria-hidden="true">
-            <div class="phone">
-              <div class="sb"><span>7:42</span><span><em></em><b></b></span></div>
-              <div class="ph-time">7:42</div>
-              <div class="ph-dim ph-date" data-t="m_date"></div>
-              <div class="ph-dim" data-t="m_today"></div>
-              <div class="ph-apps">
-                <div data-t="m_a1"></div><div data-t="m_a2"></div><div data-t="m_a3"></div><div data-t="m_a4"></div><div data-t="m_a5"></div>
-              </div>
-              <div class="ph-home"></div>
-            </div>
-          </div>
-          <div><h3 data-t="r1_h"></h3><p data-t="r1_p"></p></div>
-        </div>
-        <div class="row">
-          <div class="shot" aria-hidden="true">
-            <div class="phone">
-              <div class="sb"><span>21:15</span><span><em></em><b></b></span></div>
-              <div class="ph-title" data-t="m_open"></div>
-              <div class="ph-dim" style="margin-top:8px" data-t="m_wait"></div>
-              <div class="ph-dim" data-t="m_used"></div>
-              <div style="margin-top:16px" data-t="m_why"></div>
-              <div class="ph-btns">
-                <div class="ph-btn on" data-t="m_home"></div>
-                <div class="ph-btn" data-t="m_c5"></div>
-                <div class="ph-btn" data-t="m_c10"></div>
-                <div class="ph-btn" data-t="m_c20"></div>
-              </div>
-              <div class="ph-home"></div>
-            </div>
-          </div>
-          <div><h3 data-t="r2_h"></h3><p data-t="r2_p"></p></div>
-        </div>
-        <div class="row">
-          <div class="shot" aria-hidden="true">
-            <div class="phone">
-              <div class="sb"><span>10:11</span><span><em></em><b></b></span></div>
-              <div class="ph-time">10:11</div>
-              <div class="ph-dim ph-date" data-t="m_date"></div>
-              <div class="ph-pill" data-t="m_focus"></div>
-              <div class="ph-apps">
-                <div data-t="m_f1"></div><div data-t="m_f2"></div><div data-t="m_f3"></div>
-              </div>
-              <div class="ph-home"></div>
-            </div>
-          </div>
-          <div><h3 data-t="r3_h"></h3><p data-t="r3_p"></p></div>
+        <article class="row"><div><p class="ch-n">1 / 5</p><h3 data-t="r1_h"></h3><p data-t="r1_p"></p><p class="task"><span data-t="k1"></span></p></div></article>
+        <article class="row"><div><p class="ch-n">2 / 5</p><h3 data-t="r2_h"></h3><p data-t="r2_p"></p><p class="task"><span data-t="k2"></span></p></div></article>
+        <article class="row"><div><p class="ch-n">3 / 5</p><h3 data-t="r3_h"></h3><p data-t="r3_p"></p><p class="task"><span data-t="k3"></span></p></div></article>
+        <article class="row"><div><p class="ch-n">4 / 5</p><h3 data-t="r4_h"></h3><p data-t="r4_p"></p><p class="task"><span data-t="k4"></span></p></div></article>
+        <article class="row"><div><p class="ch-n">5 / 5</p><h3 data-t="r5_h"></h3><p data-t="r5_p"></p><p class="task"><span data-t="k5"></span></p></div></article>
+      </div>
+      <div class="pin tilt" data-tilt="soft">
+        <div class="phone demo" id="demo">
+          <div class="sb"><span id="demo-clock">7:42</span><span><em></em><b></b></span></div>
+          <div id="demo-screen"></div>
+          <div id="demo-toast" role="status" aria-live="polite"></div>
+          <button class="d-homebar" type="button" data-act="home" id="demo-home"><i></i></button>
         </div>
       </div>
-      <div class="pin tilt" aria-hidden="true"><div class="phone" id="pin-phone"></div></div>
       </div>
+      <p class="try-done" id="demo-done" hidden></p>
+      <p class="story-note"><span data-t="try_note"></span> <button type="button" class="linkbtn" id="demo-reset"></button></p>
     </div>
   </section>
 
@@ -497,14 +527,36 @@
         <p class="num">02</p>
         <h2 data-t="also_h"></h2>
       </div>
-      <dl>
-        <div class="item"><dt data-t="d1_h"></dt><dd data-t="d1_p"></dd></div>
-        <div class="item"><dt data-t="d2_h"></dt><dd data-t="d2_p"></dd></div>
-        <div class="item"><dt data-t="d3_h"></dt><dd data-t="d3_p"></dd></div>
-        <div class="item"><dt data-t="d4_h"></dt><dd data-t="d4_p"></dd></div>
-        <div class="item"><dt data-t="d5_h"></dt><dd data-t="d5_p"></dd></div>
-        <div class="item"><dt data-t="d6_h"></dt><dd data-t="d6_p"></dd></div>
-      </dl>
+      <div class="bento">
+        <div class="card wide">
+          <h3 data-t="d3_h"></h3><p data-t="w_time_p"></p>
+          <div class="ex" id="time-seg"></div>
+          <div class="bars" id="time-bars"></div>
+          <p class="w-read" id="time-read"></p>
+        </div>
+        <div class="card">
+          <h3 data-t="d2_h"></h3><p data-t="w_hold_p"></p>
+          <label class="sw"><input type="checkbox" id="hold-on" checked><i></i><span data-t="w_hold_sw"></span></label>
+          <div class="hold-box" id="hold-box" aria-live="off"></div>
+        </div>
+        <div class="card">
+          <h3 data-t="d4_h"></h3><p data-t="w_sched_p"></p>
+          <div class="day" aria-hidden="true"><i class="closed a"></i><i class="closed b"></i></div>
+          <input type="range" id="sched" min="0" max="1430" step="10" value="1300">
+          <p class="w-read" id="sched-read"></p>
+        </div>
+        <div class="card">
+          <h3 data-t="d5_h"></h3><p data-t="w_strict_p"></p>
+          <div class="timer" id="strict-time">25:00</div>
+          <button class="btn ghost" type="button" id="strict-end" data-t="w_strict_btn"></button>
+          <p class="w-read" id="strict-read"></p>
+        </div>
+        <div class="card">
+          <h3 data-t="d6_h"></h3><p data-t="w_gray_p"></p>
+          <label class="sw"><input type="checkbox" id="gray-on"><i></i><span data-t="w_gray_sw"></span></label>
+          <div class="feed" id="feed" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -519,6 +571,7 @@
         <div class="shot" aria-hidden="true">
           <div class="phone">
             <div class="sb"><span>16:30</span><span><em></em><b></b></span></div>
+            <div class="ph-head" id="guard-name"></div>
             <div class="ph-chat">
               <div><i></i><span><u style="width:62%"></u><u style="width:88%"></u></span></div>
               <div><i></i><span><u style="width:48%"></u><u style="width:74%"></u></span></div>
@@ -530,6 +583,12 @@
             <div class="ph-home"></div>
           </div>
         </div>
+      </div>
+      <div class="tester">
+        <label for="guard-in" data-t="g_label"></label>
+        <input id="guard-in" type="text" maxlength="40" autocomplete="off" spellcheck="false">
+        <div class="ex" id="guard-ex"></div>
+        <p class="verdict" id="guard-out" role="status"></p>
       </div>
       <div class="cols">
         <div>
@@ -561,7 +620,12 @@
         <h2 data-t="pr_h"></h2>
         <p data-t="pr_p"></p>
       </div>
-      <table>
+      <div class="chooser">
+        <p data-t="ch_p"></p>
+        <div class="ex" id="needs"></div>
+        <p class="w-read" id="need-out" role="status"></p>
+      </div>
+      <table id="plans">
         <thead><tr><th scope="col" data-t="t_what"></th><th scope="col" data-t="t_free"></th><th scope="col">Pro</th></tr></thead>
         <tbody>
           <tr><td data-t="t1"></td><td data-t="v_yes"></td><td data-t="v_yes"></td></tr>
@@ -587,7 +651,10 @@
       </div>
       <div class="body">
         <p data-t="pv_p1"></p>
-        <p data-t="pv_p2"></p>
+        <div class="perm">
+          <div class="ex" id="perm-tabs"></div>
+          <p class="perm-text" id="perm-text" role="status"></p>
+        </div>
         <p><a id="privacy-link" href="https://encrypster.github.io/quiet-privacy/uz/" data-t="pv_link"></a></p>
       </div>
     </div>
@@ -616,7 +683,10 @@
         <h2 data-t="end_h"></h2>
         <p><span data-t="end_p"></span> <a href="mailto:test@example.com">test@example.com</a></p>
       </div>
-      <div class="ring" aria-hidden="true"></div>
+      <div class="ring-box">
+        <button class="ring" id="ring" type="button"></button>
+        <p class="ring-cap" id="ring-cap" role="status"></p>
+      </div>
     </div>
   </section>
 </main>
@@ -929,15 +999,15 @@ const Demo = (() => {
   function open(app) {
     if (st.focus && !FOCUS_ALLOWED.has(app)) { go("block", app); if (app === "instagram") mark(2); return; }
     if (app === "instagram") {
-      st.n = WAIT_S; go("wait", app); mark(0);
+      st.n = WAIT_S; go("wait", app);
       timers.push(setInterval(() => { if (st.n > 0) { st.n--; render(false); } }, 1000));
       return;
     }
     st.min = 0; go("app", app);
   }
   function visit(min) {
-    st.min = min; go("app", "instagram");
-    later(() => { go("home"); toast(fill(d().timeup, { app: name("instagram") })); mark(1); }, VISIT_S * 1000);
+    st.min = min; go("app", "instagram"); mark(1);
+    later(() => { go("home"); toast(fill(d().timeup, { app: name("instagram") })); }, VISIT_S * 1000);
   }
   function shorts() {
     go("shorts", "youtube");
@@ -1021,19 +1091,27 @@ const Demo = (() => {
     $("demo-clock").textContent = clock();
     $("demo-home").setAttribute("aria-label", d().home_btn);
   }
+  let cur = 0;
   function side() {
     const t = d();
-    $("demo-steps").innerHTML = t.steps.map((s, i) => "<li" + (st.done.has(i) ? ' class="done"' : "") + "><span>" + esc(s) + "</span></li>").join("");
-    $("demo-focus").textContent = st.focus ? t.focus_off : t.focus_on;
+    document.querySelectorAll(".story .task").forEach((el, i) => el.classList.toggle("done", st.done.has(i)));
     $("demo-reset").textContent = t.reset;
     const done = $("demo-done");
     done.textContent = t.done;
-    done.hidden = st.done.size < t.steps.length;
+    done.hidden = st.done.size < 5;
+    $("story-tabs").innerHTML = t.tabs.map((name, i) =>
+      '<button type="button" role="tab" data-ch="' + i + '" aria-selected="' + (i === cur) + '">' + esc(name) + "</button>").join("");
+  }
+  // Each chapter of the story puts the phone into its own state.
+  function scene(i) {
+    cur = i; st.focus = i === 2; $("demo-toast").innerHTML = "";
+    if (i === 1) open("instagram"); else if (i === 3) open("youtube"); else if (i === 4) open("telegram"); else go("home");
+    side();
   }
   function act(a) {
     const [what, arg] = a.split(":");
     if (what === "home") go("home");
-    else if (what === "drawer") go("drawer");
+    else if (what === "drawer") { go("drawer"); mark(0); }
     else if (what === "open") open(arg);
     else if (what === "visit") visit(Number(arg));
     else if (what === "shorts") shorts();
@@ -1052,11 +1130,11 @@ const Demo = (() => {
     let y0 = null;
     phone.addEventListener("pointerdown", e => { y0 = e.clientY; });
     phone.addEventListener("pointerup", e => { if (y0 !== null && st.screen === "home" && y0 - e.clientY > 50) go("drawer"); y0 = null; });
-    $("demo-focus").addEventListener("click", () => { st.focus = !st.focus; go("home"); side(); });
-    $("demo-reset").addEventListener("click", () => { st.focus = false; st.done.clear(); $("demo-toast").innerHTML = ""; go("home"); side(); });
+    $("demo-reset").addEventListener("click", () => { st.done.clear(); scene(cur); });
+    $("story-tabs").addEventListener("click", e => { const b = e.target.closest("[data-ch]"); if (b) FX.pick(Number(b.dataset.ch)); });
     setInterval(() => { if (st.screen === "home") render(false); }, 20000);
   }
-  return { init, refresh() { render(false); side(); } };
+  return { init, scene, refresh() { render(false); side(); } };
 })();
 
 // The hero scene's words: what a phone shouts before Quiet.
@@ -1076,6 +1154,7 @@ const FX = (() => {
   let scene, stage, ticking = false, pointer = { x: -999, y: -999 }, gridOn = false;
 
   function chips() {
+    $("chips").onclick = e => { const c = e.target.closest(".chip"); if (c) c.classList.add("gone"); };
     $("chips").innerHTML = T[LANG].d.noise.map((text, i) =>
       '<div class="chip" style="--dx:' + SPOTS[i][0] + "px;--dy:" + SPOTS[i][1] + "px;--d:" + (3.2 + (i % 4) * .7) + "s;--delay:-" + (i * .45) + 's"><span>' + text + "</span></div>").join("");
   }
@@ -1099,7 +1178,7 @@ const FX = (() => {
     // (a menu link, a restored scroll position) never leaves anything hidden.
     const edge = innerHeight * .92;
     pending = pending.filter(el => { if (el.getBoundingClientRect().top < edge) { el.classList.add("in"); return false; } return true; });
-    if (storyRows.length) {
+    if (storyRows.length && innerWidth > 960) {
       const mid = innerHeight / 2;
       let best = storyRows[0], gap = Infinity;
       for (const r of storyRows) { const b = r.getBoundingClientRect(), g = Math.abs((b.top + b.bottom) / 2 - mid); if (g < gap) { gap = g; best = r; } }
@@ -1148,8 +1227,9 @@ const FX = (() => {
     document.querySelectorAll(".tilt").forEach(box => {
       box.addEventListener("pointermove", e => {
         const r = box.getBoundingClientRect();
-        box.style.setProperty("--ry", ((e.clientX - r.left) / r.width - .5) * 16 + "deg");
-        box.style.setProperty("--rx", (.5 - (e.clientY - r.top) / r.height) * 12 + "deg");
+        const k = box.dataset.tilt === "soft" ? .35 : 1;
+        box.style.setProperty("--ry", ((e.clientX - r.left) / r.width - .5) * 16 * k + "deg");
+        box.style.setProperty("--rx", (.5 - (e.clientY - r.top) / r.height) * 12 * k + "deg");
       });
       box.addEventListener("pointerleave", () => { box.style.setProperty("--ry", "0deg"); box.style.setProperty("--rx", "0deg"); });
     });
@@ -1163,7 +1243,7 @@ const FX = (() => {
   function reveals() {
     if (reduce) return;
     const io = { observe: el => pending.push(el) };
-    const groups = [".facts li", ".try-head > *", ".steps li", ".sec-head > *", ".also .item", ".cols li", "tbody tr", ".faq details", ".privacy .body p", ".closing h2", ".closing p", ".try-phone", ".price-note"];
+    const groups = [".facts li", ".sec-head > *", ".bento .card", ".tester", ".chooser", ".perm", ".cols li", "tbody tr", ".faq details", ".privacy .body p", ".closing h2", ".closing p", ".price-note"];
     groups.forEach(sel => {
       const byParent = new Map();
       document.querySelectorAll(sel).forEach(el => {
@@ -1179,17 +1259,18 @@ const FX = (() => {
     if (row === active) return;
     active = row;
     storyRows.forEach(r => r.classList.toggle("active", r === row));
-    syncStory(true);
+    Demo.scene(storyRows.indexOf(row));
   }
   function story() {
     storyRows = [...document.querySelectorAll(".story .row")];
     if (storyRows.length) setActive(storyRows[0]);
   }
-  function syncStory(animate) {
-    const pin = $("pin-phone");
-    if (!pin || !active) return;
-    pin.innerHTML = active.querySelector(".phone").innerHTML;
-    if (animate && !reduce) { pin.classList.remove("swap"); void pin.offsetWidth; pin.classList.add("swap"); }
+  // A tab was tapped: on a wide screen scroll to that chapter, on a narrow one just show it.
+  function pick(i) {
+    const row = storyRows[i];
+    if (!row) return;
+    if (innerWidth > 960) scrollTo({ top: row.getBoundingClientRect().top + scrollY - (innerHeight - row.offsetHeight) / 2, behavior: reduce ? "auto" : "smooth" });
+    else setActive(row);
   }
 
   function parents() {
@@ -1211,7 +1292,254 @@ const FX = (() => {
     addEventListener("resize", onScroll);
     frame();
   }
-  return { init, lang() { chips(); syncStory(false); } };
+  return { init, pick, lang() { chips(); } };
+})();
+
+// Words for the story's chapters and for the parts of the page that can be touched.
+Object.assign(T.uz, {
+  how_h: "Bu telefon ishlaydi. Bosib koʻring.",
+  how_p: "Sahifani surganingizda telefon keyingi holatga oʻtadi. Har birida ilovalarni oʻzingiz bosib koʻrishingiz mumkin.",
+  r4_h: "YouTube qoladi, Shorts ketadi",
+  r4_p: "YouTube va Instagramning oʻzi ishlayveradi. Qisqa videolar tasmasi ochilsa, Quiet orqaga qaytaradi. Kerak boʻlgan kuni uni bir muddatga ochib qoʻyish mumkin.",
+  r5_h: "Begona botlar ochilmaydi",
+  r5_p: "Telegramdagi oddiy chatlar ishlaydi. Bot esa, nomi va rasmi qanchalik beozor boʻlmasin, ota-ona roʻyxatiga kiritilmagan boʻlsa yopiladi.",
+  k1: "Sinab koʻring: “Barcha ilovalar”ni oching va biror ilovani qidiring.",
+  k2: "Sinab koʻring: sanoq tugashini kuting va 5 daqiqani tanlang.",
+  k3: "Sinab koʻring: “Barcha ilovalar”dan Instagramni oching.",
+  k4: "Sinab koʻring: pastdagi Shorts boʻlimini bosing.",
+  k5: "Sinab koʻring: “Kinolar” botini oching.",
+  try_note: "Namoyishda daqiqalar soniyalarga qisqartirilgan.",
+  also_h: "Qolganini ham ushlab koʻring",
+  w_time_p: "Namuna maʼlumot. Ustunlarni bosib koʻring.",
+  w_hold_p: "Kalitni oʻchiring va farqini koʻring.", w_hold_sw: "Bildirishnomalarni ushlab turish",
+  w_sched_p: "Ijtimoiy tarmoqlar 23:00 dan 07:00 gacha yopiq. Vaqtni surib koʻring.",
+  w_strict_p: "Qatʼiy seans ketmoqda. Uni toʻxtatishga urinib koʻring.", w_strict_btn: "Seansni tugatish",
+  w_gray_p: "Rang diqqatni tortadi. Kalitni yoqing. Haqiqiy telefonda buning uchun uni bir marta kompyuterga ulash kerak.", w_gray_sw: "Kulrang ekran",
+  g_label: "Kanal yoki chat nomini yozing. Quiet uni qanday baholashini koʻrasiz.",
+  ch_p: "Sizga nimalar kerak? Belgilang, qaysi biri yetishini aytamiz."
+});
+T.uz.d.tabs = ["Bosh ekran", "Kutish", "Fokus", "Shorts", "Botlar"];
+T.uz.w = {
+  seg: ["Bugun", "7 kun", "8 hafta"], days: ["Du", "Se", "Ch", "Pa", "Ju", "Sh", "Ya"], week: "{n}-hafta", weekLong: "{n}-hafta, kuniga oʻrtacha",
+  h: "{h} soat {m} daqiqa", m: "{m} daqiqa", total: "Jami: {t}",
+  holdCount: "ta bildirishnoma jimgina kutib turibdi", holdNames: ["Instagram: yangi yoqtirish", "YouTube: yangi video chiqdi", "Doʻkon: chegirma tugayapti", "Oʻyin: sovgʻangiz tayyor"],
+  open: "{t} · Instagram ochiq", closed: "{t} · Instagram yopiq, 07:00 da ochiladi",
+  strictNo: "Boʻlmaydi. Qatʼiy seans oʻz vaqtida tugaydi: {t} qoldi.",
+  gPh: "Masalan: Tungi kinolar", gEx: ["Sinfdoshlar 7-A", "Tungi kinolar 🔞", "Kino 18+", "Kinolar yashirin"],
+  gClose: ["Yopiladi.", "Nomida kattalar uchun kontentni bildiruvchi soʻz yoki belgi bor."],
+  gPass: ["Soʻz tekshiruvidan oʻtadi.", "Shuning uchun rasm tekshiruvi va botlarni yopish ham bor: nomi beozor boʻlsa-da, ichidagisi tekshiriladi."],
+  needs: [["Matnli bosh ekran", 0], ["Kutish va kunlik limit", 0], ["Bildirishnomalar filtri", 0], ["Ikkitadan koʻp qoida", 1], ["Bir nechta fokus profili", 1], ["Shorts va Reelsni yopish", 1], ["Qatʼiy rejim", 1], ["Farzandim telefoni nazorati", 1]],
+  needNone: "Hali hech narsa belgilanmagan.", needFree: "Sizga bepul qismi yetadi.", needPro: "Buning uchun Pro kerak boʻladi.",
+  perms: [["Maxsus imkoniyatlar", "Qaysi ilova ochiqligini bilish va uni cheklash uchun. Siz yoqsangiz, kattalar uchun sahifalarni yopishda ekrandagi soʻzlarni ham tekshiradi. Yozayotgan matningizni va parollaringizni oʻqimaydi."],
+    ["Foydalanish tarixi", "Ekran vaqtini hisoblash va kunlik limitlarni qoʻllash uchun. Bu maʼlumot telefondan chiqmaydi."],
+    ["Bildirishnomalar", "Siz tanlagan ilovalarning bildirishnomalarini ushlab turish uchun. Boshqalariga tegmaydi."],
+    ["Internet", "Faqat bitta holatda ishlatiladi: ota-ona oʻz Telegram botini ulasa, yopilgan ilovaning nomi va vaqti shu botga yuboriladi. Bot ulanmagan boʻlsa, hech narsa yuborilmaydi."],
+    ["Kontaktlar va taqvim", "Ixtiyoriy. Qidiruvda kontaktni topish va keyingi tadbirni bosh ekranda koʻrsatish uchun. Hech biri saqlanmaydi."]],
+  ring: "Halqani bosing", breatheIn: "Nafas oling", breatheOut: "Nafas chiqaring"
+};
+Object.assign(T.ru, {
+  how_h: "Этот телефон работает. Нажимайте.",
+  how_p: "Когда вы листаете страницу, телефон переходит в следующее состояние. В каждом из них можно нажимать на приложения самому.",
+  r4_h: "YouTube остаётся, Shorts уходит",
+  r4_p: "Сами YouTube и Instagram работают как обычно. Если открывается лента коротких видео, Quiet возвращает назад. В день, когда она нужна, её можно открыть на время.",
+  r5_h: "Посторонние боты не открываются",
+  r5_p: "Обычные чаты в Telegram работают. А бот, каким бы безобидным ни было его название и фото, закрывается, если родитель не добавил его в список.",
+  k1: "Попробуйте: откройте «Все приложения» и найдите любое приложение.",
+  k2: "Попробуйте: дождитесь конца отсчёта и выберите 5 минут.",
+  k3: "Попробуйте: откройте Instagram через «Все приложения».",
+  k4: "Попробуйте: нажмите на раздел Shorts внизу.",
+  k5: "Попробуйте: откройте бота «Кино».",
+  try_note: "В демо минуты сокращены до секунд.",
+  also_h: "Остальное тоже можно потрогать",
+  w_time_p: "Пример данных. Нажимайте на столбцы.",
+  w_hold_p: "Выключите переключатель и почувствуйте разницу.", w_hold_sw: "Откладывать уведомления",
+  w_sched_p: "Соцсети закрыты с 23:00 до 07:00. Подвигайте время.",
+  w_strict_p: "Идёт строгий сеанс. Попробуйте его остановить.", w_strict_btn: "Закончить сеанс",
+  w_gray_p: "Цвет притягивает внимание. Включите переключатель. На настоящем телефоне для этого нужно один раз подключить его к компьютеру.", w_gray_sw: "Серый экран",
+  g_label: "Напишите название канала или чата и посмотрите, как его оценит Quiet.",
+  ch_p: "Что вам нужно? Отметьте, и мы скажем, какой вариант подойдёт."
+});
+T.ru.d.tabs = ["Главный экран", "Ожидание", "Фокус", "Shorts", "Боты"];
+T.ru.w = {
+  seg: ["Сегодня", "7 дней", "8 недель"], days: ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"], week: "{n}", weekLong: "Неделя {n}, в среднем за день",
+  h: "{h} ч {m} мин", m: "{m} мин", total: "Всего: {t}",
+  holdCount: "уведомлений тихо ждут своего часа", holdNames: ["Instagram: новый лайк", "YouTube: вышло новое видео", "Магазин: скидка заканчивается", "Игра: ваш подарок готов"],
+  open: "{t} · Instagram открыт", closed: "{t} · Instagram закрыт, откроется в 07:00",
+  strictNo: "Не получится. Строгий сеанс закончится в своё время: осталось {t}.",
+  gPh: "Например: Ночное кино", gEx: ["Одноклассники 7-А", "Ночное кино 🔞", "Кино 18+", "Скрытые фильмы"],
+  gClose: ["Закроется.", "В названии есть слово или знак, указывающий на контент для взрослых."],
+  gPass: ["Проверку слов пройдёт.", "Поэтому есть ещё проверка изображений и закрытие ботов: название безобидное, но содержимое проверяется."],
+  needs: [["Текстовый главный экран", 0], ["Ожидание и дневной лимит", 0], ["Фильтр уведомлений", 0], ["Больше двух правил", 1], ["Несколько профилей фокуса", 1], ["Закрытие Shorts и Reels", 1], ["Строгий режим", 1], ["Контроль телефона ребёнка", 1]],
+  needNone: "Пока ничего не отмечено.", needFree: "Вам хватит бесплатной части.", needPro: "Для этого понадобится Pro.",
+  perms: [["Специальные возможности", "Чтобы знать, какое приложение открыто, и ограничивать его. Если вы включите, при закрытии страниц для взрослых проверяются и слова на экране. То, что вы печатаете, и пароли не читаются."],
+    ["История использования", "Чтобы считать экранное время и применять дневные лимиты. Эти данные не покидают телефон."],
+    ["Уведомления", "Чтобы откладывать уведомления выбранных вами приложений. Остальные не затрагиваются."],
+    ["Интернет", "Используется в одном случае: если родитель подключил своего Telegram-бота, ему отправляются название закрытого приложения и время. Без подключённого бота ничего не отправляется."],
+    ["Контакты и календарь", "По желанию. Чтобы находить контакт в поиске и показывать ближайшее событие на главном экране. Ничего из этого не сохраняется."]],
+  ring: "Нажмите на кольцо", breatheIn: "Вдох", breatheOut: "Выдох"
+};
+Object.assign(T.en, {
+  how_h: "This phone works. Go on, tap it.",
+  how_p: "As you scroll, the phone moves to its next state. In each one you can tap the apps yourself.",
+  r4_h: "YouTube stays, Shorts goes",
+  r4_p: "YouTube and Instagram themselves keep working. When the feed of short videos opens, Quiet steps back out of it. On a day you need it, you can open it for a while.",
+  r5_h: "Unknown bots stay shut",
+  r5_p: "Ordinary Telegram chats work. A bot is closed unless a parent put it on the list, however harmless its name and photo look.",
+  k1: "Try it: open “All apps” and search for an app.",
+  k2: "Try it: wait for the countdown and pick 5 minutes.",
+  k3: "Try it: open Instagram from “All apps”.",
+  k4: "Try it: tap Shorts at the bottom.",
+  k5: "Try it: open the “Movies” bot.",
+  try_note: "In the demo, minutes are shortened to seconds.",
+  also_h: "The rest is yours to play with too",
+  w_time_p: "Sample data. Tap the bars.",
+  w_hold_p: "Switch it off and feel the difference.", w_hold_sw: "Hold notifications",
+  w_sched_p: "Social apps are closed from 23:00 to 07:00. Drag the time.",
+  w_strict_p: "A strict session is running. Try to stop it.", w_strict_btn: "End session",
+  w_gray_p: "Colour pulls at your attention. Flip the switch. On a real phone this takes one connection to a computer.", w_gray_sw: "Grayscale",
+  g_label: "Type the name of a channel or chat and see what Quiet makes of it.",
+  ch_p: "What do you need? Pick, and we will tell you which plan covers it."
+});
+T.en.d.tabs = ["Home", "Wait", "Focus", "Shorts", "Bots"];
+T.en.w = {
+  seg: ["Today", "7 days", "8 weeks"], days: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], week: "W{n}", weekLong: "Week {n}, daily average",
+  h: "{h} h {m} min", m: "{m} min", total: "Total: {t}",
+  holdCount: "notifications are waiting quietly", holdNames: ["Instagram: a new like", "YouTube: new video is out", "Shop: sale ends soon", "Game: your gift is ready"],
+  open: "{t} · Instagram is open", closed: "{t} · Instagram is closed, opens at 07:00",
+  strictNo: "No. A strict session ends when it ends: {t} left.",
+  gPh: "For example: Late night movies", gEx: ["Class 7-A", "Late night movies 🔞", "Movies 18+", "Hidden films"],
+  gClose: ["It gets closed.", "The name carries a word or sign that marks adult content."],
+  gPass: ["It passes the word check.", "That is why there is a picture check and the bot rule as well: a harmless name still has its content looked at."],
+  needs: [["Text home screen", 0], ["Wait and daily limit", 0], ["Notification filter", 0], ["More than two rules", 1], ["Several focus profiles", 1], ["Closing Shorts and Reels", 1], ["Strict mode", 1], ["Control of my child's phone", 1]],
+  needNone: "Nothing picked yet.", needFree: "The free part covers it.", needPro: "That takes Pro.",
+  perms: [["Accessibility", "To know which app is open and to limit it. If you turn it on, the words on screen are also checked when closing pages meant for adults. What you type and your passwords are not read."],
+    ["Usage access", "To count screen time and apply daily limits. This data never leaves the phone."],
+    ["Notifications", "To hold the notifications of the apps you chose. The others are left alone."],
+    ["Internet", "Used in one case only: when a parent connects their own Telegram bot, the name of a closed app and the time are sent to it. With no bot connected, nothing is sent."],
+    ["Contacts and calendar", "Optional. To find a contact in search and show your next event on the home screen. Neither is stored."]],
+  ring: "Press the ring", breatheIn: "Breathe in", breatheOut: "Breathe out"
+};
+
+/* ---- Touch: the small things on the page that respond. Sample data only; nothing is sent. ---- */
+const Touch = (() => {
+  const $ = id => document.getElementById(id);
+  const w = () => T[LANG].w;
+  const fill = (s, v) => s.replace(/\{(\w+)\}/g, (_, k) => v[k]);
+  const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const dur = min => min >= 60 ? fill(w().h, { h: Math.floor(min / 60), m: min % 60 }) : fill(w().m, { m: min });
+  const clock = min => String(Math.floor(min / 60)).padStart(2, "0") + ":" + String(min % 60).padStart(2, "0");
+
+  // Screen time
+  const TIME = [
+    { vals: [52, 41, 24, 18, 6], labels: () => ["Telegram", "YouTube", "Instagram", "Chrome", T[LANG].d.apps.maps] },
+    { vals: [134, 171, 122, 160, 205, 248, 190], labels: () => w().days },
+    { vals: [212, 205, 188, 176, 160, 151, 139, 128], labels: () => [1, 2, 3, 4, 5, 6, 7, 8].map(n => fill(w().week, { n })) }
+  ];
+  let tab = 1, bar = -1;
+  function time() {
+    const set = TIME[tab], labels = set.labels(), max = Math.max(...set.vals);
+    $("time-seg").innerHTML = w().seg.map((s, i) => '<button type="button" data-i="' + i + '" aria-pressed="' + (i === tab) + '">' + esc(s) + "</button>").join("");
+    $("time-bars").innerHTML = set.vals.map((v, i) =>
+      '<button type="button" data-i="' + i + '" class="' + (i === bar ? "on" : "") + '" style="--h:' + Math.round(v / max * 100) + '%"><i></i><span>' + esc(String(labels[i])) + "</span></button>").join("");
+    const name = tab === 2 && bar >= 0 ? fill(w().weekLong, { n: bar + 1 }) : labels[bar];
+    $("time-read").textContent = bar < 0 ? fill(w().total, { t: dur(tab === 2 ? set.vals[7] : set.vals.reduce((a, b) => a + b, 0)) }) : name + ": " + dur(set.vals[bar]);
+  }
+
+  // Held notifications
+  let held = 0, popped = [], tick = 0;
+  function hold() {
+    const box = $("hold-box");
+    if ($("hold-on").checked) box.innerHTML = '<div class="hold-count"><b>' + held + "</b><span>" + esc(w().holdCount) + "</span></div>";
+    else box.innerHTML = popped.map(t => '<div class="hold-chip">' + esc(t) + "</div>").join("");
+  }
+  function arrive() {
+    const names = w().holdNames;
+    if ($("hold-on").checked) { held++; hold(); }
+    else { popped = [names[tick % names.length]].concat(popped).slice(0, 3); hold(); }
+    tick++;
+  }
+
+  // Schedule
+  function sched() {
+    const min = Number($("sched").value), shut = min >= 23 * 60 || min < 7 * 60;
+    $("sched-read").textContent = fill(shut ? w().closed : w().open, { t: clock(min) });
+  }
+
+  // Strict session
+  let left = 25 * 60, refused = false;
+  const mmss = () => String(Math.floor(left / 60)).padStart(2, "0") + ":" + String(left % 60).padStart(2, "0");
+  function strict() { $("strict-time").textContent = mmss(); if (refused) $("strict-read").textContent = fill(w().strictNo, { t: mmss() }); }
+
+  // What a name is made of, the way the app looks at it.
+  const PARTS = ["porn", "порн", "xvideos", "xnxx", "xhamster", "onlyfans", "hentai", "хентай", "nsfw", "erotic", "erotik", "эротик", "секс", "интим", "18+", "+18", "🔞", "sekis", "секис", "seksual"];
+  const WORDS = ["sex", "sexy", "seks", "seksi", "xxx", "nude", "anal"];
+  function guard(replay) {
+    const raw = $("guard-in").value.trim(), text = raw.toLowerCase();
+    const out = $("guard-out"), phone = document.querySelector("#parents .phone");
+    $("guard-name").textContent = raw ? "‹  " + raw : "";
+    if (!raw) { out.innerHTML = ""; phone.classList.remove("pass"); return; }
+    const bad = PARTS.some(p => text.includes(p)) || text.split(/[^\p{L}\p{N}+]+/u).some(x => WORDS.includes(x));
+    const v = bad ? w().gClose : w().gPass;
+    out.innerHTML = "<b>" + esc(v[0]) + "</b>" + esc(v[1]);
+    phone.classList.toggle("pass", !bad);
+    if (replay && phone.classList.contains("anim")) { phone.classList.remove("play"); void phone.offsetWidth; phone.classList.add("play"); }
+  }
+
+  // Which plan
+  const picked = new Set();
+  function needs() {
+    $("needs").innerHTML = w().needs.map((n, i) => '<button type="button" data-i="' + i + '" aria-pressed="' + picked.has(i) + '">' + esc(n[0]) + "</button>").join("");
+    const pro = [...picked].some(i => w().needs[i][1]);
+    $("need-out").textContent = !picked.size ? w().needNone : pro ? w().needPro : w().needFree;
+    $("plans").className = !picked.size ? "" : pro ? "pick-pro" : "pick-free";
+  }
+
+  // What each access is for
+  let perm = 0;
+  function perms() {
+    $("perm-tabs").innerHTML = w().perms.map((p, i) => '<button type="button" data-i="' + i + '" aria-pressed="' + (i === perm) + '">' + esc(p[0]) + "</button>").join("");
+    $("perm-text").textContent = w().perms[perm][1];
+  }
+
+  // The ring at the end: a slow breath to follow.
+  let breathing = null, phase = 0;
+  function ringCap() { $("ring-cap").textContent = breathing === null ? w().ring : (phase % 2 ? w().breatheOut : w().breatheIn); }
+
+  function on(id, type, fn) { $(id).addEventListener(type, fn); }
+  function pick(id, fn) { on(id, "click", e => { const b = e.target.closest("[data-i]"); if (b) fn(Number(b.dataset.i)); }); }
+
+  function init() {
+    pick("time-seg", i => { tab = i; bar = -1; time(); });
+    pick("time-bars", i => { bar = bar === i ? -1 : i; time(); });
+    on("hold-on", "change", () => { if ($("hold-on").checked) popped = []; hold(); });
+    setInterval(arrive, 1900);
+    on("sched", "input", sched);
+    setInterval(() => { left = left > 0 ? left - 1 : 25 * 60; strict(); }, 1000);
+    on("strict-end", "click", () => {
+      refused = true; strict();
+      const t = $("strict-time"); t.classList.remove("shake"); void t.offsetWidth; t.classList.add("shake");
+    });
+    on("gray-on", "change", () => $("feed").classList.toggle("gray", $("gray-on").checked));
+    on("guard-in", "input", () => guard(true));
+    on("guard-ex", "click", e => { const b = e.target.closest("button"); if (b) { $("guard-in").value = b.textContent; guard(true); } });
+    pick("needs", i => { picked.has(i) ? picked.delete(i) : picked.add(i); needs(); });
+    pick("perm-tabs", i => { perm = i; perms(); });
+    on("ring", "click", () => {
+      const ring = $("ring");
+      if (breathing !== null) { clearInterval(breathing); breathing = null; ring.classList.remove("go"); ringCap(); return; }
+      phase = 0; ring.classList.remove("go"); void ring.offsetWidth; ring.classList.add("go");
+      breathing = setInterval(() => { phase++; ringCap(); }, 4000); ringCap();
+    });
+  }
+  function lang() {
+    time(); hold(); sched(); strict(); needs(); perms(); ringCap();
+    $("guard-in").placeholder = w().gPh;
+    $("sched").setAttribute("aria-label", T[LANG].d4_h);
+    $("ring").setAttribute("aria-label", w().ring);
+    $("guard-ex").innerHTML = w().gEx.map(x => '<button type="button">' + esc(x) + "</button>").join("");
+    guard(false);
+  }
+  return { init, lang };
 })();
 
 function pickLang() {
@@ -1237,10 +1565,12 @@ function apply(lang) {
   LANG = lang;
   Demo.refresh();
   FX.lang();
+  Touch.lang();
 }
 
 document.querySelectorAll(".langs button").forEach(b => b.addEventListener("click", () => apply(b.dataset.lang)));
 Demo.init();
+Touch.init();
 apply(pickLang());
 FX.init();
 </script>
