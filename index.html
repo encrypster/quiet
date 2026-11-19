@@ -404,13 +404,13 @@
   @keyframes glow { 50% { scale: 1.08; } }
 
   /* A large numeral for the scene, drawn in outline behind everything */
-  .ghost { position: fixed; z-index: 3; right: 5vw; bottom: -5vh; pointer-events: none; overflow: hidden;
+  #ghost { position: fixed; z-index: 3; right: 5vw; bottom: -5vh; pointer-events: none; overflow: hidden;
     font: 600 min(52vh, 34vw)/.82 Inter, system-ui, sans-serif; letter-spacing: -.07em; color: transparent; -webkit-text-stroke: 1.5px var(--line);
     transform: translate(calc(var(--px, 0) * -22px), calc(var(--py, 0) * -14px)); transition: transform .5s ease-out, -webkit-text-stroke-color .6s; }
-  .ghost span { display: block; }
-  .ghost span.swap { animation: ghost .9s var(--ease); }
+  #ghost span { display: block; }
+  #ghost span.swap { animation: ghost .9s var(--ease); }
   @keyframes ghost { from { transform: translateY(60%); opacity: 0; } }
-  body[data-scene="0"] .ghost, body[data-scene="1"] .ghost { right: auto; left: -1vw; bottom: -7vh; }
+  body[data-scene="0"] #ghost, body[data-scene="1"] #ghost { right: auto; left: -1vw; bottom: -7vh; }
 
   /* Corner marks, as on a viewfinder */
   .mark { position: fixed; z-index: 29; width: 12px; height: 12px; pointer-events: none; border: 0 solid var(--muted); opacity: .7; }
@@ -503,19 +503,33 @@
 
   @media (max-width: 960px) {
     .mark, .halo { display: none; }
-    .ghost { right: -2vw; left: auto !important; bottom: auto !important; top: 46px; font-size: 38vw; opacity: .8; }
+    #ghost { right: -2vw; left: auto !important; bottom: auto !important; top: 46px; font-size: 38vw; opacity: .8; }
     .ticks { display: none; }
     .bar { font-size: 11px; }
     .vtabs button::before { display: none; }
     .vtabs button { gap: 0; }
-    body.launcher .ghost, body.launcher .grain { display: none; }
+    body.launcher #ghost, body.launcher .grain { display: none; }
     body.launcher .device .phone.demo::before, body.launcher .device .phone.demo::after { display: none; }
     body.launcher .device .phone.demo { box-shadow: none; }
     .device .phone.demo { box-shadow: 0 0 0 5px #0a0a0a, 0 0 0 6px #454545, 0 -30px 80px -30px color-mix(in srgb, var(--fg) 30%, transparent); }
   }
   @media (prefers-reduced-motion: reduce) {
-    .halo, .status i::after, .ring::before, .ring::after, .ghost span.swap { animation: none !important; }
+    .halo, .status i::after, .ring::before, .ring::after, #ghost span.swap { animation: none !important; }
     .slide { filter: none !important; }
+  }
+  /* Phone fixes */
+  @media (max-width: 960px) {
+    /* The bar keeps what scrolls under it out of sight. */
+    header { background: var(--bg); transition: background .6s; }
+    /* The phone on the first screen only takes the room left under the words (set by the deck). */
+    body[data-scene="0"] .device { height: var(--hero-h, min(38vh, 330px)); }
+    body.no-peek[data-scene="0"] .device { opacity: 0; pointer-events: none; }
+    /* The last screen: the ring sits lower and smaller, clear of the bar. */
+    .end .ring-box { margin: 28px 0 22px; }
+    .ring { width: 92px; height: 92px; border-width: 9px; }
+    .ring::before, .ring::after { inset: -9px; }
+    .end .hero-actions { margin-top: 20px; }
+    .card .btn { max-width: 100%; }
   }
 </style>
 </head>
@@ -1377,7 +1391,23 @@ const Deck = (() => {
   const $ = id => document.getElementById(id);
   const slides = [...document.querySelectorAll(".slide")];
   const steps = slides.map(el => Number(el.dataset.steps) || 1);
-  const total = steps.reduce((a, b) => a + b, 0);
+  let total = steps.reduce((a, b) => a + b, 0);
+  // On a phone the first screen shows the phone under the words only where there is room for it, so it never covers them.
+  // With no room, the first screen is a single step: the phone is met on the next screen, where it fills the display.
+  function fit() {
+    const b = document.body, bar = document.querySelector(".bar"), col = slides[0].querySelector(".col");
+    let h = -1;
+    if (narrow() && bar && col) {
+      const bottom = $("deck").getBoundingClientRect().top + col.offsetTop + col.offsetHeight - slides[0].scrollTop;
+      h = Math.min(330, Math.round(bar.getBoundingClientRect().top - bottom - 64));
+      if (h < 110) h = 0;
+      b.style.setProperty("--hero-h", h + "px");
+    } else b.style.removeProperty("--hero-h");
+    b.classList.toggle("no-peek", h === 0);
+    const want = h === 0 ? 1 : (Number(slides[0].dataset.steps) || 1);
+    if (steps[0] !== want) { steps[0] = want; total = steps.reduce((a, c) => a + c, 0); if (s === 0) k = Math.min(k, want - 1); }
+  }
+
   const names = () => T[LANG].scenes;
   let s = 0, k = 0, lock = 0, shown = "";
   const narrow = () => innerWidth <= 960;
@@ -1385,6 +1415,7 @@ const Deck = (() => {
   function stop() { let n = k; for (let i = 0; i < s; i++) n += steps[i]; return n; }
 
   function labels() {
+    fit();
     $("rail").innerHTML = slides.map((_, i) => '<button type="button" data-go="' + i + '" aria-current="' + (i === s) + '"><span>' + names()[i] + "</span></button>").join("");
     $("b-n").textContent = String(s + 1).padStart(2, "0");
     $("b-total").textContent = String(slides.length).padStart(2, "0");
@@ -1405,6 +1436,7 @@ const Deck = (() => {
   }
 
   function render() {
+    fit();
     const b = document.body, key = s + ":" + k, sceneChanged = shown.split(":")[0] !== String(s);
     b.dataset.scene = s; b.dataset.step = k; b.dataset.stop = stop();
     b.classList.toggle("invert", slides[s].hasAttribute("data-invert"));
@@ -1432,7 +1464,7 @@ const Deck = (() => {
       // The specks: noise on the first screen, a ring round the phone, a ring round the last circle, calm between.
       if (s === 0 && k === 0) FX.specks("chaos", $("demo"));
       else if (s <= 1) narrow() && s === 1 ? FX.specks("calm") : FX.specks("ring", $("demo"));
-      else if (s === slides.length - 1) FX.specks("ring", $("ring"), narrow() ? 96 : 130);
+      else if (s === slides.length - 1) FX.specks("ring", $("ring"), narrow() ? 78 : 130);
       else FX.specks("calm");
       try { history.replaceState(null, "", "#" + slides[s].id.replace(/^s-/, "")); } catch (e) {}
     }
@@ -1493,6 +1525,7 @@ const Deck = (() => {
     $("b-prev").addEventListener("click", prev); $("b-next").addEventListener("click", next);
     $("l-prev").addEventListener("click", prev); $("l-next").addEventListener("click", next);
     addEventListener("resize", () => { shown = ""; render(); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { shown = ""; render(); });
     const want = location.hash.slice(1), at = slides.findIndex(el => el.id.replace(/^s-/, "") === want);
     if (at > 0) s = at;
     render();
