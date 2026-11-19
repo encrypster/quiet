@@ -663,6 +663,7 @@
       <button type="button" data-lang="uz">UZ</button>
       <button type="button" data-lang="ru">RU</button>
       <button type="button" data-lang="en">EN</button>
+      <button type="button" data-lang="de">DE</button>
     </div>
   </nav>
 </header>
@@ -1292,14 +1293,16 @@ const Demo = (() => {
     const W = {
       uz: ["Yakshanba", "Dushanba", "Seshanba", "Chorshanba", "Payshanba", "Juma", "Shanba"],
       ru: ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"],
-      en: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+      en: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      de: ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"]
     }[LANG][n.getDay()];
     const M = {
       uz: ["yanvar", "fevral", "mart", "aprel", "may", "iyun", "iyul", "avgust", "sentabr", "oktabr", "noyabr", "dekabr"],
       ru: ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"],
-      en: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+      en: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+      de: ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"]
     }[LANG][n.getMonth()];
-    return LANG === "uz" ? W + ", " + day + "-" + M : W + ", " + day + " " + M;
+    return LANG === "uz" ? W + ", " + day + "-" + M : LANG === "de" ? W + ", " + day + ". " + M : W + ", " + day + " " + M;
   }
   function render(animate) {
     const el = $("demo-screen");
@@ -2121,11 +2124,146 @@ Object.assign(T.en.w, {
   gPass: ["It passes the word check.", "But an ordinary name hides nothing: the pictures inside are checked separately, and unknown bots do not open at all."],
   ring: "Tap the ring and breathe with it"
 });
+// German. Built on the English set, so anything left out falls back to English rather than to nothing.
+T.de = JSON.parse(JSON.stringify(T.en));
+Object.assign(T.de, {
+  title: "Quiet — ein ruhiger Startbildschirm für Android",
+  nav_how: "So funktioniert’s", nav_parents: "Für Eltern", nav_pricing: "Kostenlos und Pro", nav_faq: "Fragen",
+  kicker: "Ein Startbildschirm für Android",
+  h1: "Handy in die Hand, Sache erledigen, Handy weg.",
+  lead: "Quiet macht deinen Startbildschirm zu einer schlichten Wortliste und stellt eine kleine Hürde vor die Apps, die dir Zeit stehlen. Was begrenzt wird, entscheidest du.",
+  status: "Bald bei Google Play", more: "Jetzt ausprobieren",
+  fact1: "Android 8 und neuer", fact2: "Auf Deutsch, Englisch, Russisch und Usbekisch", fact3: "Ohne Anmeldung",
+  m_toast: "Quiet hat die Seite geschlossen: Inhalte für Erwachsene.",
+  how_h: "Dieses Handy funktioniert. Tipp es an.",
+  r1_h: "Dein Startbildschirm, auf acht Namen reduziert",
+  r1_p: "Statt Symbolen, roten Punkten und Widgets siehst du die Uhrzeit, das Datum und bis zu acht Apps, die du selbst gewählt hast. Alles andere ist einen Wisch entfernt oder zwei, drei Buchstaben in der Suche.",
+  r2_h: "Gewohnheits-Apps öffnen sich nicht mehr sofort",
+  r2_p: "Angenommen, du tippst auf Instagram. Quiet lässt dich zehn Sekunden warten und fragt, warum du die App öffnest. Machst du weiter, wählst du 5, 10 oder 20 Minuten, und danach schließt sich die App. Ein Tageslimit geht auch.",
+  r3_h: "Bei der Arbeit steht nur die Arbeit auf dem Bildschirm",
+  r3_p: "Starte eine Fokus-Sitzung, und der Startbildschirm zeigt nur die Apps, die du dafür gewählt hast; der Rest bleibt bis zum Ende der Sitzung zu. Benachrichtigungen warten in einer Liste, Anrufe kommen immer durch.",
+  also_h: "Probier auch die anderen Werkzeuge aus",
+  d2_h: "Benachrichtigungen", d3_h: "Bildschirmzeit", d4_h: "Zeitplan", d5_h: "Strenger Modus", d6_h: "Graustufen",
+  par_h: "Für das Handy deines Kindes",
+  par_p: "Du kannst Quiet auf dem Handy deines Kindes installieren und die Einstellungen mit einer PIN sperren. Unten steht ehrlich, was es kann und was nicht.",
+  can_h: "Was es tut",
+  can1_h: "Sperrt die Regeln mit einer PIN", can1_p: "Solange gesperrt ist, lassen sich Limits nicht lockern und Quiet nicht entfernen.",
+  can2_h: "Schließt Seiten für Erwachsene", can2_p: "In Telegram, im Browser und in sozialen Apps prüft es die Wörter auf dem Bildschirm und, wenn du das einschaltest, auch die Bilder. Alles wird auf dem Handy selbst geprüft.",
+  can3_h: "Hält fremde Telegram-Bots zu", can3_p: "Nur die Bots, die du auf die Liste setzt, öffnen sich.",
+  can4_h: "Sagt dir Bescheid", can4_p: "Wenn du willst, schreibt es dir auf Telegram, sobald etwas geschlossen wurde: welche App, wann und warum.",
+  cant_h: "Was es nicht tut",
+  cant1_h: "Es fängt nicht alles ab", cant1_p: "Das schafft kein Filter. Lass Family Link und Ähnliches eingeschaltet: Quiet arbeitet mit ihnen zusammen.",
+  cant2_h: "Es liest keine Unterhaltungen", cant2_p: "Dir wird weder Text noch Bild vom Bildschirm geschickt. Nur der App-Name, die Uhrzeit und der Grund.",
+  cant3_h: "Es arbeitet nicht heimlich", cant3_p: "Solange Nachrichten an dich eingeschaltet sind, zeigt das Handy des Kindes eine Benachrichtigung darüber.",
+  cant4_h: "Den abgesicherten Modus sperrt es nicht allein", cant4_p: "Im abgesicherten Modus läuft Quiet nicht. Um diesen Weg zu schließen, braucht es eine einmalige Einrichtung am Computer.",
+  pr_h: "Kostenlos und Pro",
+  pr_p: "Für den Alltag reicht die kostenlose Version. Wenn Pro endet, läuft alles weiter, was du eingerichtet hast.",
+  t_what: "Funktion", t_free: "Kostenlos",
+  t1: "Text-Startbildschirm und Suche", t2: "Regeln: Warten, Limit, Sperre", t3: "Fokus-Profile", t4: "Verlauf der Bildschirmzeit",
+  t5: "Benachrichtigungsfilter", t6: "Shorts und Reels schließen", t7: "Strenger Modus", t8: "Elternsperre und Inhaltsprüfung",
+  t9: "Nachrichten an Eltern über Telegram",
+  v_yes: "Ja", v_two: "2", v_one: "1", v_unl: "Unbegrenzt", v_7d: "7 Tage", v_8w: "8 Wochen",
+  pr_note: "Pro gibt es als Jahresabo oder als Einmalkauf. Den Preis zeigt Google Play, sobald die App erscheint.",
+  pv_h: "Deine Daten bleiben auf dem Handy",
+  pv_p1: "Quiet hat kein Konto, keine Werbung, keine Analyse, und wir betreiben keinen Server. Deine Einstellungen und dein Verlauf liegen nur auf deinem Handy; deinstallierst du die App, sind sie weg.",
+  pv_link: "Die ganze Datenschutzerklärung lesen",
+  perm_intro: "Die Berechtigungen, die Quiet erfragt. Tippe eine an, um zu sehen, wofür sie gebraucht wird.",
+  q_h: "Fragen",
+  q1: "Kann ich zu meinem alten Startbildschirm zurück?", a1: "Ja. Unter „Standard-Apps“ in den Einstellungen des Handys wählst du jederzeit den alten. Deinstallierst du Quiet, ist alles wie vorher.",
+  q2: "Verpasse ich einen wichtigen Anruf oder eine Nachricht?", a2: "Anrufe und Wecker werden nie blockiert. Benachrichtigungen werden nur bei den Apps zurückgehalten, die du ausgewählt hast.",
+  q3: "Auf welchen Handys läuft es?", a3: "Auf Handys mit Android 8.0 oder neuer. Getestet wurde besonders auf Samsung Galaxy. Die Bildprüfung braucht Android 11.",
+  q4: "Warum fragt es nach den Bedienungshilfen?", a4: "Anders erfährt eine App unter Android nicht, welche App gerade offen ist. Quiet braucht den Zugriff, um Apps zu begrenzen und, wenn du das einschaltest, Seiten für Erwachsene zu schließen. Was du tippst und deine Passwörter liest es nicht.",
+  q5: "Kann ein Kind Quiet deinstallieren?", a5: "Nicht, solange gesperrt ist: Deinstallieren, die App-Einstellungen und die Seiten für Datum und Uhrzeit bleiben zu. Um auch den abgesicherten Modus und das Zurücksetzen zu sperren, braucht es eine einmalige Einrichtung am Computer.",
+  q6: "Was passiert, wenn ich Pro kündige?", a6: "Deine Regeln laufen weiter. Du kannst nur keine neuen Pro-Funktionen hinzufügen.",
+  end_h: "Quiet kommt bald zu Google Play",
+  end_p: "Am Tag des Erscheinens steht der Link auf dieser Seite. Fragen? Schreib an",
+  foot_privacy: "Datenschutz", foot_contact: "Kontakt",
+  cap_before: "Ein gewöhnliches Handy", cap_after: "Mit Quiet", scroll_hint: "Scrollen",
+  tb0: "Sieh, wohin deine Zeit wirklich geht.",
+  tb1: "Benachrichtigungen reißen dich nicht mehr jede Minute raus.",
+  tb2: "Nachts und während der Arbeit schließen sich Apps von selbst.",
+  tb3: "Der Plan hält, auch an Tagen ohne Willenskraft.",
+  tb4: "Ohne Farbe legt man das Handy leichter weg.",
+  r4_h: "YouTube bleibt, Shorts gehen",
+  r4_p: "YouTube und Instagram selbst funktionieren weiter. Öffnet sich der Feed mit kurzen Videos, holt Quiet dich raus. An Tagen, an denen du ihn brauchst, kannst du ihn eine Weile öffnen.",
+  r5_h: "Fremde Bots bleiben zu",
+  r5_p: "Normale Telegram-Chats funktionieren. Ein Bot wird geschlossen, außer ein Elternteil hat ihn auf die Liste gesetzt, egal wie gewöhnlich Name und Foto aussehen.",
+  k1: "Probier’s: öffne „Alle Apps“ und such eine App.",
+  k2: "Probier’s: warte den Countdown ab und wähle 5 Minuten.",
+  k3: "Probier’s: öffne Instagram über „Alle Apps“.",
+  k4: "Probier’s: tippe unten auf Shorts.",
+  k5: "Probier’s: öffne den Bot „Filme“.",
+  try_note: "In der Demo sind Minuten auf Sekunden verkürzt. Tipp: Halte den Namen einer App gedrückt, um ihr eine eigene Regel zu geben.",
+  w_time_p: "Beispieldaten. Tippe auf die Balken.",
+  w_hold_p: "Schalte es aus und sieh, was sich ändert.",
+  w_hold_sw: "Benachrichtigungen zurückhalten",
+  w_sched_p: "Soziale Apps sind von 23:00 bis 07:00 gesperrt. Zieh an der Uhrzeit.",
+  w_strict_p: "Eine strenge Sitzung läuft. Versuch, sie zu beenden.",
+  w_strict_btn: "Sitzung beenden",
+  w_gray_p: "Farbe zieht Aufmerksamkeit an. Leg den Schalter um. Auf einem echten Handy braucht das einmal eine Verbindung zum Computer.",
+  w_gray_sw: "Graustufen",
+  g_label: "Gib den Namen eines Kanals oder Chats ein und sieh, wie Quiet ihn einschätzt.",
+  ch_p: "Was brauchst du? Hak es an, und wir sagen dir, welche Version reicht.",
+  y_h: "Wie viele Tage im Jahr nimmt dir dein Handy?",
+  y_p: "Stell die Regler auf deine eigenen Werte. Das ist Rechnen, kein Versprechen.",
+  y_unit: "Tage / Jahr", y_l1: "Täglich am Handy", y_l2: "Wie viel du täglich einsparen willst",
+  y_k1: "Tage am Handy", y_k2: "Tage, die du zurückbekommst"
+});
+T.de.scenes = ["Start", "Ausprobieren", "Dein Jahr", "Werkzeuge", "Eltern", "Kostenlos und Pro", "Datenschutz", "Ende"];
+Object.assign(T.de.d, {
+  steps: ["Öffne Instagram", "Warte, wähle 5 Minuten und lass die Zeit ablaufen", "Starte den Fokus und öffne dann Instagram über „Alle Apps“", "Geh in YouTube zu Shorts", "Öffne in Telegram den Bot „Filme“"],
+  focus_on: "Fokus starten", focus_off: "Fokus beenden", reset: "Von vorn",
+  done: "Du hast alles ausprobiert. In der echten App richtest du all das selbst ein.",
+  today: "Heute 38 Minuten am Handy", all: "Alle Apps", search: "Apps suchen", back: "Zurück", home_btn: "Startbildschirm",
+  opening: "{app} wird geöffnet", wait: "Warte {n} s.", used: "Heute 3-mal, 24 Minuten.", why: "Wofür öffnest du die App?",
+  go_home: "Zum Startbildschirm", cont: "{n} Min. weiter", chip: "{n} Min. · {s} s in der Demo",
+  timeup: "Zeit um. {app} wurde geschlossen.", pill: "Arbeit · noch 25 Min.",
+  block_h: "{app} öffnet sich jetzt nicht", block_p: "Bis zum Ende des Fokus öffnen sich nur die Apps für diese Aufgabe. Anrufe kommen immer durch.",
+  shorts_toast: "Kurze Videos sind ausgeschaltet.", bot_toast: "Quiet hat den Chat geschlossen: Fremde Bots öffnen sich auf diesem Handy nicht.",
+  tab_home: "Start",
+  chats: ["Familie", "Klasse 7a", "Filme", "Lehrerin"], subs: ["Kommst du zum Essen?", "Morgen um 9", "Bot", "Danke"],
+  noise: ["99+ ungelesen", "Neue Reels", "Du wurdest markiert", "Sale endet heute", "3 neue Videos", "Jemand hat deine Story gesehen", "Jetzt live", "Für dich empfohlen", "Komm zurück", "Neuer Follower"],
+  tabs: ["Start", "Warten", "Fokus", "Shorts", "Bots"],
+  sheet_p: "Eine Regel für diese App:", sheet_wait: "Vor dem Öffnen warten", sheet_block: "Immer sperren", sheet_none: "Keine Regel",
+  sheet_ok: "Regel für {app} gespeichert.", block2_h: "{app} ist gesperrt",
+  block2_p: "Diese Regel hast du selbst gesetzt. Halte den Namen der App gedrückt, um sie zu ändern."
+});
+Object.assign(T.de.d.apps, {
+  phone: "Telefon", messages: "Nachrichten", camera: "Kamera", maps: "Karten", calendar: "Kalender", instagram: "Instagram",
+  youtube: "YouTube", telegram: "Telegram", mail: "Mail", docs: "Dokumente", notes: "Notizen", clock: "Uhr"
+});
+Object.assign(T.de.w, {
+  seg: ["Heute", "7 Tage", "8 Wochen"], days: ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"],
+  week: "W{n}", weekLong: "Woche {n}, Tagesschnitt", h: "{h} Std. {m} Min.", m: "{m} Min.", total: "Gesamt: {t}",
+  holdCount: "warten in aller Ruhe",
+  holdNames: ["Instagram: ein neues Like", "YouTube: neues Video", "Shop: Sale endet bald", "Spiel: dein Geschenk wartet"],
+  open: "{t} · Instagram ist offen", closed: "{t} · Instagram ist zu, öffnet um 07:00",
+  strictNo: "Geht nicht. Eine strenge Sitzung läuft bis zum Ende: noch {t}.",
+  gPh: "Zum Beispiel: Späte Filme", gEx: ["Klasse 7a", "Späte Filme 🔞", "Filme 18+", "Versteckte Filme"],
+  gClose: ["Wird geschlossen.", "Der Name enthält ein Wort oder Zeichen, das auf Inhalte für Erwachsene hinweist."],
+  gPass: ["Besteht die Wortprüfung.", "Aber ein gewöhnlicher Name verbirgt nichts: Bilder darin werden gesondert geprüft, und fremde Bots öffnen sich gar nicht."],
+  needs: [["Text-Startbildschirm", 0], ["Warten und Tageslimit", 0], ["Benachrichtigungsfilter", 0], ["Mehr als zwei Regeln", 1], ["Mehrere Fokus-Profile", 1], ["Shorts und Reels schließen", 1], ["Strenger Modus", 1], ["Das Handy meines Kindes schützen", 1]],
+  needNone: "Noch nichts angehakt.", needFree: "Die kostenlose Version reicht.", needPro: "Dafür brauchst du Pro.",
+  perms: [
+    ["Bedienungshilfen", "Um zu wissen, welche App offen ist, und sie zu begrenzen. Wenn du es einschaltest, werden beim Schließen von Seiten für Erwachsene auch die Wörter auf dem Bildschirm geprüft. Was du tippst und deine Passwörter werden nicht gelesen."],
+    ["Nutzungsdatenzugriff", "Um die Bildschirmzeit zu zählen und Tageslimits anzuwenden. Diese Daten verlassen das Handy nie."],
+    ["Benachrichtigungen", "Um die Benachrichtigungen der Apps zurückzuhalten, die du gewählt hast. Die anderen bleiben unberührt."],
+    ["Internet", "Nur für einen Fall: Verbindet ein Elternteil seinen eigenen Telegram-Bot, gehen der Name einer geschlossenen App und die Uhrzeit an ihn. Ohne Bot wird nichts gesendet."],
+    ["Kontakte und Kalender", "Freiwillig. Um in der Suche einen Kontakt zu finden und den nächsten Termin auf dem Startbildschirm zu zeigen. Nichts davon wird gespeichert."]
+  ],
+  ring: "Tippe auf den Ring und atme mit ihm", breatheIn: "Einatmen", breatheOut: "Ausatmen",
+  yPct: "Das sind {p} % deiner wachen Zeit.", ySave: "Sparst du {c} am Tag, bekommst du {d} Tage im Jahr zurück.",
+  yNone: "Zieh am unteren Regler, um zu sehen, wie viele Tage zurückkommen."
+});
+// The other languages name German too, now that it is there.
+T.uz.fact2 = "O‘zbek, rus, ingliz va nemis tillarida";
+T.ru.fact2 = "На узбекском, русском, английском и немецком";
+T.en.fact2 = "In Uzbek, Russian, English and German";
 
 function pickLang() {
   try { const saved = localStorage.getItem("quiet-lang"); if (saved && T[saved]) return saved; } catch (e) {}
-  const nav = (navigator.language || "uz").slice(0, 2).toLowerCase();
-  return T[nav] ? nav : "uz";
+  const nav = (navigator.language || "en").slice(0, 2).toLowerCase();
+  return T[nav] ? nav : "en";
 }
 
 function apply(lang) {
@@ -2134,7 +2272,8 @@ function apply(lang) {
   document.documentElement.lang = lang;
   document.title = t.title;
   // The policy in the same language as the page.
-  const policy = "https://encrypster.github.io/quiet-privacy/" + (lang === "en" ? "" : lang + "/");
+  // The German policy is published together with its GDPR section; until then German readers get the English one.
+  const policy = "https://encrypster.github.io/quiet-privacy/" + (lang === "en" || lang === "de" ? "" : lang + "/");
   document.getElementById("privacy-link").href = policy;
   document.getElementById("privacy-link-foot").href = policy;
   document.querySelectorAll("[data-t]").forEach(el => {
