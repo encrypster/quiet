@@ -1580,10 +1580,13 @@ const Deck = (() => {
         ph.classList.add("anim"); ph.classList.remove("play"); void ph.offsetWidth; ph.classList.add("play");
       }
       if (sceneChanged) { slides[s].scrollTop = 0; slides[s].querySelectorAll("h1, h2").forEach(FX.scramble); }
+      // A heading that only appears with a step (the questions) is written in the same way as the scene titles.
+      else slides[s].querySelectorAll("[data-k].on h1, [data-k].on h2").forEach(FX.scramble);
       // The specks: noise on the first screen, a ring round the phone, a ring round the last circle, calm between.
       if (s === 0 && k === 0) FX.specks("chaos", $("demo"));
       else if (s <= 1) narrow() && s === 1 ? FX.specks("calm") : FX.specks("ring", $("demo"));
       else if (s === slides.length - 1) FX.specks("ring", $("ring"), narrow() ? 78 : 130);
+      else if (slides[s].id === "parents" && k === 0 && !narrow()) { const ph = slides[s].querySelector(".shot .phone"); FX.specks("ring", ph, ph.getBoundingClientRect().height * .62); }
       else FX.specks("calm");
       try { history.replaceState(null, "", "#" + slides[s].id.replace(/^s-/, "")); } catch (e) {}
     }
