@@ -13,7 +13,7 @@
 <script>try { var th = localStorage.getItem("quiet-theme"); if (th) document.documentElement.dataset.theme = th; } catch (e) {}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   @property --p { syntax: "<number>"; inherits: true; initial-value: 0; }
   :root { --bg: #000; --fg: #fff; --muted: #a0a0a0; --line: #262626; --soft: #0d0d0d; --head: 64px; --gut: 28px; --ease: cubic-bezier(.2, .7, .2, 1); }
@@ -388,6 +388,135 @@
     .slide, .slide .rv, .device, .chip, body { transition: none !important; }
     .slide [data-k].on, .chip span, .icons i.n, .ring, .bar .hint::after, .demo .scr { animation: none !important; }
   }
+
+  /* ================= Finish: an instrument, not a brochure ================= */
+  :root { --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+
+  /* Texture and light */
+  .grain { position: fixed; inset: 0; z-index: 2; pointer-events: none; opacity: .09;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  .halo { position: fixed; z-index: 1; width: 760px; height: 760px; border-radius: 50%; pointer-events: none;
+    right: calc(max(7vw, (100vw - 1120px) / 2 + 20px) - 190px); top: calc(50% + var(--head) / 2); margin-top: -380px;
+    background: radial-gradient(circle, color-mix(in srgb, var(--fg) 15%, transparent), color-mix(in srgb, var(--fg) 5%, transparent) 38%, transparent 66%);
+    transform: translate(calc(var(--px, 0) * 26px), calc(var(--py, 0) * 20px)); transition: right 1s var(--ease), opacity .8s, transform .4s ease-out; animation: glow 9s ease-in-out infinite; }
+  body:not([data-scene="0"]):not([data-scene="1"]) .halo { right: calc(50% - 380px); opacity: .45; }
+  body[data-scene="0"][data-step="0"] .halo { opacity: .35; }
+  @keyframes glow { 50% { scale: 1.08; } }
+
+  /* A large numeral for the scene, drawn in outline behind everything */
+  .ghost { position: fixed; z-index: 3; right: 5vw; bottom: -5vh; pointer-events: none; overflow: hidden;
+    font: 600 min(52vh, 34vw)/.82 Inter, system-ui, sans-serif; letter-spacing: -.07em; color: transparent; -webkit-text-stroke: 1.5px var(--line);
+    transform: translate(calc(var(--px, 0) * -22px), calc(var(--py, 0) * -14px)); transition: transform .5s ease-out, -webkit-text-stroke-color .6s; }
+  .ghost span { display: block; }
+  .ghost span.swap { animation: ghost .9s var(--ease); }
+  @keyframes ghost { from { transform: translateY(60%); opacity: 0; } }
+  body[data-scene="0"] .ghost, body[data-scene="1"] .ghost { right: auto; left: -1vw; bottom: -7vh; }
+
+  /* Corner marks, as on a viewfinder */
+  .mark { position: fixed; z-index: 29; width: 12px; height: 12px; pointer-events: none; border: 0 solid var(--muted); opacity: .7; }
+  .mark.tl { left: 10px; top: 10px; border-width: 1px 0 0 1px; } .mark.tr { right: 10px; top: 10px; border-width: 1px 1px 0 0; }
+  .mark.bl { left: 10px; bottom: 10px; border-width: 0 0 1px 1px; } .mark.br { right: 10px; bottom: 10px; border-width: 0 1px 1px 0; }
+
+  /* Type */
+  h1 { font-weight: 600; background: linear-gradient(180deg, var(--fg) 58%, color-mix(in srgb, var(--fg) 52%, transparent)); -webkit-background-clip: text; background-clip: text; color: transparent; padding-bottom: .08em; margin-bottom: 18px; }
+  h2 { font-weight: 600; }
+  .kicker, .num, thead th, .cols h3, .stage-cap, .ring-cap, .legend, .bar, .rail button span, .l-mid b, .ctl output, .d-chip { font-family: var(--mono); }
+  .kicker { display: flex; align-items: center; gap: 14px; font-size: 12.5px; letter-spacing: .12em; text-transform: uppercase; }
+  .kicker::before { content: ""; width: 34px; height: 1px; background: var(--muted); }
+  .num { display: flex; align-items: center; gap: 12px; font-size: 12.5px; letter-spacing: .14em; }
+  .num::after { content: ""; width: 44px; height: 1px; background: var(--line); }
+  thead th, .cols h3 { font-size: 12px; letter-spacing: .1em; font-weight: 500; }
+  .stage-cap, .ring-cap { font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; }
+  .lead { color: color-mix(in srgb, var(--fg) 62%, transparent); }
+
+  /* Header */
+  header nav a { position: relative; padding: 6px 0; }
+  header nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--fg); transform: scaleX(0); transform-origin: 0 50%; transition: transform .35s var(--ease); }
+  header nav a:hover::after, header nav a.here::after { transform: scaleX(1); }
+  .logo i { transition: transform .5s var(--ease), border-width .3s; }
+  .logo:hover i { transform: scale(1.25); border-width: 1.5px; }
+  .theme { transition: transform .5s var(--ease); } .theme:hover { transform: rotate(180deg); }
+
+  /* The status pill breathes */
+  .status { position: relative; overflow: hidden; background: color-mix(in srgb, var(--bg) 70%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-color: color-mix(in srgb, var(--fg) 26%, transparent); }
+  .status i { position: relative; }
+  .status i::after { content: ""; position: absolute; inset: -5px; border-radius: 50%; border: 1px solid var(--fg); animation: ping 2.2s ease-out infinite; }
+  @keyframes ping { from { transform: scale(.4); opacity: .9; } to { transform: scale(1.7); opacity: 0; } }
+  .more { text-decoration: none; position: relative; padding-bottom: 3px; }
+  .more::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--fg); transform-origin: 100% 50%; transition: transform .4s var(--ease); }
+  .more:hover::after { transform: scaleX(.3); }
+
+  /* Scenes change with a little depth */
+  .slide { filter: blur(10px); transform: translateY(6%) scale(.985); transition: opacity .5s var(--ease), transform .8s var(--ease), filter .6s var(--ease), visibility 0s .8s; }
+  .slide[data-pos="before"] { transform: translateY(-6%) scale(.985); }
+  .slide.active { filter: none; transform: none; transition-delay: .12s, .12s, .12s, 0s; }
+
+  /* The phone: a body with an edge, a light on it, a shadow under it */
+  .device .phone.demo { border-color: #3d3d3d;
+    box-shadow: 0 0 0 5px #0a0a0a, 0 0 0 6px #454545, 0 0 0 7px #0a0a0a, 0 60px 90px -34px rgba(0, 0, 0, .7), 0 0 140px -30px color-mix(in srgb, var(--fg) 22%, transparent); }
+  .device .phone.demo::before { content: ""; position: absolute; inset: 0; z-index: 5; pointer-events: none; border-radius: inherit;
+    background: linear-gradient(108deg, transparent 34%, rgba(255, 255, 255, .1) 47%, transparent 58%); transform: translateX(calc(var(--tx, 0) * 46%)); transition: transform .3s ease-out; }
+  .device .phone.demo::after { content: ""; position: absolute; z-index: 6; top: 11px; left: 50%; width: 74px; height: 20px; margin-left: -37px; border-radius: 12px; background: #0d0d0d; box-shadow: inset 0 0 0 1px #1c1c1c; pointer-events: none; }
+  .device .phone .sb { top: 15px; left: 24px; right: 24px; }
+  .chip span { -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); background: color-mix(in srgb, var(--bg) 78%, transparent); border-color: color-mix(in srgb, var(--fg) 20%, transparent); }
+
+  /* Pills, tabs, buttons */
+  .tabs button, .ex button { font-family: var(--mono); font-size: 12.5px; letter-spacing: .02em; padding: 10px 13px; }
+  .btn { position: relative; overflow: hidden; transition: color .3s, background .3s, border-color .3s, transform .25s var(--ease); }
+  .btn.ghost:hover { border-color: var(--fg); background: var(--fg); color: var(--bg); }
+  .task { -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); background: color-mix(in srgb, var(--bg) 70%, transparent) !important; }
+
+  /* Cards catch the light where the pointer is */
+  .card, .perm { border: 1px solid transparent; position: relative;
+    background: radial-gradient(420px circle at var(--mx, 50%) var(--my, -40%), color-mix(in srgb, var(--fg) 9%, transparent), transparent 62%) padding-box,
+      linear-gradient(var(--soft), var(--soft)) padding-box,
+      linear-gradient(140deg, color-mix(in srgb, var(--fg) 42%, transparent), color-mix(in srgb, var(--fg) 8%, transparent) 36%, color-mix(in srgb, var(--fg) 8%, transparent) 64%, color-mix(in srgb, var(--fg) 26%, transparent)) border-box; }
+  .card { box-shadow: 0 40px 80px -50px rgba(0, 0, 0, .55); }
+  .vtabs { counter-reset: v; }
+  .vtabs button { counter-increment: v; justify-content: flex-start; gap: 16px; }
+  .vtabs button::before { content: counter(v, decimal-leading-zero); font: 500 12px/1 var(--mono); color: var(--muted); letter-spacing: .06em; }
+  .vtabs button::after { margin-left: auto; }
+  .bars i { background: linear-gradient(180deg, color-mix(in srgb, var(--fg) 26%, transparent), color-mix(in srgb, var(--fg) 8%, transparent)); }
+  .bars button:hover i, .bars button.on i { background: var(--fg); box-shadow: 0 0 34px -4px color-mix(in srgb, var(--fg) 60%, transparent); }
+  .timer, .year-big, .hold-count b { background: linear-gradient(180deg, var(--fg) 50%, color-mix(in srgb, var(--fg) 45%, transparent)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .year-big small { -webkit-text-fill-color: var(--muted); font-family: var(--mono); font-size: .14em; letter-spacing: .08em; text-transform: uppercase; }
+  .tester input { box-shadow: 0 0 0 6px color-mix(in srgb, var(--fg) 6%, transparent); transition: box-shadow .3s; }
+  .tester input:focus { outline: none; box-shadow: 0 0 0 8px color-mix(in srgb, var(--fg) 14%, transparent); }
+  tbody tr { transition: background .2s; } tbody tr:hover { background: color-mix(in srgb, var(--fg) 4%, transparent); }
+
+  /* Rail and bar */
+  .rail::before { content: ""; position: absolute; left: 50%; top: 10px; bottom: 10px; width: 1px; margin-left: -.5px; background: var(--line); }
+  .rail button::before { position: relative; box-shadow: 0 0 0 4px var(--bg); transition: height .45s var(--ease), background .3s, box-shadow .6s; }
+  .rail button span { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+  .bar { font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; }
+  .bar button { font-family: Inter, system-ui, sans-serif; transition: border-color .2s, opacity .2s, background .25s, color .25s; }
+  .bar button:hover:not(:disabled) { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+  .ticks { display: flex; gap: 3px; align-items: center; }
+  .ticks i { width: 9px; height: 2px; background: var(--line); transition: background .4s, width .4s var(--ease); }
+  .ticks i.done { background: var(--muted); } .ticks i.now { background: var(--fg); width: 22px; }
+
+  /* The last circle sends rings outward */
+  .ring { position: relative; box-shadow: 0 0 90px -10px color-mix(in srgb, var(--fg) 40%, transparent); }
+  .ring::before, .ring::after { content: ""; position: absolute; inset: -13px; border-radius: 50%; border: 1px solid var(--fg); opacity: 0; animation: ripple 4.6s ease-out infinite; }
+  .ring::after { animation-delay: 2.3s; }
+  @keyframes ripple { from { transform: scale(1); opacity: .5; } to { transform: scale(2.3); opacity: 0; } }
+
+  @media (max-width: 960px) {
+    .mark, .halo { display: none; }
+    .ghost { right: -2vw; left: auto !important; bottom: auto !important; top: 46px; font-size: 38vw; opacity: .8; }
+    .ticks { display: none; }
+    .bar { font-size: 11px; }
+    .vtabs button::before { display: none; }
+    .vtabs button { gap: 0; }
+    body.launcher .ghost, body.launcher .grain { display: none; }
+    body.launcher .device .phone.demo::before, body.launcher .device .phone.demo::after { display: none; }
+    body.launcher .device .phone.demo { box-shadow: none; }
+    .device .phone.demo { box-shadow: 0 0 0 5px #0a0a0a, 0 0 0 6px #454545, 0 -30px 80px -30px color-mix(in srgb, var(--fg) 30%, transparent); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .halo, .status i::after, .ring::before, .ring::after, .ghost span.swap { animation: none !important; }
+    .slide { filter: none !important; }
+  }
 </style>
 </head>
 <body data-scene="0" data-step="0" data-stop="0">
@@ -395,6 +524,10 @@
 <canvas id="grid" aria-hidden="true"></canvas>
 <div id="cur" aria-hidden="true"></div>
 <div id="prog" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="halo" aria-hidden="true"></div>
+<div class="ghost" id="ghost" aria-hidden="true"><span>01</span></div>
+<i class="mark tl"></i><i class="mark tr"></i><i class="mark bl"></i><i class="mark br"></i>
 
 <header>
   <button class="logo" type="button" data-go="0" aria-label="Quiet"><i></i>Quiet</button>
@@ -640,6 +773,7 @@
 <div class="bar" id="bar">
   <button type="button" id="b-prev" aria-label="Back">↑</button>
   <span><b id="b-n">01</b> / <span id="b-total">08</span> &nbsp; <span id="b-name"></span></span>
+  <span class="ticks" id="ticks" aria-hidden="true"></span>
   <span class="hint" data-t="scroll_hint"></span>
   <button type="button" id="b-next" aria-label="Next">↓</button>
 </div>
@@ -1180,7 +1314,7 @@ const FX = (() => {
   function scramble(el) {
     const text = T[LANG][el.dataset.t];
     if (reduce || !text) return;
-    const G = "/\\—·:░▒"; let i = 0; const total = 18;
+    const G = "/\\—·:|"; let i = 0; const total = 18;
     clearInterval(el._s);
     el._s = setInterval(() => {
       i++;
@@ -1206,6 +1340,7 @@ const FX = (() => {
     const cur = $("cur"); let x = -100, y = -100, tx = -100, ty = -100;
     addEventListener("pointermove", e => {
       tx = e.clientX; ty = e.clientY; cur.style.opacity = 1;
+      document.body.style.setProperty("--px", (tx / innerWidth - .5).toFixed(3)); document.body.style.setProperty("--py", (ty / innerHeight - .5).toFixed(3));
       cur.style.setProperty("--s", e.target.closest && e.target.closest("a, button, input, label, summary, .chip") ? 2.3 : 1);
     }, { passive: true });
     (function loop() { x += (tx - x) * .2; y += (ty - y) * .2; cur.style.setProperty("--x", x + "px"); cur.style.setProperty("--y", y + "px"); requestAnimationFrame(loop); })();
@@ -1214,10 +1349,14 @@ const FX = (() => {
       el.addEventListener("pointermove", e => { const r = el.getBoundingClientRect(); el.style.transform = "translate(" + (e.clientX - r.left - r.width / 2) * .28 + "px," + (e.clientY - r.top - r.height / 2) * .28 + "px)"; });
       el.addEventListener("pointerleave", () => { el.style.transform = ""; });
     });
+    document.querySelectorAll(".card, .perm").forEach(el => el.addEventListener("pointermove", e => {
+      const r = el.getBoundingClientRect(); el.style.setProperty("--mx", (e.clientX - r.left) + "px"); el.style.setProperty("--my", (e.clientY - r.top) + "px");
+    }));
     document.querySelectorAll(".tilt").forEach(box => {
       box.addEventListener("pointermove", e => {
         const r = box.getBoundingClientRect(), k = box.dataset.tilt === "soft" ? .4 : 1;
         box.style.setProperty("--ry", ((e.clientX - r.left) / r.width - .5) * 16 * k + "deg");
+        box.style.setProperty("--tx", ((e.clientX - r.left) / r.width - .5).toFixed(3));
         box.style.setProperty("--rx", (.5 - (e.clientY - r.top) / r.height) * 12 * k + "deg");
       });
       box.addEventListener("pointerleave", () => { box.style.setProperty("--ry", "0deg"); box.style.setProperty("--rx", "0deg"); });
@@ -1250,6 +1389,10 @@ const Deck = (() => {
     $("b-n").textContent = String(s + 1).padStart(2, "0");
     $("b-total").textContent = String(slides.length).padStart(2, "0");
     $("b-name").textContent = names()[s];
+    const g = $("ghost").firstElementChild, num = String(s + 1).padStart(2, "0");
+    if (g.textContent !== num) { g.textContent = num; g.classList.remove("swap"); void g.offsetWidth; g.classList.add("swap"); }
+    const at = stop();
+    $("ticks").innerHTML = Array.from({ length: total }, (_, i) => '<i class="' + (i === at ? "now" : i < at ? "done" : "") + '"></i>').join("");
     strip();
   }
   // The strip over the full-screen launcher on a phone: where you are, what to try, and the way on.
