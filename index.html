@@ -1317,11 +1317,13 @@ const FX = (() => {
       fg = getComputedStyle(document.body).color; place();
     }
     size();
-    for (let i = 0; i < N; i++) P.push({ x: Math.random() * w, y: Math.random() * h, vx: 0, vy: 0, a: i / N * 6.2832, o: (Math.random() + Math.random() - 1) * 16, s: 1 + Math.random() * 1.2 });
+    for (let i = 0; i < N; i++) P.push({ x: Math.random() * w, y: Math.random() * h, vx: 0, vy: 0, a: i / N * 6.2832, o: (Math.random() + Math.random() - 1) * 16, s: 1 + Math.random() * 1.2, hx: Math.random(), hy: Math.random() });
     function draw() {
       const want = mode === "ring" ? 1 : 0, wantCalm = mode === "calm" ? 1 : 0;
       p += (want - p) * (reduce ? 1 : .045); calm += (wantCalm - calm) * .05;
       const pull = .03 * p * p, wild = (1 - p) * (.55 - .43 * calm);
+      // Off the ring, each speck drifts back to a place of its own, so a ring left behind spreads out instead of lingering.
+      const home = (1 - p) * (1 - p) * .012;
       if (++n % 12 === 0) { place(); fg = getComputedStyle(document.body).color; }
       ctx.clearRect(0, 0, w, h);
       ctx.fillStyle = fg; ctx.globalAlpha = (.28 + .5 * p) * (1 - .5 * calm);
@@ -1330,6 +1332,7 @@ const FX = (() => {
         const tx = cx + Math.cos(q.a) * (R + q.o), ty = cy + Math.sin(q.a) * (R + q.o);
         q.vx += (Math.random() - .5) * wild + (tx - q.x) * pull;
         q.vy += (Math.random() - .5) * wild + (ty - q.y) * pull;
+        q.vx += (q.hx * w - q.x) * home; q.vy += (q.hy * h - q.y) * home;
         const dx = q.x - pointer.x, dy = q.y - pointer.y, d2 = dx * dx + dy * dy;
         if (d2 < 19600) { const d = Math.sqrt(d2) || 1, f = (1 - d / 140) * 1.8; q.vx += dx / d * f; q.vy += dy / d * f; }
         if (shock) { const sx = q.x - shock.x, sy = q.y - shock.y, d = Math.hypot(sx, sy) || 1; if (d < 320) { const f = (1 - d / 320) * 16; q.vx += sx / d * f; q.vy += sy / d * f; } }
