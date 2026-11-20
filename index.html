@@ -661,6 +661,18 @@
   .lang-pick .langs button[aria-pressed="true"], .lang-pick .langs button[aria-pressed="true"]:hover { background: var(--soft); color: var(--fg); }
   .lang-pick .langs button[aria-pressed="true"]::after { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--fg); flex: none; }
   @media (max-width: 960px) { .perm-intro { font-size: 14.5px; margin-bottom: 10px; } #s-privacy .perm .ex button { padding: 7px 11px; font-size: 13px; } }
+  /* ---- Scroll: the page scrolls like any page. A scene with steps holds still while its steps go by. ---- */
+  html, body { height: auto; overflow: visible; overscroll-behavior: auto; }
+  header { background: color-mix(in srgb, var(--bg) 84%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); transition: background .6s; }
+  #deck { position: relative; inset: auto; padding-top: var(--head); }
+  .track { position: relative; }
+  .track.sticky { height: calc((100svh - var(--head)) * (1 + var(--n, 0) * .75)); }
+  .slide, .slide[data-pos="before"], .slide.active { position: relative; inset: auto; min-height: calc(100svh - var(--head)); opacity: 1; visibility: visible; transform: none; filter: none; transition: none; }
+  .track.sticky > .slide { position: sticky; top: var(--head); height: calc(100svh - var(--head)); }
+  .slide:not(.seen) .rv { opacity: 0; transform: translateY(22px); }
+  .slide.seen .rv { opacity: 1; transform: none; transition-delay: calc(var(--i, 0) * 70ms + 120ms); }
+  #prog { transition: none; }
+  @media (min-width: 961px) { .bar { margin-left: -8px; padding: 6px 8px; border-radius: 999px; background: color-mix(in srgb, var(--bg) 86%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); } }
 </style>
 </head>
 <body data-scene="0" data-step="0" data-stop="0">
@@ -1602,7 +1614,7 @@ const Tour = (() => {
     await SCRIPTS[i](k);
     if (!alive(k)) return;
     // Then on to the next chapter, and round again after the last.
-    again = setTimeout(() => { if (alive(k)) Deck.go(1, (i + 1) % SCRIPTS.length); }, 900);
+    again = setTimeout(() => { if (alive(k)) start(i); }, 1800);
   }
   function stop() { run++; ch = -1; clearTimeout(again); if ($("finger")) hide(); }
   // A tap of the visitor's own takes the phone over; the tabs start the tour again.
@@ -1620,7 +1632,7 @@ const Deck = (() => {
     const b = document.body, bar = document.querySelector(".bar"), col = slides[0].querySelector(".col");
     let h = -1;
     if (narrow() && bar && col) {
-      const bottom = $("deck").getBoundingClientRect().top + col.offsetTop + col.offsetHeight - slides[0].scrollTop;
+      const bottom = head() + col.getBoundingClientRect().bottom - slides[0].getBoundingClientRect().top;
       h = Math.min(330, Math.round(bar.getBoundingClientRect().top - bottom - 64));
       if (h < 110) h = 0;
       b.style.setProperty("--hero-h", h + "px");
@@ -1631,6 +1643,36 @@ const Deck = (() => {
     if (steps[0] !== want) { steps[0] = want; changed = true; }
     slides.forEach((el, i) => { if (!el.dataset.stepsM) return; const n = Number(narrow() ? el.dataset.stepsM : el.dataset.steps) || 1; if (steps[i] !== n) { steps[i] = n; changed = true; } });
     if (changed) { total = steps.reduce((a, c) => a + c, 0); k = Math.min(k, steps[s] - 1); }
+    layout();
+  }
+  const head = () => parseFloat(getComputedStyle($("deck")).paddingTop) || 0;
+  // A scene with steps gets room to scroll through them; the others are as tall as their words.
+  function layout() { slides.forEach((el, i) => { const t = el.parentElement; if (!t.classList.contains("track")) return; t.classList.toggle("sticky", steps[i] > 1); t.style.setProperty("--n", steps[i] - 1); }); }
+  const stepLen = i => slides[i].offsetHeight * .75;
+  const topOf = i => slides[i].parentElement.offsetTop - head();
+  // The scene that fills most of the screen, and the step its scroll has reached.
+  function where() {
+    const y = scrollY, vh = innerHeight;
+    let ns = 0;
+    slides.forEach((el, i) => { if (topOf(i) <= y + vh * .45) ns = i; });
+    if (y + vh >= document.documentElement.scrollHeight - 4) ns = slides.length - 1;
+    const L = stepLen(ns), nk = steps[ns] > 1 ? Math.max(0, Math.min(steps[ns] - 1, Math.floor((y - topOf(ns) + L * .5) / L))) : 0;
+    return [ns, nk];
+  }
+  function progress() { const m = document.documentElement.scrollHeight - innerHeight; $("prog").style.setProperty("--sp", m > 0 ? Math.min(1, scrollY / m) : 0); }
+  function seen() { const vh = innerHeight; slides.forEach(el => { const r = el.getBoundingClientRect(); if (r.top < vh * .85 && r.bottom > 0) el.classList.add("seen"); }); }
+  // On a phone the demo phone travels with its own scene and fades as it leaves, so it never lies over the next scene's words.
+  function follow() {
+    const d = document.querySelector(".device"); if (!d) return;
+    if (!narrow() || s > 1 || (s === 0 && document.body.classList.contains("no-peek"))) { d.style.translate = ""; d.style.opacity = ""; return; }
+    const dy = Math.round(slides[s].getBoundingClientRect().top - head());
+    d.style.translate = dy ? "0 " + dy + "px" : "";
+    d.style.opacity = dy ? Math.max(0, 1 - Math.abs(dy) / (innerHeight * .3)).toFixed(3) : "";
+  }
+  let ticking = false;
+  function onScroll() {
+    if (ticking) return; ticking = true;
+    requestAnimationFrame(() => { ticking = false; progress(); seen(); const [ns, nk] = where(); if (ns !== s || nk !== k) { s = ns; k = nk; render(); } follow(); });
   }
 
   const names = () => T[LANG].scenes;
@@ -1642,7 +1684,7 @@ const Deck = (() => {
   function tourFit() {
     const b = document.body, bar = document.querySelector(".bar"), col = slides[1].querySelector(".col");
     if (!narrow() || !bar || !col) return;
-    const bottom = $("deck").getBoundingClientRect().top + col.offsetTop + col.offsetHeight - slides[1].scrollTop;
+    const bottom = head() + col.getBoundingClientRect().bottom - slides[1].getBoundingClientRect().top;
     const h = Math.max(300, Math.round(bar.getBoundingClientRect().top - bottom - 24));
     const z = Math.min(1, Math.max(.5, (h - 8) / (264 * 19 / 9)));
     b.style.setProperty("--tour-h", h + "px"); b.style.setProperty("--tour-z", z.toFixed(3));
@@ -1675,11 +1717,12 @@ const Deck = (() => {
     b.dataset.scene = s; b.dataset.step = k; b.dataset.stop = stop();
     b.classList.toggle("invert", slides[s].hasAttribute("data-invert"));
     b.classList.toggle("launcher", false);
-    $("prog").style.setProperty("--sp", total > 1 ? stop() / (total - 1) : 0);
+    progress();
     slides.forEach((el, i) => {
       el.classList.toggle("active", i === s);
       el.dataset.pos = i < s ? "before" : i > s ? "after" : "on";
-      el.inert = i !== s;
+      el.inert = false;
+      if (i === s) el.classList.add("seen");
     });
     slides[s].querySelectorAll("[data-k]").forEach(el => el.classList.toggle("on", Number(el.dataset.k) === k));
     slides[s].querySelectorAll("[data-step]").forEach(el => el.setAttribute("aria-selected", Number(el.dataset.step) === k));
@@ -1695,7 +1738,7 @@ const Deck = (() => {
         const ph = slides[s].querySelector(".phone");
         ph.classList.add("anim"); ph.classList.remove("play"); void ph.offsetWidth; ph.classList.add("play");
       }
-      if (sceneChanged) { slides[s].scrollTop = 0; slides[s].querySelectorAll("h1, h2").forEach(FX.scramble); }
+      if (sceneChanged) { slides[s].querySelectorAll("h1, h2").forEach(FX.scramble); }
       // A heading that only appears with a step (the questions) is written in the same way as the scene titles.
       else slides[s].querySelectorAll("[data-k].on h1, [data-k].on h2").forEach(FX.scramble);
       // The specks: noise on the first screen, a ring round the phone, a ring round the last circle, calm between.
@@ -1713,62 +1756,31 @@ const Deck = (() => {
   function go(ns, nk) {
     ns = Math.max(0, Math.min(slides.length - 1, ns));
     nk = Math.max(0, Math.min(steps[ns] - 1, nk || 0));
-    if (ns === s && nk === k) return;
-    s = ns; k = nk; render();
+    const smooth = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+    scrollTo({ top: Math.max(0, topOf(ns) + nk * stepLen(ns)), behavior: smooth ? "smooth" : "auto" });
   }
   function next() { if (k < steps[s] - 1) go(s, k + 1); else if (s < slides.length - 1) go(s + 1, 0); }
   function prev() { if (k > 0) go(s, k - 1); else if (s > 0) go(s - 1, steps[s - 1] - 1); }
 
-  // Something under the pointer that still has room to scroll that way keeps the wheel.
-  function scrolls(el, dy) {
-    for (; el && el !== document.body; el = el.parentElement) {
-      if (el.scrollHeight > el.clientHeight + 2) {
-        const o = getComputedStyle(el).overflowY;
-        if ((o === "auto" || o === "scroll") && (dy > 0 ? el.scrollTop + el.clientHeight < el.scrollHeight - 2 : el.scrollTop > 2)) return true;
-      }
-    }
-    return false;
-  }
-
   function init() {
+    slides.forEach(el => { const t = document.createElement("div"); t.className = "track"; el.before(t); t.appendChild(el); });
     slides.forEach((el, i) => el.querySelectorAll(".num:not([data-t])").forEach(n => { n.textContent = String(i + 1).padStart(2, "0"); }));
-    addEventListener("wheel", e => {
-      if (Math.abs(e.deltaY) < 8 || scrolls(e.target, e.deltaY)) return;
-      const now = Date.now();
-      if (now < lock) return;
-      lock = now + 850;
-      e.deltaY > 0 ? next() : prev();
-    }, { passive: true });
-    addEventListener("keydown", e => {
-      if (e.target.closest && e.target.closest("input, textarea, [contenteditable]")) return;
-      if (["ArrowDown", "PageDown", " "].includes(e.key)) { e.preventDefault(); next(); }
-      else if (["ArrowUp", "PageUp"].includes(e.key)) { e.preventDefault(); prev(); }
-      else if (e.key === "Home") go(0, 0);
-      else if (e.key === "End") go(slides.length - 1, 0);
-    });
-    let t0 = null;
-    addEventListener("touchstart", e => { const t = e.touches[0]; t0 = { x: t.clientX, y: t.clientY, el: e.target }; }, { passive: true });
-    addEventListener("touchend", e => {
-      if (!t0) return;
-      const t = e.changedTouches[0], dy = t0.y - t.clientY, dx = t0.x - t.clientX, el = t0.el; t0 = null;
-      if (Math.abs(dy) < 60 || Math.abs(dy) < Math.abs(dx) * 1.5) return;
-      if (el.closest("#demo, input, .dots, .bars") || scrolls(el, dy)) return;
-      dy > 0 ? next() : prev();
-    }, { passive: true });
+    addEventListener("scroll", onScroll, { passive: true });
     document.addEventListener("click", e => {
       const g = e.target.closest("[data-go]");
       if (g) { e.preventDefault(); const [a, b] = g.dataset.go.split(":"); go(Number(a), Number(b) || 0); return; }
-      const st = e.target.closest("[data-step]");
+      const st = e.target.closest("[data-step]:not(body)");
       if (st) go(s, Number(st.dataset.step));
     });
     $("b-prev").addEventListener("click", prev); $("b-next").addEventListener("click", next);
     $("l-prev").addEventListener("click", prev); $("l-next").addEventListener("click", next);
-    addEventListener("resize", () => { shown = ""; render(); tourFit(); if (s === 0) FX.fitChips(); });
+    addEventListener("resize", () => { shown = ""; render(); tourFit(); if (s === 0) FX.fitChips(); onScroll(); });
     Tour.init();
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { shown = ""; render(); });
     const want = location.hash.slice(1), at = slides.findIndex(el => el.id.replace(/^s-/, "") === want);
-    if (at > 0) s = at;
     render();
+    if (at > 0) { history.scrollRestoration = "manual"; scrollTo(0, topOf(at)); }
+    { const [ns, nk] = where(); s = ns; k = nk; shown = ""; render(); seen(); follow(); }
   }
   return { init, go, next, prev, labels, strip };
 })();
