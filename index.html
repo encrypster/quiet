@@ -2324,8 +2324,7 @@ function apply(lang) {
   document.documentElement.lang = lang;
   document.title = t.title;
   // The policy in the same language as the page.
-  // The German policy is published together with its GDPR section; until then German readers get the English one.
-  const policy = "https://encrypster.github.io/quiet-privacy/" + (lang === "en" || lang === "de" ? "" : lang + "/");
+  const policy = "https://encrypster.github.io/quiet-privacy/" + (lang === "en" ? "" : lang + "/");
   document.getElementById("privacy-link").href = policy;
   document.getElementById("privacy-link-foot").href = policy;
   document.querySelectorAll("[data-t]").forEach(el => {
