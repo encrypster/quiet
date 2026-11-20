@@ -668,7 +668,6 @@
   #prog { transition: none; }
   #parents .cols { grid-template-columns: minmax(0, 1fr); }
   @media (min-width: 961px) { #parents .cols ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 48px; } }
-  .t-note { display: block; margin-top: 3px; font-size: 13px; line-height: 1.45; color: var(--muted); }
   /* The words under the ring sit outside the ring of specks, where they can be read. */
   .ring-box { gap: 78px; margin-bottom: 28px; }
   @media (max-width: 960px) { .ring-box { gap: 60px; } }
@@ -864,7 +863,7 @@
           <thead><tr><th scope="col" data-t="t_what"></th><th scope="col" data-t="t_free"></th><th scope="col">Pro</th></tr></thead>
           <tbody>
             <tr><td data-t="t1"></td><td data-t="v_yes"></td><td data-t="v_yes"></td></tr>
-            <tr><td><span data-t="t2"></span><small class="t-note" data-t="t2_note"></small></td><td data-t="v_two"></td><td data-t="v_unl"></td></tr>
+            <tr><td data-t="t2"></td><td data-t="v_two"></td><td data-t="v_unl"></td></tr>
             <tr><td data-t="t3"></td><td data-t="v_one"></td><td data-t="v_unl"></td></tr>
             <tr><td data-t="t4"></td><td data-t="v_7d"></td><td data-t="v_8w"></td></tr>
             <tr><td data-t="t5"></td><td data-t="v_yes"></td><td data-t="v_yes"></td></tr>
@@ -2311,10 +2310,10 @@ function pickLang() {
 }
 
 // Review: what a rule is, the wait page's "you can go on", and the parents' scene without the second list.
-Object.assign(T.uz, { t2_note: "Qoida tanlangan ilovalar bilan nima bo‘lishini belgilaydi: ochishdan oldin kutish, kunlik limit, jadval bo‘yicha yoki doim bloklash.", par_p: "Quietni bolaning telefoniga o‘rnatib, sozlamalarni PIN-kod bilan yopib qo‘yish mumkin. Quyida u nimalar qilishini ko‘rasiz." });
-Object.assign(T.ru, { t2_note: "Правило задаёт, что будет с выбранными приложениями: ожидание перед открытием, дневной лимит, блокировка по расписанию или всегда.", par_p: "Quiet можно установить на телефон ребёнка и закрыть настройки PIN-кодом. Ниже — что именно он делает." });
-Object.assign(T.en, { t2_note: "A rule says what happens to the apps you pick: a wait before they open, a daily limit, a block on a schedule or always.", par_p: "You can install Quiet on a child's phone and lock its settings with a PIN. Below is what it does." });
-Object.assign(T.de, { t2_note: "Eine Regel legt fest, was mit den gewählten Apps passiert: Warten vor dem Öffnen, ein Tageslimit, eine Sperre nach Zeitplan oder immer.", par_p: "Du kannst Quiet auf dem Handy deines Kindes installieren und die Einstellungen mit einer PIN sperren. Unten steht, was es tut." });
+Object.assign(T.uz, { par_p: "Quietni bolaning telefoniga o‘rnatib, sozlamalarni PIN-kod bilan yopib qo‘yish mumkin. Quyida u nimalar qilishini ko‘rasiz." });
+Object.assign(T.ru, { par_p: "Quiet можно установить на телефон ребёнка и закрыть настройки PIN-кодом. Ниже — что именно он делает." });
+Object.assign(T.en, { par_p: "You can install Quiet on a child's phone and lock its settings with a PIN. Below is what it does." });
+Object.assign(T.de, { par_p: "Du kannst Quiet auf dem Handy deines Kindes installieren und die Einstellungen mit einer PIN sperren. Unten steht, was es tut." });
 Object.assign(T.uz.d, { ready: "Endi davom etishingiz mumkin." });
 Object.assign(T.ru.d, { ready: "Теперь можно продолжить." });
 Object.assign(T.en.d, { ready: "You can continue now." });
