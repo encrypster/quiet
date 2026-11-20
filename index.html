@@ -603,12 +603,7 @@
     .dots { gap: 2px; }
     .legend { margin-top: 10px; font-size: 12px; }
     /* Parents: what it does, then what it does not, one screen each. */
-    body[data-scene="4"][data-step="1"] #parents .cols > div:last-child { display: none; }
-    body[data-scene="4"][data-step="2"] #parents .cols { display: grid !important; }
-    body[data-scene="4"][data-step="2"] #parents .cols > div:first-child { display: none; }
     /* Price: the chooser, then the table. */
-    body[data-scene="5"][data-step="0"] #s-pricing .price > .rv:last-child { display: none; }
-    body[data-scene="5"][data-step="1"] #s-pricing .chooser, body[data-scene="5"][data-step="1"] #s-pricing .sub { display: none; }
   }
   /* Review pass 2: phones of ordinary height */
   @media (max-width: 960px) {
@@ -666,12 +661,17 @@
   header { background: color-mix(in srgb, var(--bg) 84%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); transition: background .6s; }
   #deck { position: relative; inset: auto; padding-top: var(--head); }
   .track { position: relative; }
-  .track.sticky { height: calc((100svh - var(--head)) * (1 + var(--n, 0) * .75)); }
   .slide, .slide[data-pos="before"], .slide.active { position: relative; inset: auto; min-height: calc(100svh - var(--head)); opacity: 1; visibility: visible; transform: none; filter: none; transition: none; }
-  .track.sticky > .slide { position: sticky; top: var(--head); height: calc(100svh - var(--head)); }
+  .track.sticky > .slide { position: sticky; top: var(--head); height: auto; overflow: visible; }
   .slide:not(.seen) .rv { opacity: 0; transform: translateY(22px); }
   .slide.seen .rv { opacity: 1; transform: none; transition-delay: calc(var(--i, 0) * 70ms + 120ms); }
   #prog { transition: none; }
+  #parents .cols { grid-template-columns: minmax(0, 1fr); }
+  @media (min-width: 961px) { #parents .cols ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 48px; } }
+  .t-note { display: block; margin-top: 3px; font-size: 13px; line-height: 1.45; color: var(--muted); }
+  /* The words under the ring sit outside the ring of specks, where they can be read. */
+  .ring-box { gap: 78px; margin-bottom: 28px; }
+  @media (max-width: 960px) { .ring-box { gap: 60px; } }
   @media (min-width: 961px) { .bar { margin-left: -8px; padding: 6px 8px; border-radius: 999px; background: color-mix(in srgb, var(--bg) 86%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); } }
 </style>
 </head>
@@ -806,7 +806,7 @@
     </div>
   </section>
 
-  <section class="slide" id="parents" data-steps="2" data-steps-m="3" data-invert>
+  <section class="slide" id="parents" data-steps="2" data-invert>
     <div class="inner">
       <div class="head"><p class="num rv">03</p><h2 class="rv" style="--i:1" data-t="par_h"></h2><p class="sub" data-k="0" data-t="par_p"></p></div>
       <div class="rv" style="--i:3">
@@ -842,21 +842,12 @@
               <li><b data-t="can4_h"></b><span data-t="can4_p"></span></li>
             </ul>
           </div>
-          <div>
-            <h3 data-t="cant_h"></h3>
-            <ul>
-              <li><b data-t="cant1_h"></b><span data-t="cant1_p"></span></li>
-              <li><b data-t="cant2_h"></b><span data-t="cant2_p"></span></li>
-              <li><b data-t="cant3_h"></b><span data-t="cant3_p"></span></li>
-              <li><b data-t="cant4_h"></b><span data-t="cant4_p"></span></li>
-            </ul>
-          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="slide" id="s-pricing" data-steps-m="2">
+  <section class="slide" id="s-pricing">
     <div class="inner price">
       <div>
         <p class="num rv">04</p>
@@ -873,7 +864,7 @@
           <thead><tr><th scope="col" data-t="t_what"></th><th scope="col" data-t="t_free"></th><th scope="col">Pro</th></tr></thead>
           <tbody>
             <tr><td data-t="t1"></td><td data-t="v_yes"></td><td data-t="v_yes"></td></tr>
-            <tr><td data-t="t2"></td><td data-t="v_two"></td><td data-t="v_unl"></td></tr>
+            <tr><td><span data-t="t2"></span><small class="t-note" data-t="t2_note"></small></td><td data-t="v_two"></td><td data-t="v_unl"></td></tr>
             <tr><td data-t="t3"></td><td data-t="v_one"></td><td data-t="v_unl"></td></tr>
             <tr><td data-t="t4"></td><td data-t="v_7d"></td><td data-t="v_8w"></td></tr>
             <tr><td data-t="t5"></td><td data-t="v_yes"></td><td data-t="v_yes"></td></tr>
@@ -1292,7 +1283,7 @@ const Demo = (() => {
       case "wait": {
         const ready = st.n <= 0;
         return '<div style="margin-top:auto"></div><div class="d-title">' + esc(fill(t.opening, { app: name(st.app) })) + "</div>" +
-          '<div class="d-dim" style="margin-top:8px">' + (ready ? "&nbsp;" : esc(fill(t.wait, { n: st.n }))) + '</div><div class="d-dim">' + esc(t.used) + "</div>" +
+          '<div class="d-dim" style="margin-top:8px">' + esc(ready ? t.ready : fill(t.wait, { n: st.n })) + '</div><div class="d-dim">' + esc(t.used) + "</div>" +
           '<div style="margin:16px 0 12px">' + esc(t.why) + "</div>" +
           '<button type="button" class="d-btn fill" data-act="home">' + esc(t.go_home) + "</button>" +
           [5, 10, 20].map(m => '<button type="button" class="d-btn" data-act="visit:' + m + '"' + (ready ? "" : " disabled") + ">" + esc(fill(t.cont, { n: m })) + "</button>").join("");
@@ -1647,8 +1638,24 @@ const Deck = (() => {
   }
   const head = () => parseFloat(getComputedStyle($("deck")).paddingTop) || 0;
   // A scene with steps gets room to scroll through them; the others are as tall as their words.
-  function layout() { slides.forEach((el, i) => { const t = el.parentElement; if (!t.classList.contains("track")) return; t.classList.toggle("sticky", steps[i] > 1); t.style.setProperty("--n", steps[i] - 1); }); }
-  const stepLen = i => slides[i].offsetHeight * .75;
+  // A scene with steps keeps the height of its tallest step, so a taller step never moves the page under the reader.
+  // When it is taller than the screen, it scrolls until its end is in view and only then holds still for its steps.
+  const tall = [];
+  const room = () => innerHeight - head();
+  const extra = i => Math.max(0, (tall[i] || 0) - room());
+  const stepLen = () => room() * .75;
+  function layout() {
+    slides.forEach((el, i) => {
+      const t = el.parentElement; if (!t.classList.contains("track")) return;
+      const on = steps[i] > 1; t.classList.toggle("sticky", on);
+      if (!on) { t.style.height = ""; el.style.top = ""; el.style.minHeight = ""; tall[i] = 0; return; }
+      tall[i] = Math.max(tall[i] || 0, el.offsetHeight);
+      el.style.minHeight = tall[i] + "px";
+      el.style.top = (head() - extra(i)) + "px";
+      t.style.height = (tall[i] + (steps[i] - 1) * stepLen()) + "px";
+    });
+  }
+  function remeasure() { tall.length = 0; slides.forEach(el => { el.style.minHeight = ""; }); }
   const topOf = i => slides[i].parentElement.offsetTop - head();
   // The scene that fills most of the screen, and the step its scroll has reached.
   function where() {
@@ -1656,7 +1663,7 @@ const Deck = (() => {
     let ns = 0;
     slides.forEach((el, i) => { if (topOf(i) <= y + vh * .45) ns = i; });
     if (y + vh >= document.documentElement.scrollHeight - 4) ns = slides.length - 1;
-    const L = stepLen(ns), nk = steps[ns] > 1 ? Math.max(0, Math.min(steps[ns] - 1, Math.floor((y - topOf(ns) + L * .5) / L))) : 0;
+    const L = stepLen(ns), nk = steps[ns] > 1 ? Math.max(0, Math.min(steps[ns] - 1, Math.floor((y - topOf(ns) - extra(ns) + L * .5) / L))) : 0;
     return [ns, nk];
   }
   function progress() { const m = document.documentElement.scrollHeight - innerHeight; $("prog").style.setProperty("--sp", m > 0 ? Math.min(1, scrollY / m) : 0); }
@@ -1757,7 +1764,7 @@ const Deck = (() => {
     ns = Math.max(0, Math.min(slides.length - 1, ns));
     nk = Math.max(0, Math.min(steps[ns] - 1, nk || 0));
     const smooth = !matchMedia("(prefers-reduced-motion: reduce)").matches;
-    scrollTo({ top: Math.max(0, topOf(ns) + nk * stepLen(ns)), behavior: smooth ? "smooth" : "auto" });
+    scrollTo({ top: Math.max(0, topOf(ns) + (nk ? extra(ns) + nk * stepLen() : 0)), behavior: smooth ? "smooth" : "auto" });
   }
   function next() { if (k < steps[s] - 1) go(s, k + 1); else if (s < slides.length - 1) go(s + 1, 0); }
   function prev() { if (k > 0) go(s, k - 1); else if (s > 0) go(s - 1, steps[s - 1] - 1); }
@@ -1774,7 +1781,7 @@ const Deck = (() => {
     });
     $("b-prev").addEventListener("click", prev); $("b-next").addEventListener("click", next);
     $("l-prev").addEventListener("click", prev); $("l-next").addEventListener("click", next);
-    addEventListener("resize", () => { shown = ""; render(); tourFit(); if (s === 0) FX.fitChips(); onScroll(); });
+    addEventListener("resize", () => { shown = ""; remeasure(); render(); tourFit(); if (s === 0) FX.fitChips(); onScroll(); });
     Tour.init();
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { shown = ""; render(); });
     const want = location.hash.slice(1), at = slides.findIndex(el => el.id.replace(/^s-/, "") === want);
@@ -1929,7 +1936,7 @@ const Touch = (() => {
   const w = () => T[LANG].w;
   const fill = (s, v) => s.replace(/\{(\w+)\}/g, (_, k) => v[k]);
   const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-  const dur = min => min >= 60 ? fill(w().h, { h: Math.floor(min / 60), m: min % 60 }) : fill(w().m, { m: min });
+  const dur = min => min >= 60 ? fill(min % 60 ? w().h : w().h.split(" {m}")[0], { h: Math.floor(min / 60), m: min % 60 }) : fill(w().m, { m: min });
   const clock = min => String(Math.floor(min / 60)).padStart(2, "0") + ":" + String(min % 60).padStart(2, "0");
 
   // Screen time
@@ -2303,6 +2310,15 @@ function pickLang() {
   return T[nav] ? nav : "en";
 }
 
+// Review: what a rule is, the wait page's "you can go on", and the parents' scene without the second list.
+Object.assign(T.uz, { t2_note: "Qoida tanlangan ilovalar bilan nima bo‘lishini belgilaydi: ochishdan oldin kutish, kunlik limit, jadval bo‘yicha yoki doim bloklash.", par_p: "Quietni bolaning telefoniga o‘rnatib, sozlamalarni PIN-kod bilan yopib qo‘yish mumkin. Quyida u nimalar qilishini ko‘rasiz." });
+Object.assign(T.ru, { t2_note: "Правило задаёт, что будет с выбранными приложениями: ожидание перед открытием, дневной лимит, блокировка по расписанию или всегда.", par_p: "Quiet можно установить на телефон ребёнка и закрыть настройки PIN-кодом. Ниже — что именно он делает." });
+Object.assign(T.en, { t2_note: "A rule says what happens to the apps you pick: a wait before they open, a daily limit, a block on a schedule or always.", par_p: "You can install Quiet on a child's phone and lock its settings with a PIN. Below is what it does." });
+Object.assign(T.de, { t2_note: "Eine Regel legt fest, was mit den gewählten Apps passiert: Warten vor dem Öffnen, ein Tageslimit, eine Sperre nach Zeitplan oder immer.", par_p: "Du kannst Quiet auf dem Handy deines Kindes installieren und die Einstellungen mit einer PIN sperren. Unten steht, was es tut." });
+Object.assign(T.uz.d, { ready: "Endi davom etishingiz mumkin." });
+Object.assign(T.ru.d, { ready: "Теперь можно продолжить." });
+Object.assign(T.en.d, { ready: "You can continue now." });
+Object.assign(T.de.d, { ready: "Du kannst jetzt weitermachen." });
 function apply(lang) {
   const t = T[lang];
   LANG = lang;
